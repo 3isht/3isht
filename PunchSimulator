@@ -137,7 +137,7 @@ local function autoFarmDungeons()
                                             wait(1.5)
                                         end
                                     end)
-                                    wait()
+                                    wait(5)
                                 end
                             end
                         end
