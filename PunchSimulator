@@ -125,18 +125,20 @@ local function autoFarmDungeons()
                         if v and v2.Name == "Head" then
                             GetPOS(v2)
                             if player.Character then
-                                function getNil(name,class) for _,v3 in next, getnilinstances() do if v3.ClassName==class and v3.Name==name then return v3;end end end
-                                local args = {
-                                    [1] = getNil(v2.Parent.Name, "Model")
-                                }
-                                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
-                                spawn(function ()
-                                    while true do
-                                        player.Character.HumanoidRootPart.CFrame = v2.CFrame
-                                        wait(0.3)
-                                    end
-                                end)
-                                wait()
+                                if v2.Parent then
+                                    function getNil(name,class) for _,v3 in next, getnilinstances() do if v3.ClassName==class and v3.Name==name then return v3;end end end
+                                    local args = {
+                                        [1] = getNil(v2.Parent.Name, "Model")
+                                    }
+                                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
+                                    spawn(function ()
+                                        while player.Character do
+                                            player.Character.HumanoidRootPart.CFrame = v2.CFrame
+                                            wait(1.5)
+                                        end
+                                    end)
+                                    wait()
+                                end
                             end
                         end
                     end
