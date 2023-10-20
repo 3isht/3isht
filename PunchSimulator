@@ -1,0 +1,225 @@
+getgenv().autoTraining = false;
+getgenv().autoClaim = false;
+getgenv().autoWin = false;
+getgenv().autoCollectAll = false;
+getgenv().autoCrafting = false;
+getgenv().autoHacking = false
+getgenv().autoDungs = false
+getgenv().autoFarmDungs = false
+
+local function autoTrain()
+    spawn(function()
+        while wait() do
+            if autoTraining then
+                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("DamageIncreaseOnClickEvent"):FireServer()
+                wait()
+            end
+        end
+    end)
+end
+
+local function autoHack()
+    spawn(function()
+        while wait() do
+            if autoHacking then
+                if game:GetService("StarterGui").Hacker.Frame.HackButton.ContentText == "HACK" then
+                    wait()
+                    local arg = {
+                        [1] = "Begin"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("HackEvent"):InvokeServer(unpack(arg))
+                    wait()
+                    local arg1 = {
+                        [1] = "Boosts"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("RobuxShop"):InvokeServer(unpack(arg1))
+                    wait()
+                    local arg2 = {
+                        [1] = "Info"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("HackEvent"):InvokeServer(unpack(arg2))
+                end
+            end
+        end
+    end)
+end
+
+local function autoClaimGifts()
+    spawn(function()
+        while wait() do
+            if autoClaim then
+                for i = 1, 12 do
+                    local args = {
+                        [1] = i
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PlaytimeRewardUpdateEvent"):FireServer(unpack(args))
+                    wait()
+                    local arg2 = {
+                        [1] = "Boosts"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("RobuxShop"):InvokeServer(unpack(arg2))
+                end
+            end
+        end
+    end)
+end
+
+local function autoWinFights()
+    spawn(function()
+        while wait() do
+            if autoWin then
+                local args = {
+                    [1] = true
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PushEvent"):FireServer(unpack(args))
+                wait()
+            end
+        end
+    end)
+end
+
+local function autoDungeons()
+    spawn(function()
+        while wait() do
+            if autoDungs then
+                local args = {
+                    [1] = "StartDungeon"
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("DungeonEvent"):FireServer(unpack(args))
+                wait()
+            end
+        end
+    end)
+end
+
+local function GetPOS(part)
+    if part then
+        return part.Position
+    end
+    return false
+end
+
+local function autoFarmDungeons()
+    spawn(function()
+        while wait() do
+            if autoFarmDungs then
+                local player = game.Players.LocalPlayer
+                for _, v in pairs(workspace.BreakableParts.Dungeon:GetChildren()) do
+                    if v.Parent == "Dungeon" and v.ClassName == "Model" then
+                        GetPOS(v)
+                        if player.Character then
+                            player.Character.HumanoidRootPart.CFrame = CFrame.new(v.x, v.y + 10, v.z)
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function autoCollect()
+    spawn(function()
+        while wait() do
+            local head = game.Players.LocalPlayer.Character.Head
+            if autoCollectAll then
+                for i, v in pairs(workspace.ClientCoinsGems:GetDescendants()) do
+                    if v.Name == "TouchInterest" and v.Parent then
+                        firetouchinterest(head, v.Parent, 0)
+                        wait(0.1)
+                        firetouchinterest(head, v.Parent, 0)
+                    end
+                end
+            end
+        end
+    end)
+end
+
+local function Teleport(World)
+    spawn(function()
+        local args = {
+            [1] = "Teleport",
+            [2] = World
+        }
+        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("TeleportEvent"):InvokeServer(unpack(args))
+        wait()
+    end)
+end
+
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
+local window = lib:Load("Made By Tariq", "Default")
+local tab = lib.newTab("Main", "Image Id here")
+local tab2 = lib.newTab("Dungeon", "")
+local tab3 = lib.newTab("Teleport", "")
+
+local selectedWorld;
+local selectedEgg;
+
+tab.newToggle("Auto Claim Gifts", "Auto claims all available gifts.", false, function(bool)
+    autoClaim = bool
+    autoClaimGifts()
+end)
+tab.newToggle("Auto Train", "auto trains.", false, function(bool)
+    autoTraining = bool
+    autoTrain()
+end)
+
+tab.newToggle("Auto Win", "Auto defeats any boss (Must have 1/3 it's power).", false, function(bool)
+    autoWin = bool
+    autoWinFights()
+end)
+
+tab.newToggle("Auto Hack", "Auto hacks every 30 minutes.", false, function(bool)
+    autoHacking = bool
+    autoHack()
+end)
+
+tab.newToggle("Auto Collect Drops", "Auto collects all drops around the world.", false, function(bool)
+    autoCollectAll = bool
+    autoCollect()
+end)
+
+tab2.newToggle("Auto Dungeon", "Auto creates a dungeon (even if the timer isn't done).", false, function(bool)
+    autoDungs = bool
+    autoDungeons()
+end)
+
+tab2.newToggle("Auto Farm Dungeons", "Auto farms dungeons.", false, function(bool)
+    autoFarmDungs = bool
+    autoFarmDungeons()
+end)
+
+tab3.newDropdown("Teleport World", "Teleports you to any world.", {
+    "Forest", 'Desert', 'Cave',
+    'Ocean', 'Candy Zone', 'Snow',
+    'Toy Zone', 'Farm', 'Samurai',
+    'Space', 'Magical Forest', 'Heaven',
+    'Underworld', 'Laboratory', 'Pirate', 'Savanna'
+}, function(value)
+    local Worlds = {
+        ["Forest"] = 1,
+        ['Desert'] = 2,
+        ['Cave'] = 3,
+        ['Ocean'] = 4,
+        ['Candy Zone'] = 5,
+        ['Snow'] = 6,
+        ['Toy Zone'] = 7,
+        ['Farm'] = 8,
+        ['Samurai'] = 9,
+        ['Space'] = 10,
+        ['Magical Forest'] = 11,
+        ['Heaven'] = 12,
+        ['Underworld'] = 13,
+        ['Laboratory'] = 14,
+        ['Pirate'] = 15,
+        ['Savanna'] = 16
+    }
+    selectedWorld = Worlds[value]
+    return selectedWorld
+end)
+
+tab3.newButton('Teleport', 'Teleports you to the selected world.', function()
+    if selectedWorld then
+        Teleport(selectedWorld)
+        print("Teleported you to: ", selectedWorld)
+    end
+end)
