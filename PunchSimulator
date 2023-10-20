@@ -7,6 +7,7 @@ getgenv().autoHacking = false;
 getgenv().autoDungs = false;
 getgenv().autoFarmDungs = false;
 getgenv().autoClaimFreeWins = false;
+getgenv().autoAscending = false
 
 local function autoTrain()
     spawn(function()
@@ -24,22 +25,25 @@ local function autoHack()
         while wait() do
             if autoHacking then
                 if game:GetService("StarterGui").Hacker.Frame.HackButton.ContentText == "HACK" then
-                    wait()
                     local arg = {
                         [1] = "Begin"
                     }
                     game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("HackEvent"):InvokeServer(unpack(arg))
                     wait()
-                    local arg1 = {
-                        [1] = "Boosts"
-                    }
-                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("RobuxShop"):InvokeServer(unpack(arg1))
-                    wait()
-                    local arg2 = {
-                        [1] = "Info"
-                    }
-                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("HackEvent"):InvokeServer(unpack(arg2))
                 end
+            end
+        end
+    end)
+end
+
+local function autoAscend()
+    spawn(function()
+        while wait() do
+            if autoAscending then
+                local args = {
+                    [1] = true
+                }
+                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("AscendEvent"):FireServer(unpack(args))
             end
         end
     end)
@@ -120,7 +124,11 @@ local function autoFarmDungeons()
                     if v.Parent == "Dungeon" and v.ClassName == "Model" then
                         GetPOS(v)
                         if player.Character then
-                            player.Character.HumanoidRootPart.CFrame = CFrame.new(v.x, v.y + 10, v.z)
+                            local function getNil(name,class) for _,v2 in next, getnilinstances() do if v2.ClassName==class and v2.Name==name then return v2;end end end
+                            local args = {
+                                [1] = getNil(v.Name, "Model")
+                            }
+                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
                         end
                     end
                 end
@@ -173,6 +181,11 @@ end)
 tab.newToggle("Auto Train", "auto trains.", false, function(bool)
     autoTraining = bool
     autoTrain()
+end)
+
+tab.newToggle("Auto Ascend", "auto ascends.", false, function(bool)
+    autoAscending = bool
+    autoAscend()
 end)
 
 tab.newToggle("Auto Win", "Auto defeats any boss (Must have 1/3 it's power).", false, function(bool)
