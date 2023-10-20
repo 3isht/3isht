@@ -3,9 +3,10 @@ getgenv().autoClaim = false;
 getgenv().autoWin = false;
 getgenv().autoCollectAll = false;
 getgenv().autoCrafting = false;
-getgenv().autoHacking = false
-getgenv().autoDungs = false
-getgenv().autoFarmDungs = false
+getgenv().autoHacking = false;
+getgenv().autoDungs = false;
+getgenv().autoFarmDungs = false;
+getgenv().autoClaimFreeWins = false;
 
 local function autoTrain()
     spawn(function()
@@ -72,6 +73,17 @@ local function autoWinFights()
                     [1] = true
                 }
                 game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PushEvent"):FireServer(unpack(args))
+                wait()
+            end
+        end
+    end)
+end
+
+local function autoClaimWins()
+    spawn(function()
+        while wait() do
+            if autoClaimFreeWins then
+                game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("FreeRobloxShop"):FireServer()
                 wait()
             end
         end
@@ -171,6 +183,11 @@ end)
 tab.newToggle("Auto Hack", "Auto hacks every 30 minutes.", false, function(bool)
     autoHacking = bool
     autoHack()
+end)
+
+tab.newToggle("Auto Claim Free Shop Trophies", "Auto collects free wins in the shop.", false, function(bool)
+    autoClaimFreeWins = bool
+    autoClaimWins()
 end)
 
 tab.newToggle("Auto Collect Drops", "Auto collects all drops around the world.", false, function(bool)
