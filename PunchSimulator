@@ -120,7 +120,7 @@ local function autoFarmDungeons()
         while wait() do
             if autoFarmDungs then
                 local player = game.Players.LocalPlayer
-                for _, v in pairs(workspace.BreakableParts.Dungeon:GetChildren()) do
+                for _, v in pairs(game.Workspace.BreakableParts.Dungeon:GetChildren()) do
                     for _, v2 in pairs(v:GetChildren()) do
                         if v and v2.Name == "Head" then
                             GetPOS(v2)
@@ -132,7 +132,7 @@ local function autoFarmDungeons()
                                     }
                                     spawn(function ()
                                         while player.Character do
-                                            player.Character.PrimaryPart.CFrame = CFrame.new(v2.x, v2.y + 30, v2.z)
+                                            player.Character.PrimaryPart.CFrame = CFrame.new(v2.x, v2.y + 10, v2.z)
                                             wait(0.5)
                                         end
                                     end)
