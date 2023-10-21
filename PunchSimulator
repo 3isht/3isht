@@ -137,7 +137,7 @@ local function autoFarmDungeons()
                                         end
                                     end)
                                     game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
-                                    wait()
+                                    wait(3)
                                 end
                             end
                         end
