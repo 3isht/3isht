@@ -133,11 +133,16 @@ local function autoFarmDungeons()
                                     spawn(function ()
                                         while v do
                                             player.Character.PrimaryPart.CFrame = CFrame.new(v2.CFrame.x, v2.CFrame.y + 10, v2.CFrame.z)
-                                            wait(0.5)
+                                            wait(0.3)
                                         end
                                     end)
                                     if v2.Parent then
                                         game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
+                                        function getNil(name,class) for _,v3 in next, getnilinstances() do if v3.ClassName==class and v3.Name==name then return v3;end end end
+                                        local args1 = {
+                                            [1] = getNil(v.Name, "Model")
+                                        }
+                                        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("PunchEvent"):FireServer(unpack(args1))
                                     end
                                     wait(1)
                                 end
