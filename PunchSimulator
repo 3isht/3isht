@@ -125,18 +125,20 @@ local function autoFarmDungeons()
                         if v and v2.Name == "Head" then
                             GetPOS(v2)
                             if player.Character then
-                                if v2.Parent then
+                                if v then
                                     function getNil(name,class) for _,v3 in next, getnilinstances() do if v3.ClassName==class and v3.Name==name then return v3;end end end
                                     local args = {
-                                        [1] = getNil(v2.Parent.Name, "Model")
+                                        [1] = getNil(v.Name, "Model")
                                     }
                                     spawn(function ()
                                         while player.Character do
                                             player.Character.PrimaryPart.CFrame = CFrame.new(v2.CFrame.x, v2.CFrame.y + 10, v2.CFrame.z)
                                             wait(0.5)
-                                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
                                         end
                                     end)
+                                    if v2.Parent then
+                                        game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
+                                    end
                                     wait(1)
                                 end
                             end
