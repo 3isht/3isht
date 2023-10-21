@@ -131,7 +131,7 @@ local function autoFarmDungeons()
                                         [1] = getNil(v.Name, "Model")
                                     }
                                     spawn(function ()
-                                        while player.Character do
+                                        while v do
                                             player.Character.PrimaryPart.CFrame = CFrame.new(v2.CFrame.x, v2.CFrame.y + 10, v2.CFrame.z)
                                             wait(0.5)
                                         end
