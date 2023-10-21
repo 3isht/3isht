@@ -132,7 +132,7 @@ local function autoFarmDungeons()
                                     }
                                     spawn(function ()
                                         while player.Character do
-                                            player.Character.PrimaryPart.CFrame = CFrame.new(v2.x, v2.y + 30, v2.z)
+                                            player.Character.PrimaryPart.CFrame = CFrame.new(v2.x, v2.y + 20, v2.z)
                                             wait(0.1)
                                         end
                                     end)
