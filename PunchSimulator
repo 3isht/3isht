@@ -132,11 +132,11 @@ local function autoFarmDungeons()
                                     }
                                     spawn(function ()
                                         while player.Character do
-                                            player.Character.PrimaryPart.CFrame = CFrame.new(v2.x, v2.y + 10, v2.z)
+                                            player.Character.PrimaryPart.CFrame = CFrame.new(v2.x, v2.y + 30, v2.z)
                                             wait(0.5)
-                                            game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
                                         end
                                     end)
+                                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("SetTarget"):FireServer(unpack(args))
                                     wait()
                                 end
                             end
