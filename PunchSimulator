@@ -120,7 +120,7 @@ local function autoFarmDungeons()
         while wait() do
             if autoFarmDungs then
                 local player = game.Players.LocalPlayer
-                for _, v in pairs(game.Workspace.BreakableParts.Dungeon:FindFirstChild()) do
+                for _, v in pairs(game.Workspace.BreakableParts.Dungeon:GetFirstChild()) do
                     for _, v2 in pairs(v:GetChildren()) do
                         if v and v2.Name == "Head" then
                             GetPOS(v2)
