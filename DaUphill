@@ -1,9 +1,21 @@
 getgenv().AutoHighArm = false;
 
 local function autoBuyArmour()
-    
+    spawn(function()
+        while wait() do
+            if AutoHighArm then
+                fireclickdetector(workspace.MAP.Map["[High-Medium Armor]"].ClickDetector)
+                wait(0.3)
+            end
+        end
+    end)
 end
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "Image Id here")
+
+tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
+    AutoHighArm = bool
+    autoBuyArmour()
+end)
