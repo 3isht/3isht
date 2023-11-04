@@ -1,11 +1,43 @@
 getgenv().AutoHighArm = false;
+getgenv().lock = false;
+local camera = game.Workspace.Camera
+local me = game.Players.LocalPlayer
+local user = nil
+local userPart = nil
+local TS = game.TweenService
+local tweeninfo = TweenInfo.new(0.5)
+local nameInp = nil
+
+local function getFullUser(input)
+    local players = game.Workspace:GetChildren()
+    for _, player in ipairs(players) do 
+        if player.Name == input then
+            user = player
+        end
+    end
+    return user
+end
+
+local function startLock(target)
+    spawn(function()
+        while wait() do
+            if lock then
+                if target ~= me and target.Name ~= me.Name then
+                    if target.LowerTorso then
+                        camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position)
+                    end
+                end
+            end
+        end
+    end)
+end
 
 local function autoBuyArmour()
     spawn(function()
         while wait() do
             if AutoHighArm then
                 fireclickdetector(workspace.MAP.Map["[High-Medium Armor]"].ClickDetector)
-                wait()
+                wait(0.05)
             end
         end
     end)
@@ -18,4 +50,11 @@ local tab = lib.newTab("Main", "Image Id here")
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
+end)
+tab.newInput("Username", "Username to lock on.", function(inp)
+    getFullUser(inp)
+end)
+tab.newToggle("Lock On User", "Starts Locking.", false, function(bool)
+    lock = bool
+    startLock(user)
 end)
