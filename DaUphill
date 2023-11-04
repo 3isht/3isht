@@ -5,7 +5,7 @@ local function autoBuyArmour()
         while wait() do
             if AutoHighArm then
                 fireclickdetector(workspace.MAP.Map["[High-Medium Armor]"].ClickDetector)
-                wait(0.3)
+                wait(0.05)
             end
         end
     end)
