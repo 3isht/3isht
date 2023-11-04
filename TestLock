@@ -1,6 +1,6 @@
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
-local camera = game.CurrentCamera
+local camera = game.Workspace.Camera
 local me = game.Players.LocalPlayer
 local user = nil
 local userPart = nil
