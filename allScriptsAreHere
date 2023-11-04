@@ -1,2 +1,3 @@
-print("Hi dad.")
-print("Hi mum.")
+-- Da Uphill auto buy High-Medium armour script.
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/blob/master/DaUphill"))()
