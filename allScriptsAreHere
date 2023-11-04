@@ -1,3 +1,6 @@
--- Da Uphill auto buy High-Medium armour script.
+-- Da Uphill scripts.
+
+-- TESTING...
+loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/TestLock"))()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/DaUphill"))()
