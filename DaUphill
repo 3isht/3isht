@@ -1,1 +1,9 @@
-.
+getgenv().AutoHighArm = false;
+
+local function autoBuyArmour()
+    
+end
+
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
+local window = lib:Load("Made By Tariq", "Default")
+local tab = lib.newTab("Main", "Image Id here")
