@@ -1,42 +1,95 @@
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 local camera = game.Workspace.Camera
-local me = game.Players.LocalPlayer
 local user = nil
 local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
-local nameInp = nil
+local RS = game:GetService("RunService")
+local currentPlrs = {}
 
 local function getFullUser(input)
-    local players = game.Players:GetPlayers()
-    for _, player in ipairs(players) do 
-        user = player:GetName(input)
-        userPart = game.workspace.user.Character.LowerTorso
+    local players = game.Workspace:GetChildren()
+    for _, player in ipairs(players) do
+        if player.Name:lower() == input:lower() then
+            if user ~= player.Name then
+                user = player
+            end
+        end
     end
-    return user, userPart
+    return user
+end
+
+local function LockNotif()
+    if user then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Lock Notification",
+            Text = "Locked On: "..tostring(user.Name),
+            Icon = "",
+            Duration = 0.7
+        })
+    end
+end
+
+local function UnLockNotif()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Lock Notification",
+        Text = "Unlocked...",
+        Icon = "",
+        Duration = 0.7
+    })
+end
+
+local function allPlayers()
+    local plrs = game.Players
+    currentPlrs = {}
+    for _, plr in ipairs(plrs:GetChildren()) do
+        table.insert(currentPlrs, plr)
+        wait()
+    end
+    return currentPlrs
 end
 
 local function startLock(target)
     spawn(function()
         while wait() do
             if lock then
-                if target ~= me and target.Name ~= me.Name then
-                    local tween = TS:Create(camera, tweenInfo, {CFrame = CFrame.new(camera.Position, target.Position)})
-                    tween:Play()
-                    if not lock then tween:Cancel() return end
+                local NAME = target.Name
+                local MoveDirection = target.Humanoid.MoveDirection
+                if target and not target:GetAttribute("Knocked") then
+              				    if target.LowerTorso then
+            		  		        if MoveDirection.X == 0 and MoveDirection.Z == 0 then
+                  				        camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position)
+            		  		            wait()
+                				      else
+            				              camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + target.Humanoid.MoveDirection*3)
+            		  		            wait()
+            		  		        end
+              				    end
                 end
             end
         end
     end)
 end
 
+local function update(victim)
+    if victim.Name == user.Name and lock then
+        startLock(victim)
+    end
+end
+
+if user then
+    Workspace.ChildAdded:Connect(update)
+end
+
 local function autoBuyArmour()
     spawn(function()
         while wait() do
             if AutoHighArm then
-                fireclickdetector(workspace.MAP.Map["[High-Medium Armor]"].ClickDetector)
-                wait(0.05)
+                local me = game.Players.LocalPlayer.Name
+                fireclickdetector(game.workspace.MAP.Ignored.BuyPads["[High-Medium Armor]"].ClickDetector)
+                wait()
+                game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
             end
         end
     end)
@@ -50,11 +103,27 @@ tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
 end)
+--tab.newDropdown("Current Players", "Gets all players in the server.", currentPlrs, true, function(picked)
+--    if picked then
+--        user = nil
+--    end
+--    user = picked
+--end)
+--tab.newButton("Refresh Current Players", "Refreshes current players.", function()
+--    allPlayers()
+--end)
 tab.newInput("Username", "Username to lock on.", function(inp)
-    nameInp = inp
-    getFullUser(nameInp)
+    getFullUser(inp)
+    wait(1)
+    inp = nil
 end)
-tab.newToggle("Lock On User", "Starts Locking.", false, function(bool)
+tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
+    if bool == false then
+        UnLockNotif()
+    end
+    if bool == true then
+        LockNotif()
+    end
     lock = bool
     startLock(user)
 end)
