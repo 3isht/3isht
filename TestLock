@@ -1,5 +1,6 @@
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
+getgenv().AutoInfHealth = false;
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
@@ -15,10 +16,24 @@ local function getFullUser(input)
             if user ~= player.Name then
                 user = player
             end
+            if user.Name ~= player.Name then
+                user = player
+            end
         end
     end
     return user
 end
+
+local function InfHealth()
+    spawn(function()
+        while wait() do
+            local PlrName = game.Players.LocalPlayer.Name
+            if AutoInfHealth then
+                workspace[PlrName].Humanoid.Health = 100
+            end
+        end
+    end)
+end 
 
 local function LockNotif()
     if user then
@@ -102,6 +117,10 @@ local tab = lib.newTab("Main", "Image Id here")
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
+end)
+tab.newToggle("Auto Max Health", "", false, function(bool)
+    AutoInfHealth = bool
+    InfHealth()
 end)
 --tab.newDropdown("Current Players", "Gets all players in the server.", currentPlrs, true, function(picked)
 --    if picked then
