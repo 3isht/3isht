@@ -73,13 +73,7 @@ local function startLock(target)
                 local MoveDirection = target.Humanoid.MoveDirection
                 if target and not target:GetAttribute("Knocked") then
               				    if target.LowerTorso then
-            		  		        if MoveDirection.X == 0 and MoveDirection.Z == 0 then
-                  				        camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position)
-            		  		            wait()
-                				      else
-            				              camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + target.Humanoid.MoveDirection*3)
-            		  		            wait()
-            		  		        end
+                  				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + target.LowerTorso.Velocity * 2)
               				    end
                 end
             end
