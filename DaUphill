@@ -1,31 +1,94 @@
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
+getgenv().AutoInfHealth = false;
+getgenv().autoRst = false;
 local camera = game.Workspace.Camera
-local me = game.Players.LocalPlayer
 local user = nil
 local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
-local nameInp = nil
+local RS = game:GetService("RunService")
+local currentPlrs = {}
 
 local function getFullUser(input)
-    local players = game.Workspace:GetChildren()
-    for _, player in ipairs(players) do 
-        if player.Name == input then
-            user = player
-        end
-    end
+    local TARGET = game.Workspace:FindFirstChild(input)
+    user = TARGET
     return user
+end
+
+local function InfHealth()
+    spawn(function()
+        while wait() do
+            local PlrName = game.Players.LocalPlayer.Name
+            if AutoInfHealth then
+                if game.Workspace:FindFirstChild(PlrName).Humanoid then
+                    game.Workspace:FindFirstChild(PlrName).Humanoid:Remove()
+                end
+            end
+        end
+    end)
+end 
+
+local function autoReset()
+    spawn(function()
+        while wait() do
+            if autoRst then
+                local LP = game.Players.LocalPlayer.Name
+                local WLP = game.Workspace[LP]
+                local HRT = WLP.HumanoidRootPart
+                if WLP.Humanoid.Health <= 5 then
+                    local oldPOS = HRT.CFrame.Position
+                    HRT.Size = 1,2,0.5,1
+                    HRT.CFrame = CFrame.new(99999, 99999, 99999)
+                    WLP.Humanoid.Health = 0
+                    wait(4.5)
+                    HRT.CFrame = CFrame.new(oldPOS)
+                end
+            end
+        end
+    end)
+end
+
+local function LockNotif()
+    if user then
+        game.StarterGui:SetCore("SendNotification", {
+            Title = "Lock Notification",
+            Text = "Locked On: "..tostring(user.Name),
+            Icon = "",
+            Duration = 0.7
+        })
+    end
+end
+
+local function UnLockNotif()
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Lock Notification",
+        Text = "Unlocked...",
+        Icon = "",
+        Duration = 0.7
+    })
+end
+
+local function allPlayers()
+    local plrs = game.Players
+    currentPlrs = {}
+    for _, plr in ipairs(plrs:GetChildren()) do
+        table.insert(currentPlrs, plr)
+        wait()
+    end
+    return currentPlrs
 end
 
 local function startLock(target)
     spawn(function()
         while wait() do
             if lock then
-                if target ~= me and target.Name ~= me.Name then
-                    if target.LowerTorso then
-                        camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position)
-                    end
+                local NAME = target.Name
+                local MoveDirection = target.Humanoid.MoveDirection
+                if target and not target:GetAttribute("Knocked") then
+              				    if target.LowerTorso then
+                  				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + target.LowerTorso.Velocity * 0.4)
+              				    end
                 end
             end
         end
@@ -36,8 +99,10 @@ local function autoBuyArmour()
     spawn(function()
         while wait() do
             if AutoHighArm then
-                fireclickdetector(workspace.MAP.Map["[High-Medium Armor]"].ClickDetector)
-                wait(0.05)
+                local me = game.Players.LocalPlayer.Name
+                fireclickdetector(game.workspace.MAP.Ignored.BuyPads["[High-Medium Armor]"].ClickDetector)
+                wait()
+                game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
             end
         end
     end)
@@ -51,10 +116,33 @@ tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
 end)
+tab.newToggle("Auto Max Health", "", false, function(bool)
+    AutoInfHealth = bool
+    InfHealth()
+end)
+tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", false, function(bool)
+    autoRst = bool
+    autoReset()
+end)
+--tab.newDropdown("Current Players", "Gets all players in the server.", currentPlrs, true, function(picked)
+--    if picked then
+--        user = nil
+--    end
+--    user = picked
+--end)
+--tab.newButton("Refresh Current Players", "Refreshes current players.", function()
+--    allPlayers()
+--end)
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
-tab.newToggle("Lock On User", "Starts Locking.", false, function(bool)
+tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
+    if not bool then
+        UnLockNotif()
+    end
+    if bool then
+        LockNotif()
+    end
     lock = bool
     startLock(user)
 end)
