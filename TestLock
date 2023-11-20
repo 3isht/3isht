@@ -157,13 +157,13 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     end
     if bool then
         LockNotif()
-        while wait(1) do
+        while wait() do
             if VICTIM ~= user then
                 VICTIM = user
             end
         end
     end
     lock = bool
-    startLock(VICTIM)
+    startLock(user)
     print(VICTIM)
 end)
