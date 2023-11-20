@@ -100,7 +100,7 @@ local function startLock(target)
             if lock then
                 local NAME = target.Name
                 local MoveDirection = target.Humanoid.MoveDirection
-                if target and not target:GetAttribute("Knocked") then
+                if game.Workspace:FindFirstChild(NAME) and not game.Workspace:FindFirstChild(NAME):GetAttribute("Knocked") then
               				    if target.LowerTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + target.LowerTorso.Velocity * 0.4)
               				    end
@@ -139,15 +139,6 @@ tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", fals
     autoRst = bool
     autoReset()
 end)
---tab.newDropdown("Current Players", "Gets all players in the server.", currentPlrs, true, function(picked)
---    if picked then
---        user = nil
---    end
---    user = picked
---end)
---tab.newButton("Refresh Current Players", "Refreshes current players.", function()
---    allPlayers()
---end)
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
@@ -158,12 +149,14 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     if bool then
         LockNotif()
         while wait() do
-            if VICTIM ~= user then
+            if user ~= VICTIM then
                 VICTIM = user
+            else
+                break
             end
         end
     end
     lock = bool
-    startLock(user)
+    startLock(VICTIM)
     print(VICTIM)
 end)
