@@ -18,7 +18,7 @@ local function getFullUser(input)
     for _, PLAYER in ipairs(PLAYERS) do
         local PLR = PLAYER.Name:lower()
         local INP = input:lower()
-        if string.sub(PLR,1,#INP) == INP then
+        if string.sub(PLR,1,#INP) == INP and PLAYER:FindFirstChild("Humanoid") then
             table.insert(MATCHES, PLAYER)
         end
     end
@@ -53,7 +53,7 @@ local function autoReset()
                 local HRT = WLP.HumanoidRootPart
                 if WLP.Humanoid.Health <= 5 then
                     local oldPOS = HRT.CFrame.Position
-                    HRT.Size = Vector3.new(1,2,0.5,1)
+                    HRT.Size = Vector3.new(1,2,0.5)
                     HRT.CFrame = CFrame.new(99999, 99999, 99999)
                     WLP.Humanoid.Health = 0
                     wait(4.5)
@@ -84,23 +84,13 @@ local function UnLockNotif()
     })
 end
 
-local function allPlayers()
-    local plrs = game.Players
-    currentPlrs = {}
-    for _, plr in ipairs(plrs:GetChildren()) do
-        table.insert(currentPlrs, plr)
-        wait()
-    end
-    return currentPlrs
-end
-
 local function startLock(target)
     spawn(function()
         while wait() do
             if lock then
                 local NAME = target.Name
                 local MoveDirection = target.Humanoid.MoveDirection
-                if game.Workspace:FindFirstChild(NAME) and not game.Workspace:FindFirstChild(NAME):GetAttribute("Knocked") then
+                if target and not target:GetAttribute("Knocked") then
               				    if target.LowerTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + target.LowerTorso.Velocity * 0.4)
               				    end
