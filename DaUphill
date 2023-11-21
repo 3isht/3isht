@@ -9,11 +9,26 @@ local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local currentPlrs = {}
+local VICTIM = nil
 
 local function getFullUser(input)
-    local TARGET = game.Workspace:FindFirstChild(input)
-    user = TARGET
-    return user
+    local MATCHES = {}
+    local PLAYERS = game.Workspace:GetChildren()
+    local LEN = #input
+    for _, PLAYER in ipairs(PLAYERS) do
+        local PLR = PLAYER.Name:lower()
+        local INP = input:lower()
+        if string.sub(PLR,1,#INP) == INP and PLAYER:FindFirstChild("Humanoid") then
+            table.insert(MATCHES, PLAYER)
+        end
+    end
+    if #MATCHES > 0 then
+        user = MATCHES[1]
+        return user
+    else
+       user = nil
+        return user
+    end
 end
 
 local function InfHealth()
@@ -22,7 +37,7 @@ local function InfHealth()
             local PlrName = game.Players.LocalPlayer.Name
             if AutoInfHealth then
                 if game.Workspace:FindFirstChild(PlrName).Humanoid then
-                    game.Workspace:FindFirstChild(PlrName).Humanoid:Remove()
+                    game.Workspace:FindFirstChild(PlrName).Head:Remove()
                 end
             end
         end
@@ -36,9 +51,9 @@ local function autoReset()
                 local LP = game.Players.LocalPlayer.Name
                 local WLP = game.Workspace[LP]
                 local HRT = WLP.HumanoidRootPart
-                if WLP.Humanoid.Health <= 5 then
+                if WLP.Humanoid.Health <= 20 then
                     local oldPOS = HRT.CFrame.Position
-                    HRT.Size = 1,2,0.5,1
+                    HRT.Size = Vector3.new(1,2,0.5)
                     HRT.CFrame = CFrame.new(99999, 99999, 99999)
                     WLP.Humanoid.Health = 0
                     wait(4.5)
@@ -69,16 +84,6 @@ local function UnLockNotif()
     })
 end
 
-local function allPlayers()
-    local plrs = game.Players
-    currentPlrs = {}
-    for _, plr in ipairs(plrs:GetChildren()) do
-        table.insert(currentPlrs, plr)
-        wait()
-    end
-    return currentPlrs
-end
-
 local function startLock(target)
     spawn(function()
         while wait() do
@@ -86,8 +91,14 @@ local function startLock(target)
                 local NAME = target.Name
                 local MoveDirection = target.Humanoid.MoveDirection
                 if target and not target:GetAttribute("Knocked") then
-              				    if target.LowerTorso then
-                  				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + target.LowerTorso.Velocity * 0.4)
+              				    if target.UpperTorso then
+                  				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.4)
+              				    end
+                end
+                if not target or target:GetAttribute("Knocked") then
+                    local humanoid = game.Workspace:FindFirstChild(target):FindFirstChild("Humanoid")
+                    if humanoid and not target:GetAttribute("Knocked") then
+                        camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.4)
               				    end
                 end
             end
@@ -124,15 +135,6 @@ tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", fals
     autoRst = bool
     autoReset()
 end)
---tab.newDropdown("Current Players", "Gets all players in the server.", currentPlrs, true, function(picked)
---    if picked then
---        user = nil
---    end
---    user = picked
---end)
---tab.newButton("Refresh Current Players", "Refreshes current players.", function()
---    allPlayers()
---end)
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
@@ -142,7 +144,15 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     end
     if bool then
         LockNotif()
+        while wait() do
+            if user ~= VICTIM then
+                VICTIM = user
+            else
+                break
+            end
+        end
     end
     lock = bool
-    startLock(user)
+    startLock(VICTIM)
+    print(VICTIM)
 end)
