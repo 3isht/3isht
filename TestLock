@@ -2,6 +2,7 @@ getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
+getgenv().stomp = false;
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
@@ -15,7 +16,7 @@ local function getFullUser(input)
     local MATCHES = {}
     local PLAYERS = game.Workspace:GetChildren()
     local LEN = #input
-    if input == "" or input == " " then return end
+    if input == "" or input == " " then user = nil return end
     for _, PLAYER in ipairs(PLAYERS) do
         local PLR = PLAYER.Name:lower()
         local INP = input:lower()
@@ -91,7 +92,7 @@ local function startLock(target)
             if lock then
                 local NAME = target.Name
                 local MoveDirection = target.Humanoid.MoveDirection
-                if target and not target:GetAttribute("Knocked") then
+                if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.4)
               				    end
@@ -114,6 +115,16 @@ local function autoBuyArmour()
     end)
 end
 
+local function autoStomp()
+    spawn(function()
+        while wait() do
+            if stomp then
+                game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
+            end
+        end
+    end)
+end
+
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "Image Id here")
@@ -121,6 +132,10 @@ local tab = lib.newTab("Main", "Image Id here")
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
+end)
+tab.newToggle("Auto Stomp", "", false, function(bool)
+    stomp = bool
+    autoStomp()
 end)
 tab.newToggle("Auto Max Health", "", false, function(bool)
     AutoInfHealth = bool
