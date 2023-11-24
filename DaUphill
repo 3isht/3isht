@@ -2,19 +2,19 @@ getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
+getgenv().stomp = false;
 local camera = game.Workspace.Camera
 local user = nil
-local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
-local currentPlrs = {}
 local VICTIM = nil
 
 local function getFullUser(input)
     local MATCHES = {}
     local PLAYERS = game.Workspace:GetChildren()
     local LEN = #input
+    if input == "" or input == " " then user = nil return end
     for _, PLAYER in ipairs(PLAYERS) do
         local PLR = PLAYER.Name:lower()
         local INP = input:lower()
@@ -51,7 +51,7 @@ local function autoReset()
                 local LP = game.Players.LocalPlayer.Name
                 local WLP = game.Workspace[LP]
                 local HRT = WLP.HumanoidRootPart
-                if WLP.Humanoid.Health <= 20 then
+                if WLP.Humanoid.Health <= 5 then
                     local oldPOS = HRT.CFrame.Position
                     HRT.Size = Vector3.new(1,2,0.5)
                     HRT.CFrame = CFrame.new(99999, 99999, 99999)
@@ -84,21 +84,20 @@ local function UnLockNotif()
     })
 end
 
-local function startLock(target)
+local function startLock()
     spawn(function()
         while wait() do
             if lock then
+                local target = user
                 local NAME = target.Name
-                local MoveDirection = target.Humanoid.MoveDirection
-                if target and not target:GetAttribute("Knocked") then
-              				    if target.UpperTorso then
-                  				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.4)
-              				    end
-                end
-                if not target or target:GetAttribute("Knocked") then
-                    local humanoid = game.Workspace:FindFirstChild(target):FindFirstChild("Humanoid")
-                    if humanoid and not target:GetAttribute("Knocked") then
-                        camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.4)
+                if target and not target:GetAttribute("Knocked") and game.Players[NAME] then
+              				    if target.LowerTorso then
+              				        local TARGET = target.LowerTorso.Position + (target.LowerTorso.Velocity.X * 0.36204, 0, target.LowerTorso.Velocity.Z * 0.36204)
+              				        local tween = TS:Create(camera, tweeninfo, {CFrame = TARGET})
+                  				    tween:Play()
+              				        if target:GetAttribute("Knocked") then
+              				            tween:Cancel()
+              				        end
               				    end
                 end
             end
@@ -119,6 +118,22 @@ local function autoBuyArmour()
     end)
 end
 
+spawn(function()
+    if lock and user then
+        RS.RenderStepped:Connect(startLock)
+    end
+end)
+
+local function autoStomp()
+    spawn(function()
+        while wait() do
+            if stomp then
+                game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
+            end
+        end
+    end)
+end
+
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "Image Id here")
@@ -126,6 +141,10 @@ local tab = lib.newTab("Main", "Image Id here")
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
+end)
+tab.newToggle("Auto Stomp", "", false, function(bool)
+    stomp = bool
+    autoStomp()
 end)
 tab.newToggle("Auto Max Health", "", false, function(bool)
     AutoInfHealth = bool
@@ -144,15 +163,8 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     end
     if bool then
         LockNotif()
-        while wait() do
-            if user ~= VICTIM then
-                VICTIM = user
-            else
-                break
-            end
-        end
     end
     lock = bool
-    startLock(VICTIM)
-    print(VICTIM)
+    startLock()
+    print(user)
 end)
