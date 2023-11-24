@@ -92,10 +92,7 @@ local function startLock()
                 local NAME = target.Name
                 if target and not target:GetAttribute("Knocked") and game.Players[NAME] then
               				    if target.LowerTorso then
-              				        local OffsetX = target.LowerTorso.Velocity.X * 0.36204
-              				        local OffsetZ = target.LowerTorso.Velocity.Z * 0.36204
-              				        local TARGETPos = target.LowerTorso.Position + (OffsetX, 0, OffsetZ)
-              				        local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, TARGETPos) })
+              				        local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.36204) })
                   				    tween:Play()
               				        if target:GetAttribute("Knocked") then
               				            tween:Cancel()
