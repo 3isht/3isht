@@ -6,7 +6,7 @@ getgenv().stomp = false;
 local camera = game.Workspace.Camera
 local user = nil
 local TS = game.TweenService
-local tweeninfo = TweenInfo.new(0.5)
+local tweeninfo = TweenInfo.new(0.1)
 local RS = game:GetService("RunService")
 local VICTIM = nil
 
