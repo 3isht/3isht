@@ -166,3 +166,13 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     startLock(VICTIM)
     print(VICTIM)
 end)
+tab.newButton("Invisible", "", function()
+    local name = game.Players.LocalPlayer.Name
+    local localPlayer = game.Workspace[name]
+    local InvisPos = localPlayer.HumanoidRootPart.CFrame
+    localPlayer.HumanoidRootPart.CFrame = CFrame.new(0, 9999999999, 0)
+    wait(0.1)
+    localPlayer:BreakJoints()
+    wait(0.1)
+    localPlayer.HumanoidRootPart.CFrame = InvisPos
+end)
