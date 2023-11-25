@@ -119,6 +119,7 @@ local function autoBuyArmour()
 end
 
 if user then
+    print(user)
     local TargerVelocity = user.LowerTorso.Velocity
 end
 
