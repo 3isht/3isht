@@ -15,6 +15,7 @@ local VICTIM = nil
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
 local function getFullUser(input)
+    user = nil
     local MATCHES = {}
     local PLAYERS = game.Workspace:GetChildren()
     local LEN = #input
@@ -96,6 +97,7 @@ local function startLock(loser)
                 target = game.Workspace[loser]
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, 0, target.UpperTorso.Velocity.Z * 0.34204)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
+                    if loser ~= target.Name then break return end
               				    if target.UpperTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
               				    end
@@ -147,11 +149,11 @@ tab.newToggle("Auto Stomp", "", false, function(bool)
     stomp = bool
     autoStomp()
 end)
+--[[
 tab.newToggle("Auto Max Health", "", false, function(bool)
     AutoInfHealth = bool
     InfHealth()
 end)
---[[
 tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", false, function(bool)
     autoRst = bool
     autoReset()
