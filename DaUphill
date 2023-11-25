@@ -6,7 +6,7 @@ getgenv().stomp = false;
 local camera = game.Workspace.Camera
 local user = nil
 local TS = game.TweenService
-local tweeninfo = TweenInfo.new(0.5)
+local tweeninfo = TweenInfo.new(3)
 local RS = game:GetService("RunService")
 local VICTIM = nil
 local smooth = 0.35 -- 0 to 1
@@ -93,7 +93,7 @@ local function startLock()
                 local NAME = target.Name
                 if target and not target:GetAttribute("Knocked") and game.Players[NAME] then
               				    if target.LowerTorso then
-              				        local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + smootheningVelocity(target) * 0.36204) })
+              				        local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + smootheningVelocity(target) * 0.34204) })
                   				    tween:Play()
               				        if target:GetAttribute("Knocked") then
               				            tween:Cancel()
