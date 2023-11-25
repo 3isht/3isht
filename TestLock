@@ -89,11 +89,11 @@ local function UnLockNotif()
     })
 end
 
-local function startLock(target)
+local function startLock(loser)
     spawn(function()
         while wait() do
             if lock then
-                target = game.Workspace[target]
+                target = game.Workspace[loser]
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, 0, target.UpperTorso.Velocity.Z * 0.34204)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
