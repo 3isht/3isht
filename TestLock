@@ -105,8 +105,10 @@ local function startLock(target)
     end)
 end
 
-RS.RenderStepped:Connect(function()
-    startLock(VICTIM)
+spawn(function()
+    if user and lock then
+        startLock(user)
+    end
 end)
 
 local function autoBuyArmour()
