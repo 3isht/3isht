@@ -117,12 +117,13 @@ local function autoBuyArmour()
         end
     end)
 end
+
 if user then
-    local TargetVelocity = user.LowerTorso.Velocity
+    local TargerVelocity = user.LowerTorso.Velocity
 end
 
 local function smootheningVelocity(person)
-    local TargetVelocity = TargetVelocity * smooth + person.LowerTorso.Velocty * (1 - smooth)
+    TargetVelocity = TargetVelocity * smooth + person.LowerTorso.Velocty * (1 - smooth)
     return TargetVelocity
 end
 
