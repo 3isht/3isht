@@ -105,6 +105,10 @@ local function startLock(target)
     end)
 end
 
+RS.HeartBeat:Connect(function()
+    startLock(VICTIM)
+end)
+
 local function autoBuyArmour()
     spawn(function()
         while wait() do
@@ -187,7 +191,7 @@ end)
 tab2.newButton("Refresh", "", function()
     local LP = game.Players.LocalPlayer
     if LP then
-        LP:LoadCharacter()
+        game.ReplicatedStorage.RefreshMyCharacter:FireServer()
     end
 end)
 tab2.newButton("Kick", "", function()
