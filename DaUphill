@@ -7,7 +7,7 @@ local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
 local TS = game.TweenService
-local tweeninfo = TweenInfo.new(0.80)
+local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
 
