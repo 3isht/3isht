@@ -23,7 +23,7 @@ local function getFullUser(input)
         local PLR = PLAYER.Name:lower()
         local INP = input:lower()
         if string.sub(PLR,1,#INP) == INP and PLAYER:FindFirstChild("Humanoid") then
-            table.insert(MATCHES, PLAYER)
+            table.insert(MATCHES, PLAYER.Name)
         end
     end
     if #MATCHES > 0 then
@@ -93,6 +93,7 @@ local function startLock(target)
     spawn(function()
         while wait() do
             if lock then
+                target = game.Workspace[target]
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, 0, target.UpperTorso.Velocity.Z * 0.34204)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
@@ -104,7 +105,7 @@ local function startLock(target)
     end)
 end
 
-RS.RenderStepped:Connect(function()
+RS.HeartBeat:Connect(function()
     startLock(VICTIM)
 end)
 
