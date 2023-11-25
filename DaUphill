@@ -6,9 +6,10 @@ getgenv().stomp = false;
 local camera = game.Workspace.Camera
 local user = nil
 local TS = game.TweenService
-local tweeninfo = TweenInfo.new(0.1)
+local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
+local smooth = 0.35 -- 0 to 1
 
 local function getFullUser(input)
     local MATCHES = {}
@@ -92,7 +93,7 @@ local function startLock()
                 local NAME = target.Name
                 if target and not target:GetAttribute("Knocked") and game.Players[NAME] then
               				    if target.LowerTorso then
-              				        local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.36204) })
+              				        local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, target.LowerTorso.Position + smootheningVelocity(target) * 0.36204) })
                   				    tween:Play()
               				        if target:GetAttribute("Knocked") then
               				            tween:Cancel()
@@ -117,9 +118,19 @@ local function autoBuyArmour()
     end)
 end
 
+local TargetVelocity = user.LowerTorso.Velocity
+
+local function smootheningVelocity(person)
+    local TargetVelocity = TargetVelocity * smooth + person.LowerTorso.Velocty * (1 - smooth)
+    return TargetVelocity
+end
+
 spawn(function()
     if lock and user then
-        RS.RenderStepped:Connect(startLock)
+        RS.HeartBeat:Connect(function()
+            smootheningVelocity(user)
+            startLock()
+        end)
     end
 end)
 
@@ -145,6 +156,7 @@ tab.newToggle("Auto Stomp", "", false, function(bool)
     stomp = bool
     autoStomp()
 end)
+--[[
 tab.newToggle("Auto Max Health", "", false, function(bool)
     AutoInfHealth = bool
     InfHealth()
@@ -153,6 +165,7 @@ tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", fals
     autoRst = bool
     autoReset()
 end)
+]]--
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
@@ -166,4 +179,14 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     lock = bool
     startLock()
     print(user)
+end)
+tab.newButton("Invisible", "", function()
+    local name = game.Players.LocalPlayer.Name
+    local localPlayer = game.Workspace[name]
+    local InvisPos = localPlayer.HumanoidRootPart.CFrame
+    localPlayer.HumanoidRootPart.CFrame = CFrame.new(0, 9999999999, 0)
+    wait(0.1)
+    localPlayer:BreakJoints()
+    wait(0.1)
+    localPlayer.HumanoidRootPart.CFrame = InvisPos
 end)
