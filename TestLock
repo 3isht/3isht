@@ -9,7 +9,6 @@ local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
-local currentPlrs = {}
 local VICTIM = nil
 
 -- CHATSPY
@@ -131,7 +130,8 @@ end
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
-local tab = lib.newTab("Main", "Image Id here")
+local tab = lib.newTab("Main", "")
+local tab2 = lib.newTab("Player", "")
 
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
@@ -172,6 +172,7 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     startLock(VICTIM)
     print(VICTIM)
 end)
+--[[
 tab.newButton("Invisible", "", function()
     local name = game.Players.LocalPlayer.Name
     local localPlayer = game.Workspace[name]
@@ -181,4 +182,17 @@ tab.newButton("Invisible", "", function()
     localPlayer:BreakJoints()
     wait(0.1)
     localPlayer.HumanoidRootPart.CFrame = InvisPos
+end)
+]]
+tab2.newButton("Refresh", "", function()
+    local LP = game.Players.LocalPlayer
+    if LP then
+        LP:LoadCharacter()
+    end
+end)
+tab2.newButton("Kick", "", function()
+    local LP = game.Players.LocalPlayer
+    if LP then
+        LP:Kick("Did you get the last stomp?")
+    end
 end)
