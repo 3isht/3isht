@@ -3,11 +3,12 @@ getgenv().lock = false;
 getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
 getgenv().stomp = false;
+getgenv().tp = false;
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
 local TS = game.TweenService
-local tweeninfo = TweenInfo.new(0.05)
+local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
 
@@ -15,6 +16,7 @@ local VICTIM = nil
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
 local function getFullUser(input)
+    user = nil
     local MATCHES = {}
     local PLAYERS = game.Workspace:GetChildren()
     local LEN = #input
@@ -23,7 +25,7 @@ local function getFullUser(input)
         local PLR = PLAYER.Name:lower()
         local INP = input:lower()
         if string.sub(PLR,1,#INP) == INP and PLAYER:FindFirstChild("Humanoid") then
-            table.insert(MATCHES, PLAYER)
+            table.insert(MATCHES, PLAYER.Name)
         end
     end
     if #MATCHES > 0 then
@@ -49,6 +51,54 @@ local function InfHealth()
     end)
 end 
 
+local function startLock(loser)
+    spawn(function()
+        while wait() do
+            if lock then
+                VICTIM = loser
+                target = game.Workspace[VICTIM]
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, 0, target.UpperTorso.Velocity.Z * 0.34204)
+                if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
+              				    if target.UpperTorso then
+                  				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
+              				    end
+                end
+            end
+            if VICTIM == nil then break end 
+        end
+    end)
+end
+
+game.Workspace.ChildAdded:Connect(function(new)
+    if new.Name == user then
+        startLock(user)
+    end
+end)
+
+local function autoTp(username)
+    spawn(function()
+        while wait() do
+            if tp then
+                local LPN = game.Players.LocalPlayer.Name
+                local LP = game.Workspace[LPN]
+                local VP = game.Workspace[username]
+                if LP.HumanoidRootPart and VP.HumanoidRootPart then
+                    LP.HumanoidRootPart.Position = VP.HumanoidRootPart
+                end
+            end
+        end
+    end)
+end
+
+local function normalTp(username)
+    local LPN = game.Players.LocalPlayer.Name
+    local LP = game.Workspace[LPN]
+    local VP = game.Workspace[username]
+    if LP.HumanoidRootPart and VP.HumanoidRootPart then
+        LP.HumanoidRootPart = VP.HumanoidRootPart
+    end
+end
+
 local function autoReset()
     spawn(function()
         while wait() do
@@ -73,7 +123,7 @@ local function LockNotif()
     if user then
         game.StarterGui:SetCore("SendNotification", {
             Title = "Lock Notification",
-            Text = "Locked On: "..tostring(user.Name),
+            Text = "Locked On: "..tostring(user)/n"Display: "..tostring(game.Players[user].DisplayName),
             Icon = "",
             Duration = 0.7
         })
@@ -87,26 +137,6 @@ local function UnLockNotif()
         Icon = "",
         Duration = 0.7
     })
-end
-
-local function startLock(target)
-    spawn(function()
-        while wait() do
-            if lock then
-                local NAME = target.Name
-                if target and not target:GetAttribute("Knocked") and game.Players[NAME] then
-              				    if target.UpperTorso then
-              				        local totalVel = target.UpperTorso.Position + target.UpperTorso.Velocity * 0.34204
-                  				    local tween = TS:Create(camera, tweeninfo, { CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + target.UpperTorso.Velocity * 0.34204) })
-              				        tween:Play()
-              				        if not lock or target:GetAttribute("Knocked") or not game.Players[NAME] then
-              				            tween:Cancel()
-              				        end
-              				    end
-                end
-            end
-        end
-    end)
 end
 
 local function autoBuyArmour()
@@ -134,8 +164,23 @@ end
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
-local tab = lib.newTab("Main", "Image Id here")
+local tab = lib.newTab("Main", "")
+local tab2 = lib.newTab("Player", "")
 
+tab.newInput("Username", "Username to lock on.", function(inp)
+    getFullUser(inp)
+end)
+tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
+    if not bool then
+        UnLockNotif()
+        VICTIM = nil
+    end
+    if bool then
+        LockNotif()
+    end
+    lock = bool
+    startLock(user)
+end)
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
@@ -143,6 +188,10 @@ end)
 tab.newToggle("Auto Stomp", "", false, function(bool)
     stomp = bool
     autoStomp()
+end)
+tab.newToggle("Auto Teleport To User", "", false, function(bool)
+    tp = bool
+    autoTp(user)
 end)
 --[[
 tab.newToggle("Auto Max Health", "", false, function(bool)
@@ -154,36 +203,18 @@ tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", fals
     autoReset()
 end)
 ]]
-tab.newInput("Username", "Username to lock on.", function(inp)
-    getFullUser(inp)
+tab.newButton("Teleport To User", "", function()
+    normalTp(user)
 end)
-tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
-    if not bool then
-        UnLockNotif()
+tab2.newButton("Refresh", "", function()
+    local LP = game.Players.LocalPlayer
+    if LP then
+        game.ReplicatedStorage.RefreshMyCharacter:FireServer()
     end
-    if bool then
-        LockNotif()
-        while wait() do
-            if user ~= VICTIM then
-                VICTIM = user
-            else
-                break
-            end
-        end
+end)
+tab2.newButton("Kick", "", function()
+    local LP = game.Players.LocalPlayer
+    if LP then
+        LP:Kick("Did you get the last stomp?")
     end
-    lock = bool
-    startLock(VICTIM)
-    print(VICTIM)
 end)
---[[
-tab.newButton("Invisible", "", function()
-    local name = game.Players.LocalPlayer.Name
-    local localPlayer = game.Workspace[name]
-    local InvisPos = localPlayer.HumanoidRootPart.CFrame
-    localPlayer.HumanoidRootPart.CFrame = CFrame.new(0, 9999999999, 0)
-    wait(0.1)
-    localPlayer:BreakJoints()
-    wait(0.1)
-    localPlayer.HumanoidRootPart.CFrame = InvisPos
-end)
-]]
