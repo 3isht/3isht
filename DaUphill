@@ -123,7 +123,7 @@ local function LockNotif()
     if user then
         game.StarterGui:SetCore("SendNotification", {
             Title = "Lock Notification",
-            Text = "Locked On: "..tostring(user)\n"Display: "..tostring(game.Workspace[user].DisplayName),
+            Text = "Locked On: "..tostring(user)/n"Display: "..tostring(game.Workspace[user].DisplayName),
             Icon = "",
             Duration = 0.7
         })
