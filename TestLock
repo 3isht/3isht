@@ -44,7 +44,7 @@ local function InfHealth()
             if AutoInfHealth then
                 if game.Workspace:FindFirstChild(PlrName).Humanoid then
                     game.Workspace:FindFirstChild(PlrName).Head:BreakJoints()
-                    game.Workspace:FindFirstChild(PlrName).Head.Position = CFrame.new(0,9999999,0)
+                    game.Workspace:FindFirstChild(PlrName).Head.Position = Vector3.new(0,9999999,0)
                 end
             end
         end
@@ -83,7 +83,7 @@ local function autoTp(username)
                 local LP = game.Workspace[LPN]
                 local VP = game.Workspace[username]
                 if LP.HumanoidRootPart and VP.HumanoidRootPart then
-                    LP.HumanoidRootPart.Position = VP.Head.Position
+                    LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
                 end
             end
         end
@@ -95,7 +95,7 @@ local function normalTp(username)
     local LP = game.Workspace[LPN]
     local VP = game.Workspace[username]
     if LP.HumanoidRootPart and VP.HumanoidRootPart then
-        LP.HumanoidRootPart.Position = VP.Head.Position
+        LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
     end
 end
 
@@ -193,11 +193,11 @@ tab.newToggle("Auto Teleport To User", "", false, function(bool)
     tp = bool
     autoTp(user)
 end)
---[[
 tab.newToggle("Auto Max Health", "", false, function(bool)
     AutoInfHealth = bool
     InfHealth()
 end)
+--[[
 tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", false, function(bool)
     autoRst = bool
     autoReset()
