@@ -4,6 +4,7 @@ getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
 getgenv().stomp = false;
 getgenv().tp = false;
+getgenv().antistomp = false;
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
@@ -11,6 +12,7 @@ local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
+local LocalName = game.Players.LocalPlayer.Name
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
@@ -44,7 +46,7 @@ local function InfHealth()
             if AutoInfHealth then
                 if game.Workspace:FindFirstChild(PlrName).Humanoid then
                     game.Workspace:FindFirstChild(PlrName).Head:BreakJoints()
-                    game.Workspace:FindFirstChild(PlrName).Head.Position = CFrame.new(0,9999999,0)
+                    game.Workspace:FindFirstChild(PlrName).Head.Position = Vector3.new(0,9999999,0)
                 end
             end
         end
@@ -61,6 +63,10 @@ local function startLock(loser)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
+              				    end
+                    if target.HumanoidRootPart.Position == target.HumanoidRootPart.Position + 0.5 then
+                        TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, target.UpperTorso.Velocity.Y * 0.017102, target.UpperTorso.Velocity.Z * 0.34204)
+                        camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
               				    end
                 end
             end
@@ -83,7 +89,7 @@ local function autoTp(username)
                 local LP = game.Workspace[LPN]
                 local VP = game.Workspace[username]
                 if LP.HumanoidRootPart and VP.HumanoidRootPart then
-                    LP.HumanoidRootPart.Position = VP.HumanoidRootPart
+                    LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
                 end
             end
         end
@@ -95,7 +101,7 @@ local function normalTp(username)
     local LP = game.Workspace[LPN]
     local VP = game.Workspace[username]
     if LP.HumanoidRootPart and VP.HumanoidRootPart then
-        LP.HumanoidRootPart = VP.HumanoidRootPart
+        LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
     end
 end
 
@@ -123,7 +129,7 @@ local function LockNotif()
     if user then
         game.StarterGui:SetCore("SendNotification", {
             Title = "Lock Notification",
-            Text = "Locked On: "..tostring(user)/n"Display: "..tostring(game.Workspace[user].DisplayName),
+            Text = "Locked On: "..tostring(user),
             Icon = "",
             Duration = 0.7
         })
@@ -157,6 +163,18 @@ local function autoStomp()
         while wait() do
             if stomp then
                 game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
+            end
+        end
+    end)
+end
+
+local function antiStomp()
+    spawn(function()
+        while wait() do
+            if antistomp and game.Workspace[LocalName]:GetAttribute("Knocked") then
+                for _, bodyPart in pairs(game.Workspace[LocalName]:FindFirstChildWhichIsA("player body parts class name")) do
+                    bodyPart:Destroy()
+                end
             end
         end
     end)
