@@ -172,7 +172,7 @@ local function antiStomp()
     spawn(function()
         while wait() do
             if antistomp and game.Workspace[LocalName]:GetAttribute("Knocked") then
-                for _, bodyPart in pairs(game.Workspace[LocalName]:FindFirstChildWhichIsA("player body parts class name")) do
+                for _, bodyPart in pairs(game.Workspace[LocalName]:FindFirstChildWhichIsA("BasePart")) do
                     bodyPart:Destroy()
                 end
             end
