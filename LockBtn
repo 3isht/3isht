@@ -10,7 +10,7 @@ btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 btn.Name = "LButton"
 btn.Parent = btnGui
-btn.BackgroundColor3 = Color3.new(3,40,53)
+btn.BackgroundColor3 = Color3fromRBG.new(3,40,53)
 btn.BorderSizePixel = 0
 btn.Position = UDim2.new(0, 737, 0, 35)
 btn.Size = UDim2.new(0, 100, 0, 50)
