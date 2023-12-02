@@ -4,7 +4,6 @@ getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
 getgenv().stomp = false;
 getgenv().tp = false;
-getgenv().antistomp = false;
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
@@ -12,7 +11,6 @@ local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
-local LocalName = game.Players.LocalPlayer.Name
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
@@ -63,10 +61,6 @@ local function startLock(loser)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
-              				    end
-                    if target.HumanoidRootPart.Position == target.HumanoidRootPart.Position + 0.5 then
-                        TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, target.UpperTorso.Velocity.Y * 0.017102, target.UpperTorso.Velocity.Z * 0.34204)
-                        camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
               				    end
                 end
             end
@@ -168,16 +162,6 @@ local function autoStomp()
     end)
 end
 
-local function antiStomp()
-    spawn(function()
-        while wait() do
-            if antistomp and game.Workspace[LocalName]:GetAttribute("Knocked") then
-                game.Workspace:FindFirstChild(LocalName):Destroy()
-            end
-        end
-    end)
-end
-
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
@@ -205,19 +189,15 @@ tab.newToggle("Auto Stomp", "", false, function(bool)
     stomp = bool
     autoStomp()
 end)
-tab.newToggle("Anti Stomp", "", false, function(bool)
-    antistomp = bool
-    antiStomp()
-end)
 tab.newToggle("Auto Teleport To User", "", false, function(bool)
     tp = bool
     autoTp(user)
 end)
---[[
 tab.newToggle("Auto Max Health", "", false, function(bool)
     AutoInfHealth = bool
     InfHealth()
 end)
+--[[
 tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", false, function(bool)
     autoRst = bool
     autoReset()
