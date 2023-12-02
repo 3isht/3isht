@@ -286,7 +286,7 @@ tab2.newButton("Silent Lock", "Locks on the closest person.", function()
     if game.CoreGui:FindFirstChild("ButtonHandler") then
         local silentBtn = Instance.new("TextButton")
         silentBtn.Name = "SilentButton"
-        silentBtn.Parent = btnGui
+        silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
         silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
         silentBtn.BorderSizePixel = 0
         silentBtn.BackgroundTransparency = 0.1
