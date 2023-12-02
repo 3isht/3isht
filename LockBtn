@@ -2,6 +2,7 @@ if game.CoreGui:FindFirstChild("ButtonHandler") then
     game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
 end
 
+
 local btnGui = Instance.new("ScreenGui")
 local btn = Instance.new("TextButton")
 btnGui.Name = "ButtonHandler"
