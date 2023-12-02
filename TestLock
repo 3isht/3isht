@@ -4,7 +4,7 @@ getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
 getgenv().stomp = false;
 getgenv().tp = false;
-getgenv().silent = false;
+getgenv().silent = false
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
@@ -249,10 +249,6 @@ tab.newButton("Teleport To User", "", function()
     normalTp(user)
 end)
 tab2.newButton("Lock Button", "Creates a new lock button.", function()
-    if game.CoreGui:FindFirstChild("ButtonHandler") then
-        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
-    end
-    
     local btnGui = Instance.new("ScreenGui")
     local btn = Instance.new("TextButton")
     btnGui.Name = "ButtonHandler"
@@ -286,10 +282,59 @@ tab2.newButton("Lock Button", "Creates a new lock button.", function()
         startLock(user)
     end)
 end)
-tab2.newButton("Refresh", "", function()
-    local LP = game.Players.LocalPlayer
-    if LP then
-        game.ReplicatedStorage.RefreshMyCharacter:FireServer()
+tab2.newButton("Silent Lock", "Locks on the closest person.", function()
+    if game.CoreGui:FindFirstChild("ButtonHandler") then
+        local silentBtn = Instance.new("TextButton")
+        silentBtn.Name = "SilentButton"
+        silentBtn.Parent = btnGui
+        silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
+        silentBtn.BorderSizePixel = 0
+        silentBtn.BackgroundTransparency = 0.1
+        silentBtn.Position = UDim2.new(0, 630, 0, -15)
+        silentBtn.Size = UDim2.new(0, 100, 0, 50)
+        silentBtn.Font = Enum.Font.GothamBlack
+        silentBtn.Text = "Silent Lock"
+        silentBtn.TextColor3 = Color3.new(1,1,1)
+        silentBtn.TextSize = 16
+        silentBtn.TextTransparency = 0.132
+    elseif not game.CoreGui:FindFirstChild("ButtonHandler") then
+        local btnGui = Instance.new("ScreenGui")
+        btnGui.Name = "ButtonHandler"
+        btnGui.Parent = game.CoreGui
+        btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        
+        local silentBtn = Instance.new("TextButton")
+        silentBtn.Name = "SilentButton"
+        silentBtn.Parent = btnGui
+        silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
+        silentBtn.BorderSizePixel = 0
+        silentBtn.BackgroundTransparency = 0.1
+        silentBtn.Position = UDim2.new(0, 630, 0, -15)
+        silentBtn.Size = UDim2.new(0, 100, 0, 50)
+        silentBtn.Font = Enum.Font.GothamBlack
+        silentBtn.Text = "Silent Lock"
+        silentBtn.TextColor3 = Color3.new(1,1,1)
+        silentBtn.TextSize = 16
+        silentBtn.TextTransparency = 0.132
+    end
+    silentBtn.MouseButton1Click:Connect(function()
+        if not silent then
+            silent = true
+        elseif silent then
+            silent = false
+        end
+        if not silent then
+            UnlockNotif()
+        end
+        if silent then
+            LockNotif()
+        end
+        silentLock()
+    end)
+end)
+tab2.newButton("Destroy Lock Buttons", "Destroys all buttons created by this script.", function()
+    if game.CoreGui:FindFirstChild("ButtonHandler") then
+        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
 end)
 tab2.newButton("Kick", "", function()
