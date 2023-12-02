@@ -208,7 +208,7 @@ end)
 tab.newButton("Teleport To User", "", function()
     normalTp(user)
 end)
-tab.newButton("Lock Button", "Creates a new lock button.", function()
+tab2.newButton("Lock Button", "Creates a new lock button.", function()
     if game.CoreGui:FindFirstChild("ButtonHandler") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
