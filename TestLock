@@ -13,7 +13,7 @@ local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
-local prediction = 0.2613
+local prediction = 0.2814
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
