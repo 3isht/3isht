@@ -12,7 +12,7 @@ local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
-
+local silentVic = nil
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
@@ -60,19 +60,20 @@ end
 
 local function silentLock()
     spawn(function()
-        local target = getClosest()
+        local silentVic = getClosest()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.32404, 0, target.UpperTorso.Velocity.Z * 0.32404)
-                if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
-                    if target.UpperTorso then
-                        camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * 0.32404, 0, silentVic.UpperTorso.Velocity.Z * 0.32404)
+                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
+                    if silentVic.UpperTorso then
+                        camera.CFrame = CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity)
                     end
                 end
             end
+            if silentVic == nil then break end
         end
-        if not target or target:GetAttribute("Knocked") or not game.Players[target.Name] then
-            local target = getClosest()
+        if not silentVic or silentVic:GetAttribute("Knocked") or not game.Players[silentVic.Name] then
+            local silentVic = getClosest()
         end
     end)
 end
@@ -305,6 +306,7 @@ tab2.newButton("Silent Lock", "Locks on the closest person.", function()
             silent = true
         elseif silent then
             silent = false
+            silentVic = nil
         end
         if not silent then
             UnlockNotif()
