@@ -209,6 +209,10 @@ tab.newToggle("Auto Stomp", "", false, function(bool)
     stomp = bool
     autoStomp()
 end)
+tab.newToggle("Anti Stomp", "", false, function(bool)
+    antistomp = bool
+    antiStomp()
+end)
 tab.newToggle("Auto Teleport To User", "", false, function(bool)
     tp = bool
     autoTp(user)
