@@ -60,9 +60,9 @@ end
 
 local function silentLock()
     spawn(function()
+        local target = getClosest()
         while wait() do
             if silent then
-                local target = getClosest()
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.32404, 0, target.UpperTorso.Velocity.Z * 0.32404)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
                     if target.UpperTorso then
@@ -70,6 +70,9 @@ local function silentLock()
                     end
                 end
             end
+        end
+        if not target or target:GetAttribute("Knocked") or not game.Players[target.Name] then
+            local target = getClosest()
         end
     end)
 end
