@@ -10,11 +10,11 @@ btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 btn.Name = "LButton"
 btn.Parent = btnGui
-btn.BackgroundColor3 = Color3.new(20,20,20)
+btn.BackgroundColor3 = Color3.new(3,40,53)
 btn.BorderSizePixel = 0
-btn.Position = UDim2.new(0, 10, 0, 27)
-btn.Size = UDim2.new(0, 30, 0, 60)
+btn.Position = UDim2.new(0, 737, 0, 35)
+btn.Size = UDim2.new(0, 100, 0, 50)
 btn.Font = Enum.Font.GothamBlack
 btn.Text = "Lock"
 btn.TextColor3 = Color3.new(1,1,1)
-btn.TextSize = 5
+btn.TextSize = 18
