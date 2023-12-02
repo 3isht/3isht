@@ -253,7 +253,7 @@ end)
 tab.newButton("Teleport To User", "", function()
     normalTp(user)
 end)
-tab2.newSlider("Prediction Amount", "", 0.5, false, function(amt)
+tab2.newSlider("Prediction Amount", "", 0.5, true, function(amt)
     prediction = amt
 end)
 tab2.newButton("Lock Button", "Creates a new lock button.", function()
