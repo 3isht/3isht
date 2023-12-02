@@ -231,14 +231,18 @@ tab2.newButton("Lock Button", "Creates a new lock button.", function()
     btn.TextSize = 18
     
     btn.MouseButton1Click:Connect(function()
-        if not bool then
+        if lock then
+            lock = false
+        elseif not lock then
+            lock = true
+        end
+        if not lock then
             UnLockNotif()
             VICTIM = nil
         end
-        if bool then
+        if lock then
             LockNotif()
         end
-        lock = bool
         startLock(user)
     end)
 end)
