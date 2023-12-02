@@ -163,6 +163,9 @@ local function autoStomp()
 end
 if game.CoreGui:FindFirstChild("DrRay") then
     game.CoreGui:FindFirstChild("DrRay"):Destroy()
+    if game.CoreGui:FindFirstChild("ButtonHandler") then
+        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
+    end
 end
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
