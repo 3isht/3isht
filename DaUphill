@@ -208,6 +208,40 @@ end)
 tab.newButton("Teleport To User", "", function()
     normalTp(user)
 end)
+tab.newButton("Lock Button", "Creates a new lock button.", function()
+    if game.CoreGui:FindFirstChild("ButtonHandler") then
+        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
+    end
+    
+    local btnGui = Instance.new("ScreenGui")
+    local btn = Instance.new("TextButton")
+    btnGui.Name = "ButtonHandler"
+    btnGui.Parent = game.CoreGui
+    btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    btn.Name = "LButton"
+    btn.Parent = btnGui
+    btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
+    btn.BorderSizePixel = 0
+    btn.Position = UDim2.new(0, 737, 0, 35)
+    btn.Size = UDim2.new(0, 100, 0, 50)
+    btn.Font = Enum.Font.GothamBlack
+    btn.Text = "Lock"
+    btn.TextColor3 = Color3.new(1,1,1)
+    btn.TextSize = 18
+    
+    btn.MouseButton1Click:Connect(function()
+        if not bool then
+            UnLockNotif()
+            VICTIM = nil
+        end
+        if bool then
+            LockNotif()
+        end
+        lock = bool
+        startLock(user)
+    end)
+end)
 tab2.newButton("Refresh", "", function()
     local LP = game.Players.LocalPlayer
     if LP then
