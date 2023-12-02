@@ -13,6 +13,8 @@ local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
+local prediction = 0.2613
+
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
@@ -60,10 +62,10 @@ end
 
 local function silentLock()
     spawn(function()
-        local silentVic = getClosest()
+        silentVic = getClosest()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * 0.32404, 0, silentVic.UpperTorso.Velocity.Z * 0.32404)
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, 0, silentVic.UpperTorso.Velocity.Z * prediction)
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity)
@@ -199,12 +201,14 @@ local function autoStomp()
         end
     end)
 end
+
 if game.CoreGui:FindFirstChild("DrRay") then
     game.CoreGui:FindFirstChild("DrRay"):Destroy()
     if game.CoreGui:FindFirstChild("ButtonHandler") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
 end
+
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
@@ -236,7 +240,7 @@ tab.newToggle("Auto Teleport To User", "", false, function(bool)
     tp = bool
     autoTp(user)
 end)
-tab.newToggle("Auto Max Health", "", false, function(bool)
+tab.newToggle("Headless", "", false, function(bool)
     AutoInfHealth = bool
     InfHealth()
 end)
@@ -248,6 +252,9 @@ end)
 ]]
 tab.newButton("Teleport To User", "", function()
     normalTp(user)
+end)
+tab2.newSlider("Prediction Amount", "", 0.5, false, function(amt)
+    prediction = amt
 end)
 tab2.newButton("Lock Button", "Creates a new lock button.", function()
     local btnGui = Instance.new("ScreenGui")
@@ -303,10 +310,10 @@ tab2.newButton("Silent Lock", "Locks on the closest person.", function()
             silent = true
         elseif silent then
             silent = false
-            silentVic = nil
         end
         if not silent then
             UnlockNotif()
+            silentVic = nil
         end
         if silent then
             LockNotif()
