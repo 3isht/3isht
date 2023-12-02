@@ -72,9 +72,6 @@ local function silentLock()
             end
             if silentVic == nil then break end
         end
-        if not silentVic or silentVic:GetAttribute("Knocked") or not game.Players[silentVic.Name] then
-            local silentVic = getClosest()
-        end
     end)
 end
 
