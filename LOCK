@@ -2,6 +2,7 @@ getgenv().lock = false;
 local camera = game.Workspace.Camera
 local user = nil
 local VICTIM = nil
+local prediction = 0.26130
 
 local function getFullUser(input)
     user = nil
@@ -31,7 +32,7 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, 0, target.UpperTorso.Velocity.Z * 0.34204)
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, 0, target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
@@ -95,7 +96,9 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     lock = bool
     startLock(user)
 end)
-
+tab2.newSlider("Prediction Amount", "", 0.5, false, function(amt)
+    prediction = amt
+end)
 tab2.newButton("Lock Button", "Creates a new lock button.", function()
     local btnGui = Instance.new("ScreenGui")
     local btn = Instance.new("TextButton")
