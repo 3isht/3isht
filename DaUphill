@@ -4,6 +4,7 @@ getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
 getgenv().stomp = false;
 getgenv().tp = false;
+getgenv().silent = false
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
@@ -11,6 +12,8 @@ local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local RS = game:GetService("RunService")
 local VICTIM = nil
+local silentVic = nil
+local prediction = 0.311505
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
@@ -37,6 +40,43 @@ local function getFullUser(input)
     end
 end
 
+local function getClosest()
+    local LocalName = game.Players.LocalPlayer.Name
+    local dis = math.huge
+    local plr = nil
+    local plrs = {}
+    for _, v in pairs(game.Players:GetChildren()) do
+        if v ~= game.Players.LocalPlayer and not game.Workspace[v.Name]:GetAttribute("Knocked") then
+            table.insert(plrs, v.Name)
+        end
+    end
+    for _, v in ipairs(plrs) do
+        local disDiff = (game.Workspace[LocalName].HumanoidRootPart.Position - game.Workspace[v].HumanoidRootPart.Position).magnitude
+        if disDiff < dis then
+            dis = disDiff
+            plr = game.Workspace[v]
+        end
+    end
+    return plr
+end
+
+local function silentLock()
+    spawn(function()
+        silentVic = getClosest()
+        while wait() do
+            if silent then
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, 0, silentVic.UpperTorso.Velocity.Z * prediction)
+                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
+                    if silentVic.UpperTorso then
+                        camera.CFrame = CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity)
+                    end
+                end
+            end
+            if silentVic == nil then break end
+        end
+    end)
+end
+
 local function InfHealth()
     spawn(function()
         while wait() do
@@ -57,7 +97,7 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * 0.34204, 0, target.UpperTorso.Velocity.Z * 0.34204)
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, 0, target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
                   				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
@@ -161,16 +201,19 @@ local function autoStomp()
         end
     end)
 end
+
 if game.CoreGui:FindFirstChild("DrRay") then
     game.CoreGui:FindFirstChild("DrRay"):Destroy()
     if game.CoreGui:FindFirstChild("ButtonHandler") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
 end
+
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Player", "")
+local tab3 = lib.newTab("Sky Colours", "")
 
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
@@ -198,7 +241,7 @@ tab.newToggle("Auto Teleport To User", "", false, function(bool)
     tp = bool
     autoTp(user)
 end)
-tab.newToggle("Auto Max Health", "", false, function(bool)
+tab.newToggle("Headless", "", false, function(bool)
     AutoInfHealth = bool
     InfHealth()
 end)
@@ -211,11 +254,14 @@ end)
 tab.newButton("Teleport To User", "", function()
     normalTp(user)
 end)
-tab2.newButton("Lock Button", "Creates a new lock button.", function()
-    if game.CoreGui:FindFirstChild("ButtonHandler") then
-        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
+tab2.newInput("Prediction Amount", "", function(amt)
+    if type(amt) ~= "string" then
+        prediction = amt
+    else
+        prediction = 0.311505
     end
-    
+end)
+tab2.newButton("Lock Button", "Creates a new lock button.", function()
     local btnGui = Instance.new("ScreenGui")
     local btn = Instance.new("TextButton")
     btnGui.Name = "ButtonHandler"
@@ -249,10 +295,40 @@ tab2.newButton("Lock Button", "Creates a new lock button.", function()
         startLock(user)
     end)
 end)
-tab2.newButton("Refresh", "", function()
-    local LP = game.Players.LocalPlayer
-    if LP then
-        game.ReplicatedStorage.RefreshMyCharacter:FireServer()
+tab2.newButton("Silent Lock", "Locks on the closest person.", function()
+    local silentBtn = Instance.new("TextButton")
+    silentBtn.Name = "SilentButton"
+    silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
+    silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
+    silentBtn.BorderSizePixel = 0
+    silentBtn.BackgroundTransparency = 0.1
+    silentBtn.Position = UDim2.new(0, 630, 0, -15)
+    silentBtn.Size = UDim2.new(0, 100, 0, 50)
+    silentBtn.Font = Enum.Font.GothamBlack
+    silentBtn.Text = "Silent Lock"
+    silentBtn.TextColor3 = Color3.new(1,1,1)
+    silentBtn.TextSize = 16
+    silentBtn.TextTransparency = 0.132
+    
+    silentBtn.MouseButton1Click:Connect(function()
+        if not silent then
+            silent = true
+        elseif silent then
+            silent = false
+        end
+        if not silent then
+            notify("Silent Unlocked", "No longer locking.", 0.7)
+            silentVic = nil
+        end
+        if silent then
+            notify("Target Selected", getClosest().Name, 0.7)
+        end
+        silentLock()
+    end)
+end)
+tab2.newButton("Destroy Lock Buttons", "Destroys all buttons created by this script.", function()
+    if game.CoreGui:FindFirstChild("ButtonHandler") then
+        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
 end)
 tab2.newButton("Kick", "", function()
@@ -260,4 +336,25 @@ tab2.newButton("Kick", "", function()
     if LP then
         LP:Kick("Did you get the last stomp?")
     end
+end)
+
+local colours = {
+    "red",
+    "orange",
+    "yellow",
+    "blue",
+    "purple",
+    "pink",
+    "regular"
+}
+local colour = nil
+tab3.newDropdown("Pick A Colour", "", colours, function(picked)
+    colour = picked
+end)
+tab3.newButton("Apply Sky Colour", "(MUST RESET FOR IT TO WORK)", function()
+    if colour == nil then
+        colour = "regular"
+    end
+    game.Workspace[game.Players.LocalPlayer.Name]:SetAttribute("skycolor", colour)
+    notify("Sky Colour Change", "Sky colour has been changed to: "..colour.."(MUST RESET)", 0.7)
 end)
