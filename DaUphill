@@ -213,7 +213,6 @@ local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithu
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Player", "")
-local tab3 = lib.newTab("Sky Colours", "")
 
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
@@ -317,11 +316,11 @@ tab2.newButton("Silent Lock", "Locks on the closest person.", function()
             silent = false
         end
         if not silent then
-            notify("Silent Unlocked", "No longer locking.", 0.7)
+            UnLockNotif()
             silentVic = nil
         end
         if silent then
-            notify("Target Selected", getClosest().Name, 0.7)
+            LockNotif()
         end
         silentLock()
     end)
@@ -348,13 +347,7 @@ local colours = {
     "regular"
 }
 local colour = nil
-tab3.newDropdown("Pick A Colour", "", colours, function(picked)
+tab2.newDropdown("Pick A Colour", "", colours, function(picked)
     colour = picked
-end)
-tab3.newButton("Apply Sky Colour", "(MUST RESET FOR IT TO WORK)", function()
-    if colour == nil then
-        colour = "regular"
-    end
     game.Workspace[game.Players.LocalPlayer.Name]:SetAttribute("skycolor", colour)
-    notify("Sky Colour Change", "Sky colour has been changed to: "..colour.."(MUST RESET)", 0.7)
 end)
