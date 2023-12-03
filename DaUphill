@@ -339,15 +339,21 @@ end)
 
 local colours = {
     "red",
+    "lightred",
     "orange",
     "yellow",
     "blue",
-    "purple",
+    "darkblue",
+    "teal",
     "pink",
+    "purple",
     "regular"
 }
 local colour = nil
-tab2.newDropdown("Pick A Colour", "", colours, function(picked)
+tab3.newDropdown("Pick A Colour", "", colours, function(picked)
     colour = picked
-    game.Workspace[game.Players.LocalPlayer.Name]:SetAttribute("skycolor", colour)
+    return colour
+end)
+tab3.newButton("Apply Sky Colour", "", function()
+    game.Players.LocalPlayer:SetAttribute("skycolor", colour)
 end)
