@@ -213,6 +213,7 @@ local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithu
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Player", "")
+local tab3 = lib.newTab("Sky Colour", "")
 
 tab.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
