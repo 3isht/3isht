@@ -261,7 +261,7 @@ tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     lock = bool
     startLock(user)
 end)
-tab2.newToggle("View Player", "Views selected player.", function(bool)
+tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     VIEW = bool
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
