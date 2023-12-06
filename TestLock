@@ -268,19 +268,16 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
     if user and game.Workspace[user] and VIEW then
-        if game.Workspace.Camera.CameraSubject ~= ME.HumanoidRootPart then
-            game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
-        end
         if ME then
-            game.Workspace.Camera.CameraSubject = game.Workspace[user].HumanoidRootPart
+            game.Workspace.Camera.CameraSubject = game.Workspace[user].Humanoid
         else
-            game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
+            game.Workspace.Camera.CameraSubject = ME.Humanoid
         end
     else
-        game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
+        game.Workspace.Camera.CameraSubject = ME.Humanoid
     end
     if not VIEW then
-        game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
+        game.Workspace.Camera.CameraSubject = ME.Humanoid
     end
 end)
 tab2.newButton("Teleport To User", "", function()
