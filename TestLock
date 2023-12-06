@@ -6,6 +6,7 @@ getgenv().stomp = false;
 getgenv().tp = false;
 getgenv().silent = false;
 getgenv().FLING = false;
+getgenv().VIEW = false;
 local camera = game.Workspace.Camera
 local user = nil
 local userPart = nil
@@ -32,7 +33,7 @@ local function getFullUser(input)
             table.insert(MATCHES, PLAYER.Name)
         end
     end
-    if #MATCHES > 0 then
+    if #MATCHES > 0 and MATCHES[1] == game.Players.LocalPlayer.Name then
         user = MATCHES[1]
         return user
     else
@@ -240,7 +241,10 @@ tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
     autoBuyArmour()
 end)
-
+tab.newToggle("Auto Stomp", "", false, function(bool)
+    stomp = bool
+    autoStomp()
+end)
 
 
 tab2.newInput("Username", "Username to lock on.", function(inp)
@@ -257,11 +261,12 @@ tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     lock = bool
     startLock(user)
 end)
-tab2.newButton("View Player", "Views selected player.", function()
+tab2.newToggle("View Player", "Views selected player.", function(bool)
+    VIEW = bool
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
-    if user and game.Workspace[user] then
-        if game.Workspace.Camera.CameraSubject == game.Workspace[user].HumanoidRootPart then
+    if user and game.Workspace[user] and VIEW then
+        if game.Workspace.Camera.CameraSubject ~= ME.HumanoidRootPart then
             game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
         end
         if ME then
@@ -272,13 +277,12 @@ tab2.newButton("View Player", "Views selected player.", function()
     else
         game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
     end
+    if not VIEW then
+        game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
+    end
 end)
 tab2.newButton("Teleport To User", "", function()
     normalTp(user)
-end)
-tab2.newToggle("Auto Stomp", "", false, function(bool)
-    stomp = bool
-    autoStomp()
 end)
 tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
     FLING = bool
