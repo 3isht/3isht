@@ -167,7 +167,7 @@ local function LockNotif()
     if user then
         game.StarterGui:SetCore("SendNotification", {
             Title = "Lock Notification",
-            Text = "Locked On: "..tostring(user),
+            Text = "Locked On: "..user .. "Display: "..tostring(game.Workspace[user].Humanoid.DisplayName),
             Icon = "",
             Duration = 0.7
         })
@@ -300,16 +300,16 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
                     local flingPoint = enemy.UpperTorso
                     local dis = 3.85
                     local inc = 6
-                    if enemy.HumanoidRootPart.MoveDirection.X < 0 then
+                    if enemy.Humanoid.MoveDirection.X < 0 then
                         xchange = -inc
-                    elseif enemy.HumanoidRootPart.MoveDirecton.X > 0 then
+                    elseif enemy.Humanoid.MoveDirecton.X > 0 then
                         xchange = inc
                     else
                         xchange = 0
                     end
-                    if enemy.HumanoidRootPart.MoveDirection.Z < 0 then
+                    if enemy.Humanoid.MoveDirection.Z < 0 then
                         zchange = -inc
-                    elseif enemy.HumanoidRootPart.MoveDirecton.Z > 0 then
+                    elseif enemy.Humanoid.MoveDirecton.Z > 0 then
                         zchange = inc
                     else
                         zchange = 0
