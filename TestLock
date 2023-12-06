@@ -12,10 +12,12 @@ local user = nil
 local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
+local camLerp = 0.36
 local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
 local prediction = 0.311505
+local normalCam = camera.CameraSubject.Value
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
@@ -104,7 +106,7 @@ local function startLock(loser)
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, 0, target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
-                  				    camera.CFrame = CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity)
+                  				    camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
               				    end
                 end
             end
@@ -269,15 +271,15 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     local ME = game.Workspace[NAME]
     if user and game.Workspace[user] and VIEW then
         if ME then
-            game.Workspace.Camera.CameraSubject = game.Workspace[user].Humanoid
+            camera.CameraSubject = game.Workspace[user].Humanoid
         else
-            game.Workspace.Camera.CameraSubject = ME.Humanoid
+            camera.CameraSubject = normalCam
         end
     else
-        game.Workspace.Camera.CameraSubject = ME.Humanoid
+        camera.CameraSubject = normalCam
     end
     if not VIEW then
-        game.Workspace.Camera.CameraSubject = ME.Humanoid
+        camera.CameraSubject = normalCam
     end
 end)
 tab2.newButton("Teleport To User", "", function()
@@ -373,8 +375,10 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     btn.MouseButton1Click:Connect(function()
         if lock then
             lock = false
+            btn.Text = "Lock"
         elseif not lock then
             lock = true
+            btn.Text = "Unlock"
         end
         if not lock then
             UnLockNotif()
@@ -404,8 +408,10 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
     silentBtn.MouseButton1Click:Connect(function()
         if not silent then
             silent = true
+            silentBtn.Text = "Unlock Silent"
         elseif silent then
             silent = false
+            silentBtn.Text = "Silent Lock"
         end
         if not silent then
             UnLockNotif()
