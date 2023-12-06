@@ -297,7 +297,7 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
         local flingLoop = function()
             local succ, err = pcall(function()
                 local enemy = game.Workspace[user]
-                if enemy and ME and not ME:GetAttribute("Knocked") and enemy:GetAttribute("Knocked") then
+                if enemy and ME and not ME:GetAttribute("Knocked") and not enemy:GetAttribute("Knocked") then
                     local flingPoint = enemy.UpperTorso
                     local dis = 3.85
                     local inc = 6
