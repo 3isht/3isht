@@ -289,6 +289,8 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
     local ME = game.Workspace[NAME]
     if FLING then
         local LOOP
+        local xchange
+        local zchange
         local oldPos = ME.HumanoidRootPart.Position
         local flingLoop = function()
             local succ, err = pcall(function()
