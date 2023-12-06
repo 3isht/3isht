@@ -335,6 +335,7 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
         local StopFling = function()
             LOOP:Disconnect()
             local vZero = Vector3.new(0,0,0)
+            ME.Humanoid.PlatformStand = false
             ME.HumanoidRootPart.Velocity = vZero
             ME.HumanoidRootPart.RotVelocity = vZero
             ME.HumanoidRootPart.CFrame = CFrame.new(oldPos)
