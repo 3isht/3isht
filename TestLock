@@ -17,7 +17,6 @@ local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
 local prediction = 0.311505
-local normalCam = camera.CameraSubject
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
@@ -269,6 +268,7 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     VIEW = bool
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
+    local normalCam = ME.Humanoid
     if user and game.Workspace[user] and VIEW then
         if ME then
             camera.CameraSubject = game.Workspace[user].Humanoid
