@@ -300,7 +300,7 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
                 if enemy and ME and not ME:GetAttribute("Knocked") and not enemy:GetAttribute("Knocked") then
                     local flingPoint = enemy.UpperTorso
                     local dis = 3.85
-                    local inc = 6
+                    local inc = 4.5
                     if enemy.Humanoid.MoveDirection.X < 0 then
                         xchange = -inc
                     elseif enemy.Humanoid.MoveDirecton.X > 0 then
