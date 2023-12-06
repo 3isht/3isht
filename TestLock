@@ -261,6 +261,9 @@ tab2.newButton("View Player", "Views selected player.", function()
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
     if user and game.Workspace[user] then
+        if game.Workspace.Camera.CameraSubject == game.Workspace[user].HumanoidRootPart then
+            game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
+        end
         if ME then
             game.Workspace.Camera.CameraSubject = game.Workspace[user].HumanoidRootPart
         else
