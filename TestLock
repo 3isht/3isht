@@ -12,7 +12,7 @@ local user = nil
 local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
-local camLerp = 0.36
+local camLerp = 0.26
 local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
@@ -73,8 +73,8 @@ local function silentLock()
                 local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, 0, silentVic.UpperTorso.Velocity.Z * prediction)
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
-                        camera.CFrame = CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity)
-                    end
+                        camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
+              				    end
                 end
             end
             if silentVic == nil then break end
