@@ -33,8 +33,10 @@ local function getFullUser(input)
             table.insert(MATCHES, PLAYER.Name)
         end
     end
-    if #MATCHES > 0 and MATCHES[1] == game.Players.LocalPlayer.Name then
-        user = MATCHES[1]
+    if #MATCHES > 0 then
+        if MATCHES[1] ~= game.Players.LocalPlayer.Name then
+            user = MATCHES[1]
+        end
         return user
     else
        user = nil
