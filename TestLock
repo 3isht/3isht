@@ -320,7 +320,7 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
                         local daZ = flingPoint.Position.Z + math.random(-dis,dis) + zchange
                         ME.Humanoid.PlatformStand = true
                         ME.HumanoidRootPart.CFrame = CFrame.new(daX, flingPoint.Position.Y,  daZ) * CFrame.Angles(math.rad(ME.HumanoidRootPart.Orientation.X + 350), math.rad(ME.HumanoidRootPart.Orientation.Y + 200), math.rad(ME.HumanoidRootPart.Orientation.Z + 240))
-                        ME.HumanoidRootPart.Velocity = Vector3.new(500000,500000,500000)
+                        ME.HumanoidRootPart.Velocity = Vector3.new(750,750,750)
                     end
                 end
             end)
@@ -335,7 +335,6 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
         local StopFling = function()
             LOOP:Disconnect()
             local vZero = Vector3.new(0,0,0)
-            ME.Humanoid.PlatformStand = false
             ME.HumanoidRootPart.Velocity = vZero
             ME.HumanoidRootPart.RotVelocity = vZero
             ME.HumanoidRootPart.CFrame = CFrame.new(oldPos)
@@ -343,6 +342,7 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
         StartFling()
         repeat wait() until not FLING
         StopFling()
+        ME.Humanoid.PlatformStand = false
     end
 end)
 
