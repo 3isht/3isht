@@ -213,13 +213,40 @@ end
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
-local tab2 = lib.newTab("Player", "")
-local tab3 = lib.newTab("Sky Colour", "")
+local tab2 = lib.newTab("Target", "")
+local tab3 = lib.newTab("Player", "")
 
-tab.newInput("Username", "Username to lock on.", function(inp)
+local colours = {
+    "red",
+    "lightred",
+    "orange",
+    "yellow",
+    "blue",
+    "darkblue",
+    "teal",
+    "pink",
+    "purple",
+    "regular"
+}
+local colour = nil
+tab.newDropdown("Pick A Colour", "", colours, function(picked)
+    colour = picked
+    return colour
+end)
+tab.newButton("Apply Sky Colour", "", function()
+    game.Players.LocalPlayer:SetAttribute("skycolor", colour)
+end)
+tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
+    AutoHighArm = bool
+    autoBuyArmour()
+end)
+
+
+
+tab2.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
-tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
+tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     if not bool then
         UnLockNotif()
         VICTIM = nil
@@ -230,15 +257,27 @@ tab.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     lock = bool
     startLock(user)
 end)
-tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
-    AutoHighArm = bool
-    autoBuyArmour()
+tab2.newButton("View Player", "Views selected player.", function()
+    local NAME = game.Players.LocalPlayer.Name
+    local ME = game.Workspace[NAME]
+    if user and game.Workspace[user] then
+        if ME then
+            game.Workspace.Camera.CameraSubject = game.Workspace[user].HumanoidRootPart
+        else
+            game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
+        end
+    else
+        game.Workspace.Camera.CameraSubject = ME.HumanoidRootPart
+    end
 end)
-tab.newToggle("Auto Stomp", "", false, function(bool)
+tab2.newButton("Teleport To User", "", function()
+    normalTp(user)
+end)
+tab2.newToggle("Auto Stomp", "", false, function(bool)
     stomp = bool
     autoStomp()
 end)
-tab.newToggle("Fling User", "Flings selected user.", false, function(bool)
+tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
     FLING = bool
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
@@ -252,16 +291,16 @@ tab.newToggle("Fling User", "Flings selected user.", false, function(bool)
                     local flingPoint = enemy.UpperTorso
                     local dis = 3.85
                     local inc = 6
-                    if enemy.Humanoid.MoveDirection.X < 0 then
+                    if enemy.HumanoidRootPart.MoveDirection.X < 0 then
                         xchange = -inc
-                    elseif enemy.Humanoid.MoveDirecton.X > 0 then
+                    elseif enemy.HumanoidRootPart.MoveDirecton.X > 0 then
                         xchange = inc
                     else
                         xchange = 0
                     end
-                    if enemy.Humanoid.MoveDirection.Z < 0 then
+                    if enemy.HumanoidRootPart.MoveDirection.Z < 0 then
                         zchange = -inc
-                    elseif enemy.Humanoid.MoveDirecton.Z > 0 then
+                    elseif enemy.HumanoidRootPart.MoveDirecton.Z > 0 then
                         zchange = inc
                     else
                         zchange = 0
@@ -295,27 +334,17 @@ tab.newToggle("Fling User", "Flings selected user.", false, function(bool)
         StopFling()
     end
 end)
-tab.newToggle("Headless", "", false, function(bool)
-    AutoInfHealth = bool
-    InfHealth()
-end)
---[[
-tab.newToggle("Auto Reset", "Auto resets when health is below/equal to 5.", false, function(bool)
-    autoRst = bool
-    autoReset()
-end)
-]]
-tab.newButton("Teleport To User", "", function()
-    normalTp(user)
-end)
-tab2.newInput("Prediction Amount", "", function(amt)
+
+
+
+tab3.newInput("Prediction Amount", "", function(amt)
     if type(amt) ~= "string" then
         prediction = amt
     else
         prediction = 0.311505
     end
 end)
-tab2.newButton("Lock Button", "Creates a new lock button.", function()
+tab3.newButton("Lock Button", "Creates a new lock button.", function()
     local btnGui = Instance.new("ScreenGui")
     local btn = Instance.new("TextButton")
     btnGui.Name = "ButtonHandler"
@@ -349,7 +378,7 @@ tab2.newButton("Lock Button", "Creates a new lock button.", function()
         startLock(user)
     end)
 end)
-tab2.newButton("Silent Lock", "Locks on the closest person.", function()
+tab3.newButton("Silent Lock", "Locks on the closest person.", function()
     local silentBtn = Instance.new("TextButton")
     silentBtn.Name = "SilentButton"
     silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
@@ -380,35 +409,14 @@ tab2.newButton("Silent Lock", "Locks on the closest person.", function()
         silentLock()
     end)
 end)
-tab2.newButton("Destroy Lock Buttons", "Destroys all buttons created by this script.", function()
+tab3.newButton("Destroy Lock Buttons", "Destroys all buttons created by this script.", function()
     if game.CoreGui:FindFirstChild("ButtonHandler") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
 end)
-tab2.newButton("Kick", "", function()
+tab3.newButton("Kick", "", function()
     local LP = game.Players.LocalPlayer
     if LP then
         LP:Kick("Did you get the last stomp?")
     end
-end)
-
-local colours = {
-    "red",
-    "lightred",
-    "orange",
-    "yellow",
-    "blue",
-    "darkblue",
-    "teal",
-    "pink",
-    "purple",
-    "regular"
-}
-local colour = nil
-tab3.newDropdown("Pick A Colour", "", colours, function(picked)
-    colour = picked
-    return colour
-end)
-tab3.newButton("Apply Sky Colour", "", function()
-    game.Players.LocalPlayer:SetAttribute("skycolor", colour)
 end)
