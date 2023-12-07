@@ -12,7 +12,7 @@ local user = nil
 local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
-local camLerp = 0.62301
+local camLerp = 0.431
 local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
@@ -236,6 +236,7 @@ local colours = {
     "regular"
 }
 local colour = nil
+
 tab.newDropdown("Pick A Colour", "", colours, function(picked)
     colour = picked
     return colour
@@ -308,14 +309,14 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
                         xchange = -inc
                     elseif enemy.Humanoid.MoveDirecton.X > 0 then
                         xchange = inc
-                    else
+                    elseif enemy.Humanoid.MoveDirecton.X == 0 then
                         xchange = 0
                     end
                     if enemy.Humanoid.MoveDirection.Z < 0 then
                         zchange = -inc
                     elseif enemy.Humanoid.MoveDirecton.Z > 0 then
                         zchange = inc
-                    else
+                    elseif enemy.Humanoid.MoveDirecton.Z == 0 then
                         zchange = 0
                     end
                     if ME then
@@ -323,7 +324,7 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
                         local daZ = flingPoint.Position.Z + math.random(-dis,dis) + zchange
                         ME.Humanoid.PlatformStand = true
                         ME.HumanoidRootPart.CFrame = CFrame.new(daX, flingPoint.Position.Y,  daZ) * CFrame.Angles(math.rad(ME.HumanoidRootPart.Orientation.X + 350), math.rad(ME.HumanoidRootPart.Orientation.Y + 200), math.rad(ME.HumanoidRootPart.Orientation.Z + 240))
-                        ME.HumanoidRootPart.Velocity = Vector3.new(750,750,750)
+                        ME.HumanoidRootPart.Velocity = Vector3.new(7500,7500,7500)
                     end
                 end
             end)
