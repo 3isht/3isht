@@ -12,7 +12,7 @@ local user = nil
 local userPart = nil
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
-local camLerp = 0.472
+local camLerp = 0.462
 local RS = game:GetService("RunService")
 local VICTIM = nil
 local silentVic = nil
@@ -350,7 +350,13 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
     end
 end)
 
-
+tab3.newInput("Camera Lerp Amount", "", function(amt)
+    if type(amt) ~= "string" then
+        camLerp = amt
+    else
+        camLerp = 0.462
+    end
+end)
 
 tab3.newInput("Prediction Amount", "", function(amt)
     if type(amt) ~= "string" then
