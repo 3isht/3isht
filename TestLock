@@ -192,9 +192,14 @@ local function autoBuyArmour()
         while wait() do
             if AutoHighArm then
                 local me = game.Players.LocalPlayer.Name
-                fireclickdetector(game.workspace.MAP.Ignored.BuyPads["[High-Medium Armor]"].ClickDetector)
-                wait()
-                game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
+                local armour
+                for _, v in pairs(game.Workspace:GetDescendants()) do
+                    if v.Name == "[High-Medium Armor]" then
+                        armour = v
+                    end
+                end
+                -- fireclickdetector(game.workspace.MAP.Ignored.BuyPads["[High-Medium Armor]"].ClickDetector)
+                fireclickdetector(armour.ClickDetector)
             end
         end
     end)
