@@ -200,6 +200,7 @@ local function autoBuyArmour()
                 end
                 -- fireclickdetector(game.workspace.MAP.Ignored.BuyPads["[High-Medium Armor]"].ClickDetector)
                 fireclickdetector(armour.ClickDetector)
+                wait()
             end
         end
     end)
