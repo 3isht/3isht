@@ -14,7 +14,7 @@ local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local camLerp = 0.462
 local RS = game:GetService("RunService")
-local VICTIM = nil 
+local VICTIM = nil
 local silentVic = nil
 local prediction = 0.311505
 
