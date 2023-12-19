@@ -8,14 +8,15 @@ getgenv().silent = false;
 getgenv().FLING = false;
 getgenv().VIEW = false;
 local camera = game.Workspace.Camera
-local user = nil
-local userPart = nil
+local user
+local userPart
+local VICTIM
+local silentVic
+local armour
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local camLerp = 0.462
 local RS = game:GetService("RunService")
-local VICTIM = nil
-local silentVic = nil
 local prediction = 0.311505
 
 -- CHATSPY
@@ -190,17 +191,15 @@ end
 local function autoBuyArmour()
     spawn(function()
         while wait() do
-            if AutoHighArm then
+            if AutoHighArm and game.Workspace[me]:GetAttribute("Armor") < 99 then
                 local me = game.Players.LocalPlayer.Name
-                local armour
                 for _, v in pairs(game.Workspace:GetDescendants()) do
                     if v.Name == "[High-Medium Armor]" then
                         armour = v
                     end
                 end
-                if game.Workspace[me]:GetAttribute("Armor") < 130 then
-                    fireclickdetector(armour.ClickDetector)
-                end
+                fireclickdetector(armour.ClickDetector)
+                wait()
                 game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
             end
         end
@@ -253,6 +252,7 @@ tab.newButton("Apply Sky Colour", "", function()
 end)
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
+    print(armour)
     autoBuyArmour()
 end)
 tab.newToggle("Auto Stomp", "", false, function(bool)
