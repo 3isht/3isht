@@ -191,7 +191,7 @@ local function autoBuyArmour()
     local me = game.Players.LocalPlayer.Name
     spawn(function()
         while wait() do
-            if AutoHighArm and tonumber(game.Workspace[me]:GetAttribute("Armor")) < 99 then
+            if AutoHighArm and game.Workspace[me]:GetAttribute("Armor") < 120 then
                 local armour
                 for _, v in pairs(game.Workspace:GetDescendants()) do
                     if v.Name == "[High-Medium Armor]" then
@@ -201,8 +201,6 @@ local function autoBuyArmour()
                 fireclickdetector(armour.ClickDetector)
                 wait()
                 game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
-                print(game.Workspace[me]:GetAttribute("Armor"), type(game.Workspace[me]:GetAttribute("Armor")))
-                print(tonumber(game.Workspace[me]:GetAttribute("Armor")), type(tonumber(game.Workspace[me]:GetAttribute("Armor"))))
             end
         end
     end)
