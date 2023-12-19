@@ -12,7 +12,6 @@ local user
 local userPart
 local VICTIM
 local silentVic
-local armour
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local camLerp = 0.462
@@ -192,7 +191,8 @@ local function autoBuyArmour()
     local me = game.Players.LocalPlayer.Name
     spawn(function()
         while wait() do
-            if AutoHighArm and game.Workspace[me]:GetAttribute("Armor") < 99 then
+            if AutoHighArm and tonumber(game.Workspace[me]:GetAttribute("Armor")) < 99 then
+                local armour
                 for _, v in pairs(game.Workspace:GetDescendants()) do
                     if v.Name == "[High-Medium Armor]" then
                         armour = v
@@ -201,6 +201,8 @@ local function autoBuyArmour()
                 fireclickdetector(armour.ClickDetector)
                 wait()
                 game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
+                print(game.Workspace[me]:GetAttribute("Armor"), type(game.Workspace[me]:GetAttribute("Armor")))
+                print(tonumber(game.Workspace[me]:GetAttribute("Armor")), type(tonumber(game.Workspace[me]:GetAttribute("Armor"))))
             end
         end
     end)
@@ -252,7 +254,6 @@ tab.newButton("Apply Sky Colour", "", function()
 end)
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
-    print(armour)
     autoBuyArmour()
 end)
 tab.newToggle("Auto Stomp", "", false, function(bool)
