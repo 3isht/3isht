@@ -189,10 +189,10 @@ local function UnLockNotif()
 end
 
 local function autoBuyArmour()
+    local me = game.Players.LocalPlayer.Name
     spawn(function()
         while wait() do
             if AutoHighArm and game.Workspace[me]:GetAttribute("Armor") < 99 then
-                local me = game.Players.LocalPlayer.Name
                 for _, v in pairs(game.Workspace:GetDescendants()) do
                     if v.Name == "[High-Medium Armor]" then
                         armour = v
