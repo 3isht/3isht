@@ -8,7 +8,7 @@ getgenv().silent = false;
 getgenv().FLING = false;
 getgenv().VIEW = false;
 local camera = game.Workspace.Camera
-local user 
+local user
 local userPart
 local VICTIM
 local silentVic
