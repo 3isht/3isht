@@ -198,8 +198,9 @@ local function autoBuyArmour()
                         armour = v
                     end
                 end
-                fireclickdetector(armour.ClickDetector)
-                wait(0.5)
+                if game.Workspace[me].Humanoid.Armor < 130 then
+                    fireclickdetector(armour.ClickDetector)
+                end
                 game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
             end
         end
