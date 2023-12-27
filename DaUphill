@@ -8,14 +8,14 @@ getgenv().silent = false;
 getgenv().FLING = false;
 getgenv().VIEW = false;
 local camera = game.Workspace.Camera
-local user = nil
-local userPart = nil
+local user
+local userPart
+local VICTIM
+local silentVic
 local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local camLerp = 0.462
 local RS = game:GetService("RunService")
-local VICTIM = nil
-local silentVic = nil
 local prediction = 0.311505
 
 -- CHATSPY
@@ -188,19 +188,18 @@ local function UnLockNotif()
 end
 
 local function autoBuyArmour()
+    local me = game.Players.LocalPlayer.Name
     spawn(function()
         while wait() do
-            if AutoHighArm then
-                local me = game.Players.LocalPlayer.Name
+            if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 then
                 local armour
                 for _, v in pairs(game.Workspace:GetDescendants()) do
                     if v.Name == "[High-Medium Armor]" then
                         armour = v
                     end
                 end
-                if game.Workspace[me]:GetAttribute("Armor") < 130 then
-                    fireclickdetector(armour.ClickDetector)
-                end
+                fireclickdetector(armour.ClickDetector)
+                wait()
                 game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
             end
         end
@@ -430,9 +429,9 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
             game.StarterGui:SetCore("SendNotification", {
                 Title = "Lock Notification",
                 Text = [[
-                Display: ]] .. tostring(game.Workspace[user].Humanoid.DisplayName) .. [[
+                Display: ]] .. tostring(game.Workspace[getClosest().Name].Humanoid.DisplayName) .. [[
                 
-                Main user: ]] .. user,
+                Main user: ]] .. getClosest().Name,
                 Icon = "",
                 Duration = 0.7
             })
