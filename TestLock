@@ -8,6 +8,15 @@ getgenv().silent = false;
 getgenv().FLING = false;
 getgenv().VIEW = false;
 local camera = game.Workspace.Camera
+local findarmour = function()
+    for _, v in pairs(game.Workspace:GetDescendants()) do
+        if v.Name == "[High-Medium Armor]" then
+            Highmed = v
+        end
+    end
+    return Highmed
+end
+local armour = findarmour()
 local user
 local userPart
 local VICTIM
@@ -109,7 +118,7 @@ local function startLock(loser)
               				    end
                 end
             end
-            if VICTIM == nil then break end 
+            if not lock then break end 
         end
     end)
 end
@@ -191,16 +200,9 @@ local function autoBuyArmour()
     local me = game.Players.LocalPlayer.Name
     spawn(function()
         while wait() do
-            if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 then
-                local armour
-                for _, v in pairs(game.Workspace:GetDescendants()) do
-                    if v.Name == "[High-Medium Armor]" then
-                        armour = v
-                    end
-                end
+            if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 and armour then
                 fireclickdetector(armour.ClickDetector)
                 wait()
-                game.Workspace[me]:SetAttribute("PurchaseCooldown", false)
             end
         end
     end)
