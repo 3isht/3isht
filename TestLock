@@ -49,7 +49,7 @@ local function getFullUser(input)
         end
         return user
     else
-       user = nil
+        user = nil
         return user
     end
 end
@@ -151,26 +151,6 @@ local function normalTp(username)
     if LP.HumanoidRootPart and VP.HumanoidRootPart then
         LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
     end
-end
-
-local function autoReset()
-    spawn(function()
-        while wait() do
-            if autoRst then
-                local LP = game.Players.LocalPlayer.Name
-                local WLP = game.Workspace[LP]
-                local HRT = WLP.HumanoidRootPart
-                if WLP.Humanoid.Health <= 5 then
-                    local oldPOS = HRT.CFrame.Position
-                    HRT.Size = Vector3.new(1,2,0.5)
-                    HRT.CFrame = CFrame.new(99999, 99999, 99999)
-                    WLP.Humanoid.Health = 0
-                    wait(4.5)
-                    HRT.CFrame = CFrame.new(oldPOS)
-                end
-            end
-        end
-    end)
 end
 
 local function LockNotif()
@@ -333,6 +313,11 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
                         ME.Humanoid.PlatformStand = true
                         ME.HumanoidRootPart.CFrame = CFrame.new(daX, flingPoint.Position.Y,  daZ) * CFrame.Angles(math.rad(ME.HumanoidRootPart.Orientation.X + 350), math.rad(ME.HumanoidRootPart.Orientation.Y + 200), math.rad(ME.HumanoidRootPart.Orientation.Z + 240))
                         ME.HumanoidRootPart.Velocity = Vector3.new(500,500,500)
+                    end
+                    if not enemy.Humanoid.MoveDirection then
+                        ME.Humanoid.PlatformStand = true
+                        ME.HumanoidRootPart.CFrame = CFrame.new(flingPoint)
+                        repeat ME.HumanoidRootPart.CFrame = CFrame.new(flingPoint) wait(0.5) until not FLING
                     end
                 end
             end)
