@@ -343,8 +343,17 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
     end
 end)
 
+tab3.newInput("Walkspeed", "", function(amt)
+    local me = game.Players.LocalPlayer.Name
+    if type(amt) == "number" then
+        RS.RenderStepped:Connect(function()
+            game.Workspace[me].Humanoid.Walkspeed = amt
+        end)
+    end
+end)
+
 tab3.newInput("Camera Lerp Amount", "", function(amt)
-    if type(amt) ~= "string" then
+    if type(amt) == "number" then
         camLerp = amt
     else
         camLerp = 0.462
