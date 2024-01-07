@@ -1,0 +1,62 @@
+getgenv().MAX = false;
+getgenv().GOLD = false;
+local RS = game:GetService("RunService")
+
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
+local window = lib:Load("Made By Tariq", "Default")
+local tab = lib.newTab("Main", "")
+
+tab.newToggle("Auto Max Pets", "", false, function(bool)
+    MAX = bool
+    local LOOP
+    local AUTOMAX = function()
+        local succ, err = pcall(function()
+            local PETS = game:GetService("Players").LocalPlayer.PlayerGui.Pets.Container.Container
+            if MAX then
+                for _, PET in pairs(PETS) do
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.4.7"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("EvolveService"):WaitForChild("RF"):WaitForChild("EvolveMax"):InvokeServer(PET.Name)
+                end
+            end
+        end)
+        if err then
+            print("Something went wrong with auto max level: "..err)
+        end
+    end
+    local START = function()
+        LOOP = RS.RenderStepped:Connect(AUTOMAX)
+    end
+    local STOP = function()
+        LOOP:Disconnect()
+    end
+    START()
+    repeat wait() until not MAX
+    STOP()
+end)
+tab.newToggle("Auto Gold Pets", "", false, function(bool)
+    GOLD = bool
+    local LOOP
+    local AUTOGOLD = function()
+        local succ, err = pcall(function()
+            local PETS = game:GetService("Players").LocalPlayer.PlayerGui.Pets.Container.Container
+            local NUMBER = math.random(1, #PETS)
+            local RANDOM = PETS[NUMBER]
+            local GOLDMATCH = {}
+            for _, PET in pairs(PETS) do
+                if PET.Power.Text == RANDOM.Power.Text then
+                    table.insert(GOLDMATCH, PET.Name)
+                end
+            end
+            if #GOLDMATCH >= 3 then
+            end
+        end)
+    end
+    local START = function()
+        LOOP = RS.RenderStepped:Connect(AUTOGOLD)
+    end
+    local STOP = function()
+        LOOP:Disconnect()
+    end
+    START()
+    repeat wait() until not GOLD
+    STOP()
+end)
