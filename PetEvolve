@@ -11,10 +11,12 @@ tab.newToggle("Auto Max Pets", "", false, function(bool)
     local LOOP
     local AUTOMAX = function()
         local succ, err = pcall(function()
-            local PETS = game:GetService("Players").LocalPlayer.PlayerGui.Pets.Container.Container
+            local PETS = game:GetService("Players").LocalPlayer.PlayerGui.Pets.Container.Container:GetChildren()
             if MAX then
                 for _, PET in pairs(PETS) do
-                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.4.7"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("EvolveService"):WaitForChild("RF"):WaitForChild("EvolveMax"):InvokeServer(PET.Name)
+                    if PET.Name ~= "UIPadding" and PET.Name ~= "UIGridLayout" then
+                        game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.4.7"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("EvolveService"):WaitForChild("RF"):WaitForChild("EvolveMax"):InvokeServer(PET.Name)
+                    end
                 end
             end
         end)
@@ -37,16 +39,27 @@ tab.newToggle("Auto Gold Pets", "", false, function(bool)
     local LOOP
     local AUTOGOLD = function()
         local succ, err = pcall(function()
-            local PETS = game:GetService("Players").LocalPlayer.PlayerGui.Pets.Container.Container
+            local PETS = game:GetService("Players").LocalPlayer.PlayerGui.Pets.Container.Container:GetChildren()
             local NUMBER = math.random(1, #PETS)
             local RANDOM = PETS[NUMBER]
             local GOLDMATCH = {}
             for _, PET in pairs(PETS) do
-                if PET.Power.Text == RANDOM.Power.Text then
+                if PET.Name ~= "UIPadding" and PET.Name ~= "UIGridLayout" and PET.Power.Text == RANDOM.Power.Text then
                     table.insert(GOLDMATCH, PET.Name)
                 end
             end
             if #GOLDMATCH >= 3 then
+                for i=0, #GOLDMATCH do
+                    local args = {
+                        [1] = {
+                            [1] = GOLDMATCH[i],
+                            [2] = GOLDMATCH[i+1],
+                            [3] = GOLDMATCH[i+3]
+                        },
+                        [2] = "Gold"
+                    }
+                    game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.4.7"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("TierService"):WaitForChild("RF"):WaitForChild("Upgrade"):InvokeServer(unpack(args))
+                end
             end
         end)
     end
