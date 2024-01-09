@@ -373,7 +373,6 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     btnGui.Name = "ButtonHandler"
     btnGui.Parent = game.CoreGui
     btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    
     btn.Name = "LButton"
     btn.Parent = btnGui
     btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
@@ -384,6 +383,11 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     btn.Text = "Lock"
     btn.TextColor3 = Color3.new(1,1,1)
     btn.TextSize = 18
+    
+    local corner = Instance.new("UICorner")
+    corner.Parent = btn
+    corner.CornerRadius = 10
+    corner.Name = "CORNER"
     
     btn.MouseButton1Click:Connect(function()
         if lock then
@@ -417,6 +421,11 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
     silentBtn.TextColor3 = Color3.new(1,1,1)
     silentBtn.TextSize = 16
     silentBtn.TextTransparency = 0.132
+    
+    local corner = Instance.new("UICorner")
+    corner.Parent = silentBtn
+    corner.CornerRadius = 10
+    corner.Name = "CORNER"
     
     silentBtn.MouseButton1Click:Connect(function()
         if not silent then
