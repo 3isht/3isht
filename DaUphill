@@ -29,8 +29,10 @@ local prediction = 0.311505
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
-local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
-rlBtn.Size = UDim2.new(0, 60, 0, 60)
+RS.RenderStepped:Connect(function()
+    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
+    rlBtn.Size = UDim2.new(0, 60, 0, 60)
+end)
 
 local function getFullUser(input)
     user = nil
@@ -166,7 +168,7 @@ local function LockNotif()
             Display: ]]..tostring(game.Workspace[user].Humanoid.DisplayName)..[[
             
             Main user: ]]..user,
-            Icon = pfp,
+            Icon = succ,
             Duration = 0.7
         })
     end
@@ -378,7 +380,6 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     btnGui.Name = "ButtonHandler"
     btnGui.Parent = game.CoreGui
     btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    
     btn.Name = "LButton"
     btn.Parent = btnGui
     btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
@@ -390,6 +391,10 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     btn.TextColor3 = Color3.new(1,1,1)
     btn.TextSize = 18
     btn.RoundCornerRadius = 0.5
+    local corner = Instance.new("UICorner")
+    corner.Parent = btn
+    corner.CornerRadius = 10
+    corner.Name = "CORNER"
     
     btn.MouseButton1Click:Connect(function()
         if lock then
@@ -423,7 +428,11 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
     silentBtn.TextColor3 = Color3.new(1,1,1)
     silentBtn.TextSize = 16
     silentBtn.TextTransparency = 0.132
-    silentBtn.RoundCornerRadius = 0.5
+    
+    local corner = Instance.new("UICorner")
+    corner.Parent = silentBtn
+    corner.CornerRadius = 10
+    corner.Name = "CORNER"
     
     silentBtn.MouseButton1Click:Connect(function()
         local succ, pfp = pcall(function()
