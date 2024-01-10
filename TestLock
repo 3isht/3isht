@@ -83,7 +83,7 @@ local function getClosest()
     local plr = nil
     local plrs = {}
     for _, v in pairs(game.Players:GetChildren()) do
-        if v ~= game.Players.LocalPlayer and not game.Workspace[v.Name]:GetAttribute("Knocked") then
+        if v ~= game.Players.LocalPlayer and not game.Workspace[v.Name]:GetAttribute("Knocked") and not table.find(teammates, v.Name) then
             table.insert(plrs, v.Name)
         end
     end
@@ -103,7 +103,7 @@ local function silentLock()
         while wait() do
             if silent then
                 local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, 0, silentVic.UpperTorso.Velocity.Z * prediction)
-                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] and not table.find(teammates, silentVic.Name) then
+                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
                     end
