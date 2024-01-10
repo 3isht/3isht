@@ -402,7 +402,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     
     local corner = Instance.new("UICorner")
     corner.Parent = btn
-    corner.CornerRadius = 10
+    corner.CornerRadius = UDim.new(0,10)
     corner.Name = "CORNER"
     
     btn.MouseButton1Click:Connect(function()
@@ -440,7 +440,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
     
     local corner = Instance.new("UICorner")
     corner.Parent = silentBtn
-    corner.CornerRadius = 10
+    corner.CornerRadius = UDim.new(0,10)
     corner.Name = "CORNER"
     
     silentBtn.MouseButton1Click:Connect(function()
