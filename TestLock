@@ -11,10 +11,10 @@ getgenv().VIEW = false;
 getgenv().customUI = false;
 function customLayout()
     local me = game.Players.LocalPlayer
-    me.PlayerGui.gui.Bar.Armor = Color3.fromRGB(127,77,10)
-    me.PlayerGui.gui.Bar.Armor.ImageLabel = Color3.fromRGB(217,122,20)
-    me.PlayerGui.gui.Bar.Health = Color3.fromRGB(94,31,31)
-    me.PlayerGui.gui.Bar.Health.ImageLabel = Color3.fromRGB(255,0,0)
+    me.PlayerGui.gui.Bar.Armor.BackgroundColor3 = Color3.fromRGB(127,77,10)
+    me.PlayerGui.gui.Bar.Armor.ImageLabel.BackgroundColor3 = Color3.fromRGB(217,122,20)
+    me.PlayerGui.gui.Bar.Health.BackgroundColor3 = Color3.fromRGB(94,31,31)
+    me.PlayerGui.gui.Bar.Health.ImageLabel.BackgroundColor3 = Color3.fromRGB(255,0,0)
 end
 local camera = game.Workspace.Camera
 local findarmour = function()
@@ -47,7 +47,7 @@ RS.RenderStepped:Connect(function()
     local plrs = game.Players
     local lplr = plrs.LocalPlayer
     for _, v in pairs(plrs:GetPlayers()) do
-        if v.group == lplr.group then
+        if v:GetAttribute("group") == lplr:GetAttribute("group") then
             table.insert(teammates, v.Name)
         end
     end
