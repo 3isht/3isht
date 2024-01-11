@@ -35,6 +35,13 @@ local RS = game:GetService("RunService")
 local prediction = 0.32115
 local teammates = {}
 
+local function autoBuyArmour()
+    local me = game.Players.LocalPlayer.Name
+    if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 and armour then
+        fireclickdetector(armour.ClickDetector)
+    end
+end
+
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 RS.RenderStepped:Connect(function()
@@ -170,13 +177,6 @@ local function UnLockNotif()
         Icon = "",
         Duration = 0.7
     })
-end
-
-local function autoBuyArmour()
-    local me = game.Players.LocalPlayer.Name
-    if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 and armour then
-        fireclickdetector(armour.ClickDetector)
-    end
 end
 
 local function autoStomp()
