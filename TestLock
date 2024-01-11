@@ -47,7 +47,7 @@ RS.RenderStepped:Connect(function()
     local plrs = game.Players
     local lplr = plrs.LocalPlayer
     for _, v in pairs(plrs:GetPlayers()) do
-        if v:GetAttribute("group") == lplr:GetAttribute("group") then
+        if v:GetAttribute("group") == lplr:GetAttribute("group") and v:GetAttribute("group") ~= 0 then
             table.insert(teammates, v.Name)
         end
     end
