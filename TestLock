@@ -1,3 +1,10 @@
+-- TO DO LIST: --
+-- air shot
+-- better prediction
+-- maybe esp
+-- new macro button
+-- auto buy food
+
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -8,6 +15,7 @@ getgenv().silent = false;
 getgenv().FLING = false;
 getgenv().VIEW = false;
 getgenv().customUI = false;
+getgenv().customMv = false;
 function customLayout()
     local me = game.Players.LocalPlayer
     me.PlayerGui.gui.Bar.Armor.BackgroundColor3 = Color3.fromRGB(127,77,10)
@@ -34,7 +42,16 @@ local camLerp = 0.462
 local RS = game:GetService("RunService")
 local prediction = 0.32115
 local teammates = {}
-
+local m = 15
+function customMacro()
+    local LS = game.Players.LocalPlayers.PlayerGui.gui.BottomLeft.Macro.LocalScript
+    for i, v in pairs(getconstants(getsenv(LS).inout) do
+        if type(v) == "number" then
+            v = m
+            print("new macro view: ", v)
+        end
+    end
+end
 local function autoBuyArmour()
     local me = game.Players.LocalPlayer.Name
     if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 and armour then
@@ -47,6 +64,9 @@ loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 RS.RenderStepped:Connect(function()
     if customUI then
         customLayout()
+    end
+    if customMv then
+        customMacro()
     end
     if AutoHighArm then
         autoBuyArmour()
@@ -234,7 +254,9 @@ end)
 tab.newToggle("Custom Layout", "", false, function(bool)
     customUI = bool
 end)
-
+tab.newToggle("Custom Macro View", "", false, function(bool)
+    customMv = bool
+end)
 tab2.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
 end)
