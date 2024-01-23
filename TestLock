@@ -2,8 +2,8 @@
 -- air shot
 -- better prediction
 -- maybe esp
--- new macro button --
--- auto buy food --
+-- new macro button
+-- auto buy food
 
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
@@ -45,7 +45,7 @@ local teammates = {}
 local m = 15
 function customMacro()
     local LS = game.Players.LocalPlayer.PlayerGui.gui.BottomLeft.Macro.LocalScript
-    for i, v in pairs(getconstants(getsenv(LS).inout) do
+    for i, v in pairs(getconstants(getsenv(LS).outin) do
         if type(v) == "number" then
             v = m
             print("new macro view: ", v)
