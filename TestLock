@@ -44,8 +44,8 @@ local prediction = 0.32115
 local teammates = {}
 local m = 15
 function customMacro()
-    local LS = game.StarterPlayer.StarterPlayerScripts.Macro
-    for i, v in pairs(getconstants(getsenv(LS)).outin) do
+    local LS = game.Players.LocalPlayer.PlayerScripts.Macro
+    for i, v in pairs(getconstants(getsenv(LS)).inout) do
         if type(v) == "number" then
             v = m
             print("new macro view: ", v)
