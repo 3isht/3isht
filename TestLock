@@ -3,7 +3,7 @@
 -- better prediction
 -- maybe esp
 -- new macro button
--- auto buy food
+-- auto buy food --
 
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
