@@ -44,7 +44,7 @@ local prediction = 0.32115
 local teammates = {}
 local m = 15
 function customMacro()
-    local LS = game.Players.LocalPlayers.PlayerGui.gui.BottomLeft.Macro.LocalScript
+    local LS = game.Players.LocalPlayer.PlayerGui.gui.BottomLeft.Macro.LocalScript
     for i, v in pairs(getconstants(getsenv(LS).inout) do
         if type(v) == "number" then
             v = m
