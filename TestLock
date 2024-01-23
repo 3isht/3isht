@@ -2,7 +2,7 @@
 -- air shot
 -- better prediction
 -- maybe esp
--- new macro button
+-- new macro button --
 -- auto buy food --
 
 getgenv().AutoHighArm = false;
