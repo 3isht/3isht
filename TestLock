@@ -30,6 +30,13 @@ local findarmour = function()
             Highmed = v
         end
     end
+    if not Highmed then
+        for _, v in pairs(game.Workspace:GetDescendants()) do
+            if v.Name == "[Medium Armor]" then
+                Highmed = v
+            end
+        end
+    end
     return Highmed
 end
 local armour = findarmour()
