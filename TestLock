@@ -49,7 +49,7 @@ local camLerp = 0.462
 local RS = game:GetService("RunService")
 local prediction = 0.31515
 local teammates = {}
-local m = 15
+local m = 7
 function customMacro()
     local LS = game.Players.LocalPlayer.PlayerScripts.Macro
     for i, v in pairs(getsenv(LS)) do
@@ -362,6 +362,13 @@ tab2.newToggle("Fling User", "Flings selected user.", false, function(bool)
         repeat wait() until not FLING
         StopFling()
         ME.Humanoid.PlatformStand = false
+    end
+end)
+tab3.newInput("Macro View", "", function(amt)
+    if type(amt) == "number" then
+        m = amt
+    else
+        m = 7
     end
 end)
 
