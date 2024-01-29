@@ -47,15 +47,15 @@ local TS = game.TweenService
 local tweeninfo = TweenInfo.new(0.5)
 local camLerp = 0.462
 local RS = game:GetService("RunService")
-local prediction = 0.32115
+local prediction = 0.31515
 local teammates = {}
 local m = 15
 function customMacro()
     local LS = game.Players.LocalPlayer.PlayerScripts.Macro
-    for i, v in pairs(getconstants(getsenv(LS)).inout) do
-        if type(v) == "number" then
-            v = m
-            print("new macro view: ", v)
+    for i, v in pairs(getsenv(LS)) do
+        for _, cons in next, getconstants(getsenv(LS).inout) do
+            setconstant(getsenv(LS).inout, 1, m)
+            print("new macro view set: ", m)
         end
     end
 end
