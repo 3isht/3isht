@@ -258,11 +258,9 @@ tab.newButton("Apply Sky Colour", "", function()
 end)
 tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
     AutoHighArm = bool
-    autoBuyArmour()
 end)
 tab.newToggle("Auto Stomp", "", false, function(bool)
     stomp = bool
-    autoStomp()
 end)
 tab.newToggle("Custom Layout", "", false, function(bool)
     customUI = bool
@@ -468,11 +466,9 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                 })
             elseif silent then
                 silent = false
-                silentBtn.Text = "Silent Lock"
-            end
-            if not silent then
                 UnLockNotif()
                 silentVic = nil
+                silentBtn.Text = "Silent Lock"
             end
             silentLock()
         end)
@@ -499,14 +495,13 @@ tab3.newButton("Armour Button", "Creates a new button for auto armour quick acce
         
         armBtn.MouseButton1Click:Connect(function()
             if not AutoHighArm then
-                armBtn.Text = "UnAuto Armour"
                 armBtn.BackgroundColor3 = Color3.fromRGB(215,5,10)
                 AutoHighArm = true
-            end
-            if AutoHighArm then
-                armBtn.Text = "Auto Armour"
+                armBtn.Text = "Unauto Armour"
+            elseif AutoHighArm then
                 armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
                 AutoHighArm = false
+                armBtn.Text = "Auto Armour"
             end
         end)
     end
