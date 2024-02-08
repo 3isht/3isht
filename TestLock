@@ -230,6 +230,10 @@ local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Target", "")
 local tab3 = lib.newTab("Player", "")
+local btnGui = Instance.new("ScreenGui")
+btnGui.Name = "ButtonHandler"
+btnGui.Parent = game.CoreGui
+btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local colours = {
     "red",
