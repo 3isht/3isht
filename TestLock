@@ -418,7 +418,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
                 UnLockNotif()
                 VICTIM = nil
                 btn.Text = "Lock"
-            elseif not lock and btn.Text == "Lock" then
+            elseif not lock and btn.Text == "Lock" and user then
                 if game.Players[user] then
                     lock = true
                     LockNotif()
@@ -485,7 +485,7 @@ tab3.newButton("Armour Button", "Creates a new button for auto armour quick acce
         armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
         armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
         armBtn.BorderSizePixel = 0
-        armBtn.Position = UDim2.new(0, 757, 0, -2)
+        armBtn.Position = UDim2.new(0, 757, 0, -3)
         armBtn.Size = UDim2.new(0, 85, 0, 42.5)
         armBtn.Font = Enum.Font.GothamBlack
         armBtn.Text = "Auto Armour"
@@ -498,12 +498,12 @@ tab3.newButton("Armour Button", "Creates a new button for auto armour quick acce
         corner.Name = "CORNER"
         
         armBtn.MouseButton1Click:Connect(function()
-            if armBtn.Text == "Auto Armour" then
+            if not AutoHighArm then
                 armBtn.Text = "UnAuto Armour"
                 armBtn.BackgroundColor3 = Color3.fromRGB(215,5,10)
                 AutoHighArm = true
             end
-            if armBtn.Text == "UnAuto Armour" then
+            if AutoHighArm then
                 armBtn.Text = "Auto Armour"
                 armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
                 AutoHighArm = false
