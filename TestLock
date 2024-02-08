@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- air shot
--- better prediction
+-- better prediction (velocity * (velocity / 3))
 -- maybe esp
 -- new macro button
 -- auto buy food
@@ -68,26 +68,6 @@ end
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
-RS.RenderStepped:Connect(function()
-    if customUI then
-        customLayout()
-    end
-    if customMv then
-        customMacro()
-    end
-    if AutoHighArm then
-        autoBuyArmour()
-    end
-    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
-    rlBtn.Size = UDim2.new(0, 60, 0, 60)
-    local plrs = game.Players
-    local lplr = plrs.LocalPlayer
-    for _, v in pairs(plrs:GetPlayers()) do
-        if v:GetAttribute("group") == lplr:GetAttribute("group") and v:GetAttribute("group") ~= 0 then
-            table.insert(teammates, v.Name)
-        end
-    end
-end)
 
 local function getFullUser(input)
     user = nil
@@ -208,11 +188,7 @@ end
 
 local function autoStomp()
     spawn(function()
-        while wait() do
-            if stomp then
-                game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
-            end
-        end
+        game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
     end)
 end
 
@@ -222,6 +198,32 @@ if game.CoreGui:FindFirstChild("DrRay") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
 end
+
+RS.RenderStepped:Connect(function()
+    if customUI then
+        customLayout()
+    end
+    if customMv then
+        customMacro()
+    end
+    if AutoHighArm then
+        autoBuyArmour()
+    end
+    if stomp then
+        autoStomp()
+    end
+    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
+    if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
+        rlBtn.Size = UDim2.new(0, 60, 0, 60)
+    end
+    local plrs = game.Players
+    local lplr = plrs.LocalPlayer
+    for _, v in pairs(plrs:GetPlayers()) do
+        if v:GetAttribute("group") == lplr:GetAttribute("group") and v:GetAttribute("group") ~= 0 then
+            table.insert(teammates, v.Name)
+        end
+    end
+end)
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load("Made By Tariq", "Default")
@@ -388,6 +390,9 @@ tab3.newInput("Prediction Amount", "", function(amt)
     end
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
+    if game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
+        return
+    end
     local btnGui = Instance.new("ScreenGui")
     local btn = Instance.new("TextButton")
     btnGui.Name = "ButtonHandler"
@@ -412,22 +417,26 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     btn.MouseButton1Click:Connect(function()
         if lock then
             lock = false
-            btn.Text = "Lock"
-        elseif not lock then
-            lock = true
-            btn.Text = "Unlock"
-        end
-        if not lock then
             UnLockNotif()
             VICTIM = nil
-        end
-        if lock then
-            LockNotif()
+            btn.Text = "Lock"
+        elseif not lock then
+            if game.Players[VICTIM] then
+                lock = true
+                LockNotif()
+                btn.Text = "Unlock"
+            else
+                lock = false
+                btn.Text = "Lock"
+            end
         end
         startLock(user)
     end)
 end)
 tab3.newButton("Silent Lock", "Locks on the closest person.", function()
+    if game.CoreGui.ButtonHandler:FindFirstChild("SilentButton") then
+        return
+    end
     local silentBtn = Instance.new("TextButton")
     silentBtn.Name = "SilentButton"
     silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
@@ -471,7 +480,41 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
         silentLock()
     end)
 end)
-tab3.newButton("Destroy Lock Buttons", "Destroys all buttons created by this script.", function()
+tab3.newButton("Armour Button", "Creates a new button for auto armour quick access.", function()
+    if game.CoreGui.ButtonHandler:FindFirstChild("AButton") then
+        return
+    end
+    local armBtn = Instance.new("TextButton")
+    armBtn.Name = "AButton"
+    armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
+    armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
+    armBtn.BorderSizePixel = 0
+    armBtn.Position = UDim2.new(0, 757, 0, -2)
+    armBtn.Size = UDim2.new(0, 85, 0, 42.5)
+    armBtn.Font = Enum.Font.GothamBlack
+    armBtn.Text = "Auto Armour"
+    armBtn.TextColor3 = Color3.new(1, 1, 1)
+    armBtn.TextSize = 12
+    
+    local corner = Instance.new("UICorner")
+    corner.Parent = armBtn
+    corner.CornerRadius = UDim.new(0,10)
+    corner.Name = "CORNER"
+    
+    armBtn.MouseButton1Click:Connect(function()
+        if armBtn.Text == "Auto Armour" then
+            armBtn.Text = "UnAuto Armour"
+            armBtn.BackgroundColor3 = Color3.fromRGB(215,5,10)
+            AutoHighArm = true
+        end
+        if armBtn.Text == "UnAuto Armour" then
+            armBtn.Text = "Auto Armour"
+            armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
+            AutoHighArm = false
+        end
+    end)
+end)
+tab3.newButton("Destroy All Buttons", "Destroys all buttons created by this script.", function()
     if game.CoreGui:FindFirstChild("ButtonHandler") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
