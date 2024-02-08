@@ -390,7 +390,7 @@ tab3.newInput("Prediction Amount", "", function(amt)
     end
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
-    if game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
+    if not game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
         local btn = Instance.new("TextButton")
         btn.Name = "LButton"
         btn.Parent = btnGui
@@ -429,7 +429,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
     end
 end)
 tab3.newButton("Silent Lock", "Locks on the closest person.", function()
-    if game.CoreGui.ButtonHandler:FindFirstChild("SilentButton") then
+    if not game.CoreGui.ButtonHandler:FindFirstChild("SilentButton") then
         local silentBtn = Instance.new("TextButton")
         silentBtn.Name = "SilentButton"
         silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
