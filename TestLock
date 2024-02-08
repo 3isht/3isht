@@ -390,125 +390,122 @@ tab3.newInput("Prediction Amount", "", function(amt)
     end
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
-    if game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild("LButton") then
-        return
-    end
-    local btn = Instance.new("TextButton")
-    btn.Name = "LButton"
-    btn.Parent = btnGui
-    btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
-    btn.BorderSizePixel = 0
-    btn.Position = UDim2.new(0, 737, 0, 35)
-    btn.Size = UDim2.new(0, 100, 0, 50)
-    btn.Font = Enum.Font.GothamBlack
-    btn.Text = "Lock"
-    btn.TextColor3 = Color3.new(1,1,1)
-    btn.TextSize = 18
-    
-    local corner = Instance.new("UICorner")
-    corner.Parent = btn
-    corner.CornerRadius = UDim.new(0,10)
-    corner.Name = "CORNER"
-    
-    btn.MouseButton1Click:Connect(function()
-        if lock then
-            lock = false
-            UnLockNotif()
-            VICTIM = nil
-            btn.Text = "Lock"
-        elseif not lock then
-            if game.Players[VICTIM] then
-                lock = true
-                LockNotif()
-                btn.Text = "Unlock"
-            else
+    if game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
+        local btn = Instance.new("TextButton")
+        btn.Name = "LButton"
+        btn.Parent = btnGui
+        btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
+        btn.BorderSizePixel = 0
+        btn.Position = UDim2.new(0, 737, 0, 35)
+        btn.Size = UDim2.new(0, 100, 0, 50)
+        btn.Font = Enum.Font.GothamBlack
+        btn.Text = "Lock"
+        btn.TextColor3 = Color3.new(1,1,1)
+        btn.TextSize = 18
+        
+        local corner = Instance.new("UICorner")
+        corner.Parent = btn
+        corner.CornerRadius = UDim.new(0,10)
+        corner.Name = "CORNER"
+        
+        btn.MouseButton1Click:Connect(function()
+            if lock then
                 lock = false
+                UnLockNotif()
+                VICTIM = nil
                 btn.Text = "Lock"
+            elseif not lock then
+                if game.Players[VICTIM] then
+                    lock = true
+                    LockNotif()
+                    btn.Text = "Unlock"
+                else
+                    lock = false
+                    btn.Text = "Lock"
+                end
             end
-        end
-        startLock(user)
-    end)
+            startLock(user)
+        end)
+    end
 end)
 tab3.newButton("Silent Lock", "Locks on the closest person.", function()
     if game.CoreGui.ButtonHandler:FindFirstChild("SilentButton") then
-        return
+        local silentBtn = Instance.new("TextButton")
+        silentBtn.Name = "SilentButton"
+        silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
+        silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
+        silentBtn.BorderSizePixel = 0
+        silentBtn.BackgroundTransparency = 0.1
+        silentBtn.Position = UDim2.new(0, 630, 0, -15)
+        silentBtn.Size = UDim2.new(0, 100, 0, 50)
+        silentBtn.Font = Enum.Font.GothamBlack
+        silentBtn.Text = "Silent Lock"
+        silentBtn.TextColor3 = Color3.new(1,1,1)
+        silentBtn.TextSize = 16
+        silentBtn.TextTransparency = 0.132
+        
+        local corner = Instance.new("UICorner")
+        corner.Parent = silentBtn
+        corner.CornerRadius = UDim.new(0,10)
+        corner.Name = "CORNER"
+        
+        silentBtn.MouseButton1Click:Connect(function()
+            if not silent then
+                silent = true
+                silentBtn.Text = "Unlock Silent"
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Lock Notification",
+                    Text = [[
+                    Display: ]] .. tostring(game.Workspace[getnear().Name].Humanoid.DisplayName) .. [[
+                    
+                    Main user: ]] .. getnear().Name,
+                    Icon = "",
+                    Duration = 0.7
+                })
+            elseif silent then
+                silent = false
+                silentBtn.Text = "Silent Lock"
+            end
+            if not silent then
+                UnLockNotif()
+                silentVic = nil
+            end
+            silentLock()
+        end)
     end
-    local silentBtn = Instance.new("TextButton")
-    silentBtn.Name = "SilentButton"
-    silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
-    silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
-    silentBtn.BorderSizePixel = 0
-    silentBtn.BackgroundTransparency = 0.1
-    silentBtn.Position = UDim2.new(0, 630, 0, -15)
-    silentBtn.Size = UDim2.new(0, 100, 0, 50)
-    silentBtn.Font = Enum.Font.GothamBlack
-    silentBtn.Text = "Silent Lock"
-    silentBtn.TextColor3 = Color3.new(1,1,1)
-    silentBtn.TextSize = 16
-    silentBtn.TextTransparency = 0.132
-    
-    local corner = Instance.new("UICorner")
-    corner.Parent = silentBtn
-    corner.CornerRadius = UDim.new(0,10)
-    corner.Name = "CORNER"
-    
-    silentBtn.MouseButton1Click:Connect(function()
-        if not silent then
-            silent = true
-            silentBtn.Text = "Unlock Silent"
-            game.StarterGui:SetCore("SendNotification", {
-                Title = "Lock Notification",
-                Text = [[
-                Display: ]] .. tostring(game.Workspace[getnear().Name].Humanoid.DisplayName) .. [[
-                
-                Main user: ]] .. getnear().Name,
-                Icon = "",
-                Duration = 0.7
-            })
-        elseif silent then
-            silent = false
-            silentBtn.Text = "Silent Lock"
-        end
-        if not silent then
-            UnLockNotif()
-            silentVic = nil
-        end
-        silentLock()
-    end)
 end)
 tab3.newButton("Armour Button", "Creates a new button for auto armour quick access.", function()
-    if game.CoreGui.ButtonHandler:FindFirstChild("AButton") then
-        return
+    if not game.CoreGui.ButtonHandler:FindFirstChild("AButton") then
+        local armBtn = Instance.new("TextButton")
+        armBtn.Name = "AButton"
+        armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
+        armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
+        armBtn.BorderSizePixel = 0
+        armBtn.Position = UDim2.new(0, 757, 0, -2)
+        armBtn.Size = UDim2.new(0, 85, 0, 42.5)
+        armBtn.Font = Enum.Font.GothamBlack
+        armBtn.Text = "Auto Armour"
+        armBtn.TextColor3 = Color3.new(1, 1, 1)
+        armBtn.TextSize = 12
+        
+        local corner = Instance.new("UICorner")
+        corner.Parent = armBtn
+        corner.CornerRadius = UDim.new(0,10)
+        corner.Name = "CORNER"
+        
+        armBtn.MouseButton1Click:Connect(function()
+            if armBtn.Text == "Auto Armour" then
+                armBtn.Text = "UnAuto Armour"
+                armBtn.BackgroundColor3 = Color3.fromRGB(215,5,10)
+                AutoHighArm = true
+            end
+            if armBtn.Text == "UnAuto Armour" then
+                armBtn.Text = "Auto Armour"
+                armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
+                AutoHighArm = false
+            end
+        end)
     end
-    local armBtn = Instance.new("TextButton")
-    armBtn.Name = "AButton"
-    armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
-    armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
-    armBtn.BorderSizePixel = 0
-    armBtn.Position = UDim2.new(0, 757, 0, -2)
-    armBtn.Size = UDim2.new(0, 85, 0, 42.5)
-    armBtn.Font = Enum.Font.GothamBlack
-    armBtn.Text = "Auto Armour"
-    armBtn.TextColor3 = Color3.new(1, 1, 1)
-    armBtn.TextSize = 12
-    
-    local corner = Instance.new("UICorner")
-    corner.Parent = armBtn
-    corner.CornerRadius = UDim.new(0,10)
-    corner.Name = "CORNER"
-    
-    armBtn.MouseButton1Click:Connect(function()
-        if armBtn.Text == "Auto Armour" then
-            armBtn.Text = "UnAuto Armour"
-            armBtn.BackgroundColor3 = Color3.fromRGB(215,5,10)
-            AutoHighArm = true
-        end
-        if armBtn.Text == "UnAuto Armour" then
-            armBtn.Text = "Auto Armour"
-            armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
-            AutoHighArm = false
-        end
-    end)
 end)
 tab3.newButton("Destroy All Buttons", "Destroys all buttons created by this script.", function()
     if game.CoreGui:FindFirstChild("ButtonHandler") then
