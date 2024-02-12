@@ -16,6 +16,7 @@ getgenv().FLING = false;
 getgenv().VIEW = false;
 getgenv().customUI = false;
 getgenv().customMv = false;
+getgenv().guns = false;
 function customLayout()
     local me = game.Players.LocalPlayer
     me.PlayerGui.gui.Bar.Armor.BackgroundColor3 = Color3.fromRGB(127,77,10)
@@ -24,21 +25,6 @@ function customLayout()
     me.PlayerGui.gui.Bar.Health.ImageLabel.BackgroundColor3 = Color3.fromRGB(255,0,0)
 end
 local camera = game.Workspace.Camera
-local findarmour = function()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[High-Medium Armor]" then
-            Highmed = v
-        end
-    end
-    if not Highmed then
-        for _, v in pairs(game.Workspace:GetDescendants()) do
-            if v.Name == "[Medium Armor]" then
-                Highmed = v
-            end
-        end
-    end
-    return Highmed
-end
 local armour = findarmour()
 local user
 local VICTIM
@@ -50,6 +36,34 @@ local RS = game:GetService("RunService")
 local prediction = 0.31515
 local teammates = {}
 local m = 7
+local findarmour = function()
+    for _, v in pairs(game.Workspace:GetDescendants()) do
+        if v.Name == "[High-Medium Armor]" then
+            return v
+        end
+    end
+    if not Highmed then
+        for _, v in pairs(game.Workspace:GetDescendants()) do
+            if v.Name == "[Medium Armor]" then
+                return v
+            end
+        end
+    end
+end
+local tact = function()
+    for _, v in pairs(game.Workspace:GetDescendants()) do
+        if v.Name == "[Tactical Shotgun]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            return v
+        end
+    end
+end
+local usp = function()
+    for _, v in pairs(game.Workspace:GetDescendants()) do
+        if v.Name == "[USP]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            return v
+        end
+    end
+end
 function customMacro()
     local LS = game.Players.LocalPlayer.PlayerScripts.Macro
     for i, v in pairs(getsenv(LS)) do
@@ -212,6 +226,10 @@ RS.RenderStepped:Connect(function()
     if stomp then
         autoStomp()
     end
+    if guns then
+        fireclickdetector(usp.ClickDetector)
+        fireclickdetector(tact.ClickDetector)
+    end
     local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
     if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
         rlBtn.Size = UDim2.new(0, 60, 0, 60)
@@ -267,6 +285,9 @@ tab.newToggle("Custom Layout", "", false, function(bool)
 end)
 tab.newToggle("Custom Macro View", "", false, function(bool)
     customMv = bool
+end)
+tab.newToggle("Auto USP and Tact SG", "", false, function(bool)
+    guns = bool
 end)
 tab2.newInput("Username", "Username to lock on.", function(inp)
     getFullUser(inp)
