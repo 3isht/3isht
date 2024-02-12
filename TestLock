@@ -411,12 +411,12 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.Name = "CORNER"
         
         btn.MouseButton1Click:Connect(function()
-            if lock and btn.Text == "Unlock" then
+            if lock then
                 lock = false
                 UnLockNotif()
                 VICTIM = nil
                 btn.Text = "Lock"
-            elseif not lock and btn.Text == "Lock" and user then
+            elseif not lock and user then
                 if game.Players[user] then
                     lock = true
                     LockNotif()
@@ -510,7 +510,7 @@ tab3.newButton("Destroy All Buttons", "Destroys all buttons created by this scri
     if game.CoreGui:FindFirstChild("ButtonHandler") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
-    local btnGui = Instance.new("ScreenGui")
+    btnGui = Instance.new("ScreenGui")
     btnGui.Name = "ButtonHandler"
     btnGui.Parent = game.CoreGui
     btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
