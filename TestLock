@@ -24,18 +24,6 @@ function customLayout()
     me.PlayerGui.gui.Bar.Health.BackgroundColor3 = Color3.fromRGB(94,31,31)
     me.PlayerGui.gui.Bar.Health.ImageLabel.BackgroundColor3 = Color3.fromRGB(255,0,0)
 end
-local camera = game.Workspace.Camera
-local armour = findarmour()
-local user
-local VICTIM
-local silentVic
-local TS = game.TweenService
-local tweeninfo = TweenInfo.new(0.5)
-local camLerp = 0.462
-local RS = game:GetService("RunService")
-local prediction = 0.31515
-local teammates = {}
-local m = 7
 local findarmour = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
         if v.Name == "[High-Medium Armor]" then
@@ -50,20 +38,34 @@ local findarmour = function()
         end
     end
 end
-local tact = function()
+local findtact = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
         if v.Name == "[Tactical Shotgun]" and v:FindFirstChildWhichIsA("ClickDetector") then
             return v
         end
     end
 end
-local usp = function()
+local findusp = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
         if v.Name == "[USP]" and v:FindFirstChildWhichIsA("ClickDetector") then
             return v
         end
     end
 end
+local camera = game.Workspace.Camera
+local armour = findarmour()
+local tact = findtact()
+local usp = findusp()
+local user
+local VICTIM
+local silentVic
+local TS = game.TweenService
+local tweeninfo = TweenInfo.new(0.5)
+local camLerp = 0.462
+local RS = game:GetService("RunService")
+local prediction = 0.31515
+local teammates = {}
+local m = 7
 function customMacro()
     local LS = game.Players.LocalPlayer.PlayerScripts.Macro
     for i, v in pairs(getsenv(LS)) do
