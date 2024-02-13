@@ -12,6 +12,7 @@ getgenv().autoRst = false;
 getgenv().stomp = false;
 getgenv().tp = false;
 getgenv().silent = false;
+getgenv().FLING = false;
 getgenv().VIEW = false;
 getgenv().customUI = false;
 getgenv().customMv = false;
@@ -123,7 +124,7 @@ local function silentLock()
         silentVic = getnear()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, 0, silentVic.UpperTorso.Velocity.Z * prediction)
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, silentVic.UpperTorso.Velocity.Y * (prediction / 6), silentVic.UpperTorso.Velocity.Z * prediction)
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
@@ -141,7 +142,7 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, 0, target.UpperTorso.Velocity.Z * prediction)
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, target.UpperTorso.Velocity.Y * (prediction / 6), target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
               				    if target.UpperTorso then
                   				    camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
