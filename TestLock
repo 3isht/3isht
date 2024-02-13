@@ -64,7 +64,7 @@ local camLerp = 0.462
 local RS = game:GetService("RunService")
 local prediction = 0.296
 local teammates = {}
-local m = 11.4
+local m = 8
 local function autoBuyArmour()
     local me = game.Players.LocalPlayer.Name
     if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 and armour then
@@ -323,9 +323,11 @@ end)
 tab3.newInput("Macro View", "", function(amt)
     if type(amt) == "number" then
         m = amt
+        print(m)
     else
-        m = 11.4
+        m = 8
     end
+    return m
 end)
 tab3.newInput("Camera Lerp Amount", "", function(amt)
     if type(amt) == "number" then
@@ -333,6 +335,7 @@ tab3.newInput("Camera Lerp Amount", "", function(amt)
     else
         camLerp = 0.462
     end
+    return camLerp
 end)
 tab3.newInput("Prediction Amount", "", function(amt)
     if type(amt) == "number" then
@@ -340,6 +343,7 @@ tab3.newInput("Prediction Amount", "", function(amt)
     else
         prediction = 0.296
     end
+    return prediction
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
     if not game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
