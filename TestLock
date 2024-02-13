@@ -324,10 +324,10 @@ tab2.newButton("Teleport To User", "", function()
 end)
 
 tab3.newInput("Macro View", "", function(amt)
-    tonumber(amt)
-    print(amt, type(amt))
-    if type(amt) == "number" then
-        m = amt
+    local num = tonumber(amt)
+    print(num, type(num))
+    if type(num) == "number" then
+        m = num
         print(m)
     else
         m = 8
@@ -335,20 +335,20 @@ tab3.newInput("Macro View", "", function(amt)
     return m
 end)
 tab3.newInput("Camera Lerp Amount", "", function(amt)
-    tonumber(amt)
-    print(amt, type(amt))
-    if type(amt) == "number" then
-        camLerp = amt
+    local num = tonumber(amt)
+    print(num, type(num))
+    if type(num) == "number" then
+        camLerp = num
     else
         camLerp = 0.462
     end
     return camLerp
 end)
 tab3.newInput("Prediction Amount", "", function(amt)
-    tonumber(amt)
-    print(amt, type(amt))
-    if type(amt) == "number" then
-        prediction = amt
+    local num = tonumber(amt)
+    print(num, type(num))
+    if type(num) == "number" then
+        prediction = num
     else
         prediction = 0.296
     end
