@@ -332,7 +332,6 @@ tab3.newInput("Macro View", "", function(amt)
     else
         m = 8
     end
-    return m
 end)
 tab3.newInput("Camera Lerp Amount", "", function(amt)
     local num = tonumber(amt)
@@ -343,7 +342,6 @@ tab3.newInput("Camera Lerp Amount", "", function(amt)
     else
         camLerp = 0.462
     end
-    return camLerp
 end)
 tab3.newInput("Prediction Amount", "", function(amt)
     local num = tonumber(amt)
@@ -354,7 +352,6 @@ tab3.newInput("Prediction Amount", "", function(amt)
     else
         prediction = 0.296
     end
-    return prediction
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
     if not game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
