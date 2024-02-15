@@ -328,7 +328,7 @@ tab3.newInput("Macro View", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         m = num
-        print(m)
+        print(m, type(m))
     else
         m = 8
     end
@@ -339,6 +339,7 @@ tab3.newInput("Camera Lerp Amount", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         camLerp = num
+        print(camLerp, type(camLerp))
     else
         camLerp = 0.462
     end
@@ -349,6 +350,7 @@ tab3.newInput("Prediction Amount", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         prediction = num
+        print(prediction, type(prediction))
     else
         prediction = 0.296
     end
