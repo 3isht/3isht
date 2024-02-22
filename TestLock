@@ -16,6 +16,7 @@ getgenv().FLING = false;
 getgenv().VIEW = false;
 getgenv().customUI = false;
 getgenv().customMv = false;
+getgenv().foodspawn = false;
 getgenv().camera = game.Workspace.Camera;
 getgenv().user = nil;
 getgenv().VICTIM = nil;
@@ -28,6 +29,13 @@ getgenv().prediction = 0.296;
 getgenv().teammates = {};
 getgenv().m = 8;
 
+function findfood()
+    for _, v in pairs(game.Workspace:GetDescendants()) do
+        if v.Name:lower() == "[pizza]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            return v
+        end
+    end
+end
 function customLayout()
     local me = game.Players.LocalPlayer
     me.PlayerGui.gui.Bar.Armor.BackgroundColor3 = Color3.fromRGB(127,77,10)
@@ -67,6 +75,7 @@ end
 getgenv().armour = findarmour();
 getgenv().tact = findtact();
 getgenv().usp = findusp();
+getgenv().food = findfood()
 
 local function autoBuyArmour()
     local me = game.Players.LocalPlayer.Name
@@ -127,7 +136,7 @@ local function silentLock()
         silentVic = getnear()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, silentVic.UpperTorso.Velocity.Y * (prediction / 4), silentVic.UpperTorso.Velocity.Z * prediction)
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, silentVic.UpperTorso.Velocity.Y * (prediction / 3.75), silentVic.UpperTorso.Velocity.Z * prediction)
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
@@ -196,9 +205,7 @@ local function UnLockNotif()
 end
 
 local function autoStomp()
-    spawn(function()
-        game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
-    end)
+    game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
 end
 
 if game.CoreGui:FindFirstChild("DrRay") then
@@ -220,6 +227,9 @@ RS.RenderStepped:Connect(function()
     end
     if stomp then
         autoStomp()
+    end
+    if foodspawn then
+        fireclickdetector(food.ClickDetector)
     end
     local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
     if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
@@ -417,12 +427,13 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
             if not silent then
                 silent = true
                 silentBtn.Text = "Unlock Silent"
+                local bozo = getnear()
                 game.StarterGui:SetCore("SendNotification", {
                     Title = "Lock Notification",
                     Text = [[
-                    Display: ]] .. tostring(game.Workspace[getnear().Name].Humanoid.DisplayName) .. [[
+                    Display: ]] .. tostring(game.Workspace[bozo.Name].Humanoid.DisplayName) .. [[
                     
-                    Main user: ]] .. getnear().Name,
+                    Main user: ]] .. bozo.Name,
                     Icon = "",
                     Duration = 0.7
                 })
