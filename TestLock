@@ -284,6 +284,9 @@ end)
 tab.newToggle("Custom Layout", "", false, function(bool)
     customUI = bool
 end)
+tab.newToggle("Auto Spawn With Food", "", false, function(bool)
+    foodspawn = bool
+end)
 tab.newButton("Custom Macro View", "", function()
     local LS = game.Players.LocalPlayer.PlayerScripts.Macro
     for i, v in pairs(getsenv(LS)) do
