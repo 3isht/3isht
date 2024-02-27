@@ -224,7 +224,7 @@ RS.RenderStepped:Connect(function()
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
             local args = {...}
-            if getnamecallmethod() == 'FireServer' and self.Name == "MAINEVENT" then
+            if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
                 if tostring(args[1]) == 'MOUSE' then
                     args[2] = pos
                 end
