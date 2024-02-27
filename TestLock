@@ -219,7 +219,7 @@ end
 RS.RenderStepped:Connect(function()
     if aim then
         local mt = getrawmetatable(game)
-        local pos = game.Workspace[user].Position
+        local pos = game.Workspace[user].LowerTorso.Position
         local old = mt.__namecall
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
