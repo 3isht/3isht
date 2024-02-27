@@ -78,7 +78,7 @@ getgenv().tact = findtact();
 getgenv().usp = findusp();
 getgenv().food = findfood()
 local mt = getrawmetatable(game)
-local pos = game.Workspace[user].LowerTorso.Position
+local pos
 local old = mt.__namecall
 
 local function autoBuyArmour()
@@ -220,6 +220,9 @@ if game.CoreGui:FindFirstChild("DrRay") then
 end
 
 RS.RenderStepped:Connect(function()
+    if user then
+        pos = game.Workspace[user].LowerTorso.Position
+    end
     if aim then
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
