@@ -216,23 +216,23 @@ if game.CoreGui:FindFirstChild("DrRay") then
     end
 end
 
-RS.RenderStepped:Connect(function()
-    if aim then
-        local mt = getrawmetatable(game)
-        local pos = game.Workspace[user].LowerTorso.Position
-        local old = mt.__namecall
-        setreadonly(mt, false)
-        mt.__namecall = newcclosure(function(self, ...)
-            local args = {...}
-            if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
-                if tostring(args[1]) == 'MOUSE' then
-                    args[2] = pos
-                end
+if aim then
+    local mt = getrawmetatable(game)
+    local pos = game.Workspace[user].LowerTorso.Position
+    local old = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(self, ...)
+        local args = {...}
+        if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
+            if tostring(args[1]) == 'MOUSE' then
+                args[2] = pos
             end
-            return old(self, unpack(args))
-        end)
-        setreadonly(mt, true)
-    end
+        end
+        return old(self, unpack(args))
+    end)
+end
+
+RS.RenderStepped:Connect(function()
     if customUI then
         customLayout()
     end
