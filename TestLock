@@ -231,6 +231,7 @@ RS.RenderStepped:Connect(function()
             end
             return old(self, unpack(args))
         end)
+        setreadonly(mt, true)
     end
     if customUI then
         customLayout()
