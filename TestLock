@@ -25,9 +25,10 @@ getgenv().TS = game.TweenService;
 getgenv().tweeninfo = TweenInfo.new(0.5);
 getgenv().camLerp = 0.462;
 getgenv().RS = game:GetService("RunService");
-getgenv().prediction = 0.296;
+getgenv().prediction = 0.288;
 getgenv().teammates = {};
 getgenv().m = 8;
+getgenv().aim = false;
 
 function findfood()
     for _, v in pairs(game.Workspace:GetDescendants()) do
@@ -156,9 +157,9 @@ local function startLock(loser)
                 target = game.Workspace[VICTIM]
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, target.UpperTorso.Velocity.Y * (prediction / 4), target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
-              				    if target.UpperTorso then
-                  				    camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
-              				    end
+              		if target.UpperTorso then
+                  		camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
+              		end
                 end
             end
             if not lock then break end 
@@ -216,6 +217,21 @@ if game.CoreGui:FindFirstChild("DrRay") then
 end
 
 RS.RenderStepped:Connect(function()
+    if aim then
+        local mt = getrawmetatable(game)
+        local pos = game.Workspace[target].Position
+        local old = mt.__namecall
+        setreadonly(mt, false)
+        mt.__namecall = newcclosure(function(self, ...)
+            local args = {...}
+            if getnamecallmethod() == 'FireServer' and self.Name == "MAINEVENT" then
+                if tostring(args[1]) == 'MOUSE' then
+                    args[2] = pos
+                end
+            end
+            return old(self, unpack(args))
+        end)
+    end
     if customUI then
         customLayout()
     end
@@ -249,6 +265,7 @@ local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Target", "")
 local tab3 = lib.newTab("Player", "")
+local tab4 = lib.newTab("AimLock test", "")
 local btnGui = Instance.new("ScreenGui")
 btnGui.Name = "ButtonHandler"
 btnGui.Parent = game.CoreGui
@@ -496,4 +513,7 @@ tab3.newButton("Kick", "", function()
     if LP then
         LP:Kick("Did you get the last stomp?")
     end
+end)
+tab4.newToggle("Aimlock", "just a test", false, function(bool)
+    aim = bool
 end)
