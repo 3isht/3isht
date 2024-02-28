@@ -220,7 +220,7 @@ if game.CoreGui:FindFirstChild("DrRay") then
 end
 
 RS.RenderStepped:Connect(function()
-    if user then
+    if user ~= nil then
         pos = game.Workspace[user].LowerTorso.Position
     end
     if aim then
@@ -228,8 +228,10 @@ RS.RenderStepped:Connect(function()
         mt.__namecall = newcclosure(function(self, ...)
             local args = {...}
             if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
-                if tostring(args[1]) == 'MOUSE' then
+                if tostring(args[1]) == 'MOUSE' and aim then
                     args[2] = pos
+                else
+                    return old(self, unpack(agrs))
                 end
             end
             return old(self, unpack(args))
