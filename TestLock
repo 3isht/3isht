@@ -231,7 +231,7 @@ RS.RenderStepped:Connect(function()
                 if tostring(args[1]) == 'MOUSE' and aim then
                     args[2] = pos
                 else
-                    return old(self, unpack(agrs))
+                    return old(self, unpack(args))
                 end
             end
             return old(self, unpack(args))
