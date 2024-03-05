@@ -3,7 +3,6 @@
 -- better prediction (velocity * (velocity / 3))
 -- maybe esp
 -- new macro button
--- auto buy food
 
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
