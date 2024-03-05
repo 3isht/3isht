@@ -220,12 +220,10 @@ end
 
 RS.RenderStepped:Connect(function()
     if user ~= nil then
-        --[[
         local aimVic = game.Workspace[user].LowerTorso.Position
         local vicVelo = game.Workspace[user].LowerTorso.Velocity
-        local sum = (vicVelo.X * prediction, 0, vicVelo.Z * prediction)
-        ]]
-        pos = game.Workspace[user].LowerTorso.Position
+        local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction
+        pos = aimVic + sum
     end
     if aim then
         setreadonly(mt, false)
