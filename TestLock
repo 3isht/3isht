@@ -220,10 +220,21 @@ end
 
 RS.RenderStepped:Connect(function()
     if user ~= nil then
+        local succ, err = pcall(function()
+            local aimVic = game.Workspace[user].LowerTorso.Position
+            local vicVelo = game.Workspace[user].LowerTorso.Velocity
+            local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction)
+            pos = Vector3.new(aimVic + sum)
+            if err then
+                print("Something went wrong: ", err)
+            end
+        end)
+        --[[
         local aimVic = game.Workspace[user].LowerTorso.Position
         local vicVelo = game.Workspace[user].LowerTorso.Velocity
-        local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction
+        local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction)
         pos = Vector3.new(aimVic + sum)
+        ]]
     end
     if aim then
         setreadonly(mt, false)
