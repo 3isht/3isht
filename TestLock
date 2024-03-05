@@ -217,11 +217,10 @@ if game.CoreGui:FindFirstChild("DrRay") then
         game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
     end
 end
-getgenv().aimVic
 
 RS.RenderStepped:Connect(function()
     if user ~= nil then
-        aimVic = game.Workspace[user].LowerTorso.Position
+        local aimVic = game.Workspace[user].LowerTorso.Position
         local vicVelo = game.Workspace[user].LowerTorso.Velocity
         pos = (aimVic + (vicVelo.X * prediction, 0, vicVelo.Z * prediction))
     end
