@@ -159,9 +159,9 @@ local function startLock(loser)
                 target = game.Workspace[VICTIM]
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, target.UpperTorso.Velocity.Y * (prediction / 4), target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
-              		if target.UpperTorso then
-                  		camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
-              		end
+                    if target.UpperTorso then
+                        camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
+                    end
                 end
             end
             if not lock then break end 
@@ -220,10 +220,12 @@ end
 
 RS.RenderStepped:Connect(function()
     if user ~= nil then
+        --[[
         local aimVic = game.Workspace[user].LowerTorso.Position
         local vicVelo = game.Workspace[user].LowerTorso.Velocity
         local sum = (vicVelo.X * prediction, 0, vicVelo.Z * prediction)
-        pos = aimVic + sum
+        ]]
+        pos = game.Workspace[user].LowerTorso.Position
     end
     if aim then
         setreadonly(mt, false)
