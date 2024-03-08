@@ -171,7 +171,7 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, calcAir(VICTIM), target.UpperTorso.Velocity.Z * prediction)
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, calcAir(loser), target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
                     if target.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
