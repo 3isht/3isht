@@ -1669,4 +1669,4 @@ local function main()
 				count = count+1
 				init = y+1
 				x,y,extra = find(str,pattern,init,true)
-			e
+			end
