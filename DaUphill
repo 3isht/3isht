@@ -89,8 +89,8 @@ loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
 local function calcAir(person)
     local succ, err = pcall(function(person)
-        local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,3,0))
-        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,7,0))
+        local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,1.5,0))
+        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,6,0))
         local normal = Vector3.new(game.Workspace[person].LowerTorso.Position.Y + (game.Workspace[person].LowerTorso.Velocity.Y * (prediction / 2.5)))
         if normal > highest then
             normal = highest
