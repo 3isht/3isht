@@ -89,8 +89,8 @@ loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
 local function calcAir(person)
     local succ, err = pcall(function(person)
-        local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,1.5,0))
-        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,6,0))
+        local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,2.3,0))
+        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,9,0))
         local normal = Vector3.new(game.Workspace[person].LowerTorso.Position.Y + (game.Workspace[person].LowerTorso.Velocity.Y * (prediction / 2.5)))
         if normal > highest then
             normal = highest
@@ -441,6 +441,9 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
+        local slockbtn = game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild"SilentButton"
+        
+        
         btn.MouseButton1Click:Connect(function()
             if lock then
                 lock = false
@@ -450,6 +453,8 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
             elseif not lock and user then
                 if game.Players[user] then
                     lock = true
+                    silent = false
+                    slockbtn.Text = "Silent Lock"
                     LockNotif()
                     btn.Text = "Unlock"
                 else
@@ -482,13 +487,17 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
+        local lockbtn = game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild"LButton"
+        
         silentBtn.MouseButton1Click:Connect(function()
             if not silent then
                 silent = true
+                lock = false
                 silentBtn.Text = "Unlock Silent"
+                lockbtn.Text = "Lock"
                 local bozo = getnear()
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Lock Notification",
+                    Title = "Silent Notification",
                     Text = [[
                     Display: ]] .. tostring(game.Workspace[bozo.Name].Humanoid.DisplayName) .. [[
                     
