@@ -419,7 +419,7 @@ tab3.newInput("Prediction Amount", "", function(amt)
         prediction = num
         print(prediction, type(prediction))
     else
-        prediction = 0.296
+        prediction = 0.282
     end
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
