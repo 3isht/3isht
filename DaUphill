@@ -153,7 +153,7 @@ local function silentLock()
         silentVic = getnear()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (silentVic.Humanoid.MoveDirection.X / 3.5), calcAir(silentVic.Name), silentVic.UpperTorso.Velocity.Z * (silentVic.Humanoid.MoveDirection.Z / 3.5))
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (silentVic.Humanoid.MoveDirection.X / 3.5)), calcAir(silentVic.Name), silentVic.UpperTorso.Velocity.Z * (silentVic.Humanoid.MoveDirection.X / 3.5)))
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
@@ -384,7 +384,7 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     else
         camera.CameraSubject = normalCam
     end
-    if not VIEW or if not game.Workspace[user] then
+    if not VIEW or not game.Workspace[user] then
         camera.CameraSubject = normalCam
     end
 end)
