@@ -13,7 +13,7 @@ getgenv().VIEW = false;
 getgenv().customUI = false;
 getgenv().customMv = false;
 getgenv().foodspawn = false;
-getgenv().camera = game.Workspace.Camera;
+getgenv().camera = game.Workspace.CurrentCamera;
 getgenv().user = nil;
 getgenv().VICTIM = nil;
 getgenv().silentVic = nil;
@@ -90,7 +90,7 @@ loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 local function calcAir(person)
     local succ, err = pcall(function(person)
         local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,2.3,0))
-        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,9,0))
+        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,7.7,0))
         local normal = Vector3.new(game.Workspace[person].LowerTorso.Position.Y + (game.Workspace[person].LowerTorso.Velocity.Y * (prediction / 2.5)))
         if normal > highest then
             normal = highest
@@ -153,7 +153,7 @@ local function silentLock()
         silentVic = getnear()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, calcAir(silentVic.Name), silentVic.UpperTorso.Velocity.Z * prediction)
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (silentVic.Humanoid.MovementDirection.X / 3.5), calcAir(silentVic.Name), silentVic.UpperTorso.Velocity.Z * (silentVic.Humanoid.MovementDirection.Z / 3.5))
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
@@ -384,7 +384,7 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     else
         camera.CameraSubject = normalCam
     end
-    if not VIEW then
+    if not VIEW or if not game.Workspace[user] then
         camera.CameraSubject = normalCam
     end
 end)
@@ -455,6 +455,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
                     lock = true
                     if slockbtn then
                         silent = false
+                        silentVic = nil
                         slockbtn.Text = "Silent Lock"
                     end
                     LockNotif()
