@@ -441,7 +441,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
-        local slockbtn = game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild"SilentButton"
+        local slockbtn = game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild("SilentButton")
         
         
         btn.MouseButton1Click:Connect(function()
