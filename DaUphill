@@ -384,7 +384,7 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     else
         camera.CameraSubject = normalCam
     end
-    if not VIEW or not game.Workspace[user] then
+    if not VIEW then
         camera.CameraSubject = normalCam
     end
 end)
