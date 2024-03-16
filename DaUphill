@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("FIXED!")
+
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
