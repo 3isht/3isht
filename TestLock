@@ -1,7 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("Working!")
-
+print("Aimlock should work just fine now.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -247,7 +246,7 @@ RS.RenderStepped:Connect(function()
     if aim then
         local plr = game.Workspace[user].LowerTorso.Position
         local velocity = game.Workspace[user].LowerTorso.Velocity
-        pos = Vector3.new(velocity.X * prediction, 0, velocity.Z * prediction)
+        pos = Vector3.new(plr + (velocity.X * prediction, 0, velocity.Z * prediction))
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
             local args = {...}
