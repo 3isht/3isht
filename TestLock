@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("Fixed!")
+
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -381,7 +381,7 @@ tab3.newInput("Prediction Amount", "", function(amt)
         prediction = num
         print(prediction, type(prediction))
     else
-        prediction = 0.296
+        prediction = 0.282
     end
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
@@ -403,7 +403,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
-        local Silentbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
+        -- local Silentbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
         
         btn.MouseButton1Click:Connect(function()
             if lock then
@@ -414,10 +414,12 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
             elseif not lock and user then
                 if game.Players[user] then
                     lock = true
+                    --[[
                     if Silentbtn then
                         silent = false
                         Silentbtn.Text = "Silent Lock"
                     end
+                    ]]
                     LockNotif()
                     btn.Text = "Unlock"
                 else
@@ -450,15 +452,17 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
-        local lbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
+        -- local lbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
         
         silentBtn.MouseButton1Click:Connect(function()
             if not silent then
                 silent = true
+                --[[
                 if lbtn then
                     lock = false 
                     lbtn.Text = "Lock"
                 end
+                ]]
                 silentBtn.Text = "Unlock Silent"
                 local bozo = getnear()
                 game.StarterGui:SetCore("SendNotification", {
