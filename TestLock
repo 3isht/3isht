@@ -1,6 +1,7 @@
 -- TO DO LIST: --
 -- maybe esp
-print("It was working")
+print("Working!")
+
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -29,6 +30,10 @@ getgenv().aim = false;
 function findfood()
     for _, v in pairs(game.Workspace:GetDescendants()) do
         if v.Name:lower() == "[pizza]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            return v
+        elseif v.Name:lower() == '[taco]' and v:FindFirstChildWhichIsA("ClickDetector") then
+            return v
+        elseif v.Name:lower() == "[chicken]" and v:FindFirstChildWhichIsA("ClickDetector") then
             return v
         end
     end
@@ -242,7 +247,7 @@ RS.RenderStepped:Connect(function()
     if aim then
         local plr = game.Workspace[user].LowerTorso.Position
         local velocity = game.Workspace[user].LowerTorso.Velocity
-        pos = Vector3.new(velocity.X * prediction, 0, veloctiy.Z * prediction)
+        pos = Vector3.new(velocity.X * prediction, 0, velocity.Z * prediction)
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
             local args = {...}
