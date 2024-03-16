@@ -217,22 +217,7 @@ end
 
 RS.RenderStepped:Connect(function()
     if user ~= nil then
-        local succ, err = pcall(function()
-            local aimVic = game.Workspace[user].LowerTorso.Position
-            local vicVelo = game.Workspace[user].LowerTorso.Velocity
-            local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction)
-            pos = Vector3.new(aimVic + sum)
-            if err then
-                print("Something went wrong: ", err)
-            end
-        end)
-        --[[
-        local aimVic = game.Workspace[user].LowerTorso.Position
-        local vicVelo = game.Workspace[user].LowerTorso.Velocity
-        local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction)
-        pos = Vector3.new(aimVic + sum)
-        ]]
-    end
+        pos = game.Workspace[user].LowerTorso.Position
     if aim then
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
@@ -418,6 +403,8 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
+        local Silent = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
+        
         btn.MouseButton1Click:Connect(function()
             if lock then
                 lock = false
@@ -427,6 +414,10 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
             elseif not lock and user then
                 if game.Players[user] then
                     lock = true
+                    if silent then
+                        silent = false
+                        Silent.Text = "Silent Lock"
+                    end
                     LockNotif()
                     btn.Text = "Unlock"
                 else
@@ -459,9 +450,15 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
+        local lbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
+        
         silentBtn.MouseButton1Click:Connect(function()
             if not silent then
                 silent = true
+                if lock then
+                    lock = false 
+                    lbtn.Text = "Lock"
+                end
                 silentBtn.Text = "Unlock Silent"
                 local bozo = getnear()
                 game.StarterGui:SetCore("SendNotification", {
