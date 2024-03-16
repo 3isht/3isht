@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("FIXED!")
+
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -403,7 +403,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
-        -- local Silentbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
+        local Silentbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
         
         btn.MouseButton1Click:Connect(function()
             if lock then
@@ -414,12 +414,10 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
             elseif not lock and user then
                 if game.Players[user] then
                     lock = true
-                    --[[
-                    if silent then
+                    if Silentbtn then
                         silent = false
                         Silentbtn.Text = "Silent Lock"
                     end
-                    ]]
                     LockNotif()
                     btn.Text = "Unlock"
                 else
@@ -457,7 +455,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
         silentBtn.MouseButton1Click:Connect(function()
             if not silent then
                 silent = true
-                if lock then
+                if lbtn then
                     lock = false 
                     lbtn.Text = "Lock"
                 end
