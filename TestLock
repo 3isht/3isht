@@ -153,7 +153,7 @@ local function silentLock()
         silentVic = getnear()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (prediction), silentVic.UpperTorso.Velocity.Y * (prediction / 3.75), silentVic.UpperTorso.Velocity.Z * (silentVic.Humanoid.MoveDirection.X / 3.5))
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (prediction), silentVic.UpperTorso.Velocity.Y * (prediction / 3.75), silentVic.UpperTorso.Velocity.Z * (prediction))
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
