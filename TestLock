@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("Hopefully it works...")
+print("Lets see now")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -235,14 +235,15 @@ if game.CoreGui:FindFirstChild("DrRay") then
     end
 end
 
+local mt = getrawmetatable(game)
+local old = mt.__namecall
+
 RS.RenderStepped:Connect(function()
     if user ~= nil then
         pos = Vector3.new(game.Workspace[user].LowerTorso.Position)
     end
     if aim then
-        local mt = getrawmetatable(game)
         local pos = game.Workspace[user].LowerTorso.Position
-        local old = mt.__namecall
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
             local args = {...}
