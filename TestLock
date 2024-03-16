@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("FIXED!")
+
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -13,7 +13,7 @@ getgenv().VIEW = false;
 getgenv().customUI = false;
 getgenv().customMv = false;
 getgenv().foodspawn = false;
-getgenv().camera = game.Workspace.Camera;
+getgenv().camera = game.Workspace.CurrentCamera;
 getgenv().user = nil;
 getgenv().VICTIM = nil;
 getgenv().silentVic = nil;
@@ -21,7 +21,7 @@ getgenv().TS = game.TweenService;
 getgenv().tweeninfo = TweenInfo.new(0.5);
 getgenv().camLerp = 0.462;
 getgenv().RS = game:GetService("RunService");
-getgenv().prediction = 0.288;
+getgenv().prediction = 0.282;
 getgenv().teammates = {};
 getgenv().m = 8;
 getgenv().aim = false;
@@ -87,6 +87,23 @@ end
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
+local function calcAir(person)
+    local succ, err = pcall(function(person)
+        local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,2.3,0))
+        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,7.7,0))
+        local normal = Vector3.new(game.Workspace[person].LowerTorso.Position.Y + (game.Workspace[person].LowerTorso.Velocity.Y * (prediction / 2.5)))
+        if normal > highest then
+            normal = highest
+        elseif normal < lowest then
+            normal = lowest
+        end
+        if err then
+            print("Something went wrong with airshot calc: , err")
+        end
+        return normal
+    end)
+end
+
 local function getFullUser(input)
     user = nil
     local MATCHES = {}
@@ -136,7 +153,7 @@ local function silentLock()
         silentVic = getnear()
         while wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * prediction, silentVic.UpperTorso.Velocity.Y * (prediction / 3.75), silentVic.UpperTorso.Velocity.Z * prediction)
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (prediction), silentVic.UpperTorso.Velocity.Y * (prediction / 3.75), silentVic.UpperTorso.Velocity.Z * (silentVic.Humanoid.MoveDirection.X / 3.5))
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
@@ -154,7 +171,7 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, target.UpperTorso.Velocity.Y * (prediction / 4), target.UpperTorso.Velocity.Z * prediction)
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, target.UpperTorso.Velocity.Y * (prediction / 3.75), target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
                     if target.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
@@ -169,6 +186,11 @@ end
 game.Workspace.ChildAdded:Connect(function(new)
     if new.Name == user then
         startLock(user)
+    end
+    if new.Name == "Part" then
+        for i,v in next, new:GetDescendants() do
+            print(i,v,v.ClassName)
+        end
     end
 end)
 
@@ -207,6 +229,7 @@ end
 local function autoStomp()
     game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
 end
+            
 
 if game.CoreGui:FindFirstChild("DrRay") then
     game.CoreGui:FindFirstChild("DrRay"):Destroy()
@@ -217,7 +240,8 @@ end
 
 RS.RenderStepped:Connect(function()
     if user ~= nil then
-        pos = game.Workspace[user].LowerTorso.Position
+        pos = Vector3.new(game.Workspace[user].LowerTorso.Position)
+    end
     if aim then
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
@@ -403,7 +427,8 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
-        -- local Silentbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
+        local slockbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
+        
         
         btn.MouseButton1Click:Connect(function()
             if lock then
@@ -414,12 +439,11 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
             elseif not lock and user then
                 if game.Players[user] then
                     lock = true
-                    --[[
-                    if Silentbtn then
+                    if slockbtn then
                         silent = false
-                        Silentbtn.Text = "Silent Lock"
+                        silentVic = nil
+                        slockbtn.Text = "Silent Lock"
                     end
-                    ]]
                     LockNotif()
                     btn.Text = "Unlock"
                 else
@@ -452,21 +476,19 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
-        -- local lbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
+        local lockbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
         
         silentBtn.MouseButton1Click:Connect(function()
             if not silent then
                 silent = true
-                --[[
-                if lbtn then
-                    lock = false 
-                    lbtn.Text = "Lock"
+                if lockbtn then
+                    lock = false
+                    lockbtn.Text = "Lock"
                 end
-                ]]
                 silentBtn.Text = "Unlock Silent"
                 local bozo = getnear()
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Lock Notification",
+                    Title = "Silent Notification",
                     Text = [[
                     Display: ]] .. tostring(game.Workspace[bozo.Name].Humanoid.DisplayName) .. [[
                     
