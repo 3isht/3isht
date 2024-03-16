@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("Lets see now")
+print("It was working")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -239,11 +239,10 @@ local mt = getrawmetatable(game)
 local old = mt.__namecall
 
 RS.RenderStepped:Connect(function()
-    if user ~= nil then
-        pos = Vector3.new(game.Workspace[user].LowerTorso.Position)
-    end
     if aim then
-        local pos = game.Workspace[user].LowerTorso.Position
+        local plr = game.Workspace[user].LowerTorso.Position
+        local velocity = game.Workspace[user].LowerTorso.Velocity
+        pos = Vector3.new(velocity.X * prediction, 0, veloctiy.Z * prediction)
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
             local args = {...}
