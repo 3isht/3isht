@@ -251,8 +251,10 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
     if pfx == "/" and cmd == "vanish" then
         vanishPos = plr.HumanoidRootPart.Position
         plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos + Vector3.new(0,999999,0))
+        plr.Humanoid.Anchored = true
     elseif pfx == "/" and cmd == "unvanish" then
         plr.HumanoidRootPart.CFrame = vanishPos
+        plr.Humanoid.Anchored = false
     else return end
 end)
 
