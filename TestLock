@@ -254,8 +254,8 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
         plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos + Vector3.new(0,6666,0))
         plr.HumanoidRootPart.Anchored = true
     elseif pfx == prefix and cmd == "unvanish" then
-        plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos)
         plr.HumanoidRootPart.Anchored = false
+        plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos)
     else return end
 end)
 
