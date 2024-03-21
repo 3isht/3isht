@@ -1,6 +1,7 @@
 -- TO DO LIST: --
 -- maybe esp
-print("Aimlock needs a fix to predict.")
+print("Vanish/Unvanish update, aimlock has no prediction.")
+
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -241,6 +242,19 @@ end
 
 local mt = getrawmetatable(game)
 local old = mt.__namecall
+
+local vanishPos
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+    local pfx, cmd = msg.split(" ")
+    local name = game.Players.LocalPlayer.Name
+    local plr = game.Workspace[name]
+    if pfx == "/" and cmd == "vanish" then
+        vanishPos = plr.HumanoidRootPart.Position
+        plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos + Vector3.new(0,999999,0))
+    elseif pfx == "/" and cmd == "unvanish" then
+        plr.HumanoidRootPart.CFrame = vanishPos
+    else return end
+end)
 
 RS.RenderStepped:Connect(function()
     if aim then
