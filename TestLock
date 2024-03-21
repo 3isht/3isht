@@ -251,11 +251,11 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
     local plr = game.Workspace[name]
     if pfx == prefix and cmd == "vanish" then
         vanishPos = plr.HumanoidRootPart.Position
-        plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos + Vector3.new(0,9999,0))
-        plr.Humanoid.Anchored = true
+        plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos + Vector3.new(0,6666,0))
+        plr.HumanoidRootPart.Anchored = true
     elseif pfx == prefix and cmd == "unvanish" then
         plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos)
-        plr.Humanoid.Anchored = false
+        plr.HumanoidRootPart.Anchored = false
     else return end
 end)
 
