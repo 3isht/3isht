@@ -2,6 +2,7 @@
 -- maybe esp
 print("Vanish/Unvanish update, aimlock has no prediction.")
 
+getgenv().prefix = "/"
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -245,7 +246,7 @@ local old = mt.__namecall
 
 local vanishPos
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    local pfx, cmd = msg.split(" ")
+    local pfx, cmd = msg[1], msg[2..]
     local name = game.Players.LocalPlayer.Name
     local plr = game.Workspace[name]
     if pfx == "/" and cmd == "vanish" then
