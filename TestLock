@@ -1,580 +1,117 @@
+                                                                                 local obf_stringchar= 
+                                                                        string.char;local obf_stringbyte=string.byte;   
+                                                                    local obf_stringsub=string.sub;local obf_bitlib=bit32 or bit  
+                                                                ;local obf_XOR=obf_bitlib.bxor;local obf_tableconcat=table.concat;local 
+                                                             obf_tableinsert=table.insert;local function LUAOBFUSACTOR_DECRYPT_STR_0(     
+                                                          LUAOBFUSACTOR_STR,LUAOBFUSACTOR_KEY) local result={};for i=1, #LUAOBFUSACTOR_STR  
+                                                        do obf_tableinsert(result,obf_stringchar(obf_XOR(obf_stringbyte(obf_stringsub(        
+                                                      LUAOBFUSACTOR_STR,i,i + 1 )),obf_stringbyte(obf_stringsub(LUAOBFUSACTOR_KEY,1 + (i% #     
+                                                    LUAOBFUSACTOR_KEY) ,1 + (i% #LUAOBFUSACTOR_KEY) + 1 )))%256 ));end return obf_tableconcat(    
+                                                  result);end local obf_stringmatch=string.match;local obf_tonumber=tonumber;local obf_pcall=pcall; 
+                                                  local function obf_adjnqwidqwjhdpoq() local function obf_wrapperfunc(obf_arg) if obf_arg then local 
+                                                 StrToNumber=tonumber;local Byte=string.byte;local Char=string.char;local Sub=string.sub;local Subg=    
+                                                string.gsub;local Rep=string.rep;local Concat=table.concat;local Insert=table.insert;local LDExp=math.    
+                                              ldexp;local GetFEnv=getfenv or function() return _ENV;end ;local Setmetatable=setmetatable;local PCall=pcall; 
+                                              local Select=select;local Unpack=unpack or table.unpack ;local ToNumber=tonumber;local function VMCall(       
+                                            ByteString,vmenv,...) local FlatIdent_76979=0;local FlatIdent_95CAC;local DIP;local repeatNext;local gBit;local   
+                                            gBits8;local gBits16;local gBits32;local gFloat;local gString;local gInt;local _R;local Deserialize;local Wrap;     
+                                          while true do if (FlatIdent_76979==3) then gInt=nil;_R=nil;Deserialize=nil;FlatIdent_76979=4;end if (FlatIdent_76979==4 
+                                          ) then Wrap=nil;while true do local FlatIdent_8D83D=0;while true do if (FlatIdent_8D83D==1) then if (FlatIdent_95CAC==3)  
+                                          then gBits32=nil;function gBits32() local FlatIdent_E652=0;local FlatIdent_51F42;local a;local b;local c;local d;while true 
+                                           do if (0==FlatIdent_E652) then FlatIdent_51F42=0;a=nil;FlatIdent_E652=1;end if (2==FlatIdent_E652) then d=nil;while true   
+                                        do if (FlatIdent_51F42==0) then local FlatIdent_49AED=0;while true do if (FlatIdent_49AED==1) then FlatIdent_51F42=1;break;end  
+                                        if (FlatIdent_49AED==0) then a,b,c,d=Byte(ByteString,DIP,DIP + 3 );   --[[==============================]]DIP=DIP + 4 ;           
+                                        FlatIdent_49AED=1;end end end if (FlatIdent_51F42==1) then  --[[============================================]]return (d *         
+                                        16777216) + (c * 65536) + (b * 256) + a ;end end break; --[[======================================================]]end if (        
+                                      FlatIdent_E652==1) then b=nil;c=nil;FlatIdent_E652=2; --[[==========================================================]]end end end       
+                                      gFloat=nil;FlatIdent_95CAC=4;end if (               --[[==============================================================]]FlatIdent_95CAC 
+                                      ==6) then Deserialize=nil;function Deserialize()    --[[================================================================]]local           
+                                      FlatIdent_74348=0;local Instrs;local Functions;     --[[==================================================================]]local Lines;  
+                                      local Chunk;local ConstCount;local Consts;while     --[[==================================================================]]true do local     
+                                    FlatIdent_65290=0;while true do if (FlatIdent_65290== --[[====================================================================]]1) then if (  
+                    FlatIdent_74348==2) then local FlatIdent_29B3D=0;while true do if (   --[[====================================================================]]FlatIdent_29B3D 
+              ==1) then for Idx=1,gBits32() do local FlatIdent_35A31=0;local              --[[======================================================================]]              
+            FlatIdent_2D88C;local Descriptor;while true do if (FlatIdent_35A31==0) then   --[[======================================================================]]              
+          FlatIdent_2D88C=0;Descriptor=nil;FlatIdent_35A31=1;end if (FlatIdent_35A31==1)  --[[======================================================================]]then while    
+        true do if (FlatIdent_2D88C==0) then Descriptor=gBits8();if (gBit(Descriptor,1,1) --[[======================================================================]]==0) then     
+        local FlatIdent_D79D=0;local Type;local Mask;local Inst;while true do if (3==     --[[======================================================================]]              
+      FlatIdent_D79D) then if (gBit(Mask,3,3)==1) then Inst[4]=Consts[Inst[4]];end Instrs --[[======================================================================]][Idx]=Inst;   
+      break;end if (FlatIdent_D79D==2) then local FlatIdent_2A862=0;while true do if (      --[[==================================================================]]FlatIdent_2A862 
+      ==1) then FlatIdent_D79D=3;break;end if (FlatIdent_2A862==0) then if (gBit(Mask,1,1)  --[[================================================================]]==1) then Inst[2] 
+    =Consts[Inst[2]];end if (gBit(Mask,2,2)==1) then Inst[3]=Consts[Inst[3]];end            --[[==============================================================]]FlatIdent_2A862=1 
+    ;end end end if (FlatIdent_D79D==1) then local FlatIdent_8B523=0;while true do if (       --[[==========================================================]]FlatIdent_8B523==1) 
+     then FlatIdent_D79D=2;break;end if (FlatIdent_8B523==0) then Inst={gBits16(),gBits16(),nil --[[====================================================]],nil};if (Type==0) then 
+     local FlatIdent_61EE=0;while true do if (0==FlatIdent_61EE) then Inst[3]=gBits16();Inst[4]=  --[[==============================================]]gBits16();break;end end   
+    elseif (Type==1) then Inst[3]=gBits32();elseif (Type==2) then Inst[3]=gBits32() -(2^16) ;elseif ( --[[====================================]]Type==3) then local           
+    FlatIdent_89237=0;local FlatIdent_89237;while true do if (FlatIdent_89237==0) then FlatIdent_89237=0; --[[========================]]while true do if (FlatIdent_89237==0) 
+     then Inst[3]=gBits32() -(2^16) ;Inst[4]=gBits16();break;end end break;end end end FlatIdent_8B523=1;end end end if (0==FlatIdent_D79D) then local FlatIdent_49280=0;   
+  while true do if (FlatIdent_49280==0) then Type=gBit(Descriptor,2,3);Mask=gBit(Descriptor,4,6);FlatIdent_49280=1;end if (FlatIdent_49280==1) then FlatIdent_D79D=1;     
+  break;end end end end end break;end end break;end end end FlatIdent_74348=3;break;end if (FlatIdent_29B3D==0) then for Idx=1,ConstCount do local FlatIdent_52551=0;   
+  local Type;local Cons;while true do if (FlatIdent_52551==0) then local FlatIdent_759F1=0;while true do if (FlatIdent_759F1==1) then FlatIdent_52551=1;break;end if (0== 
+  FlatIdent_759F1) then Type=gBits8();Cons=nil;FlatIdent_759F1=1;end end end if (FlatIdent_52551==1) then if (Type==1) then Cons=gBits8()~=0 ;elseif (Type==2) then Cons= 
+  gFloat();elseif (Type==3) then Cons=gString();end Consts[Idx]=Cons;break;end end end Chunk[3]=gBits8();FlatIdent_29B3D=1;end end end if (FlatIdent_74348==3) then local 
+   FlatIdent_2E9CB=0;while true do if (FlatIdent_2E9CB==0) then for Idx=1,gBits32() do Functions[Idx-1 ]=Deserialize();end return Chunk;end end end break;end if (        
+  FlatIdent_65290==0) then if (FlatIdent_74348==1) then Chunk={Instrs,Functions,nil,Lines};ConstCount=gBits32();Consts={};FlatIdent_74348=2;end if (FlatIdent_74348==0)   
+  then local FlatIdent_2D2B8=0;while true do if (FlatIdent_2D2B8==1) then Lines={};FlatIdent_74348=1;break;end if (FlatIdent_2D2B8==0) then Instrs={};Functions={};       
+  FlatIdent_2D2B8=1;end end end FlatIdent_65290=1;end end end end Wrap=nil;FlatIdent_95CAC=7;end FlatIdent_8D83D=2;end if (FlatIdent_8D83D==0) then if (FlatIdent_95CAC== 
+  5) then local FlatIdent_31A5A=0;while true do if (FlatIdent_31A5A==1) then function _R(...) return {...},Select("#",...);end FlatIdent_95CAC=6;break;end if (           
+  FlatIdent_31A5A==0) then gInt=gBits32;_R=nil;FlatIdent_31A5A=1;end end end if (FlatIdent_95CAC==1) then gBit=nil;function gBit(Bit,Start,End) if End then local         
+  FlatIdent_60EA1=0;local Res;while true do if (FlatIdent_60EA1==0) then Res=(Bit/(2^(Start-1)))%(2^(((End-1) -(Start-1)) + 1)) ;return Res-(Res%1) ;end end else local     
+  FlatIdent_31905=0;local FlatIdent_31A5A;local Plc;while true do if (FlatIdent_31905==1) then while true do if (FlatIdent_31A5A==0) then local FlatIdent_61B23=0;while     
+  true do if (FlatIdent_61B23==0) then Plc=2^(Start-1) ;return (((Bit%(Plc + Plc))>=Plc) and 1) or 0 ;end end end end break;end if (0==FlatIdent_31905) then                
+  FlatIdent_31A5A=0;Plc=nil;FlatIdent_31905=1;end end end end gBits8=nil;FlatIdent_95CAC=2;end FlatIdent_8D83D=1;end if (FlatIdent_8D83D==3) then if (FlatIdent_95CAC==0)   
+  then DIP=1;repeatNext=nil;ByteString=Subg(Sub(ByteString,5),LUAOBFUSACTOR_DECRYPT_STR_0("\55\196","\97\25\234\81\168"),function(byte) if (Byte(byte,2)==79) then local    
+  FlatIdent_276C2=0;local FlatIdent_475BC;while true do if (FlatIdent_276C2==0) then FlatIdent_475BC=0;while true do if (FlatIdent_475BC==0) then local FlatIdent_6D68E=0;  
+  while true do if (FlatIdent_6D68E==0) then repeatNext=StrToNumber(Sub(byte,1,1));return "";end end end end break;end end else local FlatIdent_4A248=0;local a;while true  
+  do if (0==FlatIdent_4A248) then a=Char(StrToNumber(byte,16));if repeatNext then local FlatIdent_82923=0;local b;while true do if (FlatIdent_82923==0) then b=Rep(a,       
+  repeatNext);repeatNext=nil;FlatIdent_82923=1;end if (1==FlatIdent_82923) then return b;end end else return a;end break;end end end end);FlatIdent_95CAC=1;end if (        
+  FlatIdent_95CAC==7) then local FlatIdent_5962D=0;while true do if (0==FlatIdent_5962D) then function Wrap(Chunk,Upvalues,Env) local FlatIdent_2593F=0;local               
+  FlatIdent_49280;local Instr;local Proto;local Params;while true do if (FlatIdent_2593F==0) then FlatIdent_49280=0;Instr=nil;FlatIdent_2593F=1;end if (FlatIdent_2593F==2) 
+   then while true do if (FlatIdent_49280==0) then local FlatIdent_4D83A=0;while true do if (FlatIdent_4D83A==0) then Instr=Chunk[1];Proto=Chunk[2];FlatIdent_4D83A=1;end   
+  if (1==FlatIdent_4D83A) then FlatIdent_49280=1;break;end end end if (FlatIdent_49280==1) then Params=Chunk[3];return function(...) local Instr=Instr;local Proto=Proto;   
+  local Params=Params;local _R=_R;local VIP=1;local Top= -1;local Vararg={};local Args={...};local PCount=Select("#",...) -1 ;local Lupvals={};local Stk={};for Idx=0,    
+  PCount do if (Idx>=Params) then Vararg[Idx-Params ]=Args[Idx + 1 ];else Stk[Idx]=Args[Idx + 1 ];end end local Varargsz=(PCount-Params) + 1 ;local Inst;local Enum;while 
+   true do local FlatIdent_29E69=0;while true do if (FlatIdent_29E69==1) then if (Enum<=82) then if (Enum<=40) then if (Enum<=19) then if (Enum<=9) then if (Enum<=4)     
+    then if (Enum<=1) then if (Enum>0) then VIP=Inst[3];else local FlatIdent_3B868=0;local Edx;local Results;local Limit;local A;while true do if (FlatIdent_3B868==3)    
+    then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_3B868=4;end if (FlatIdent_3B868==8) then VIP=VIP + 1 ;Inst=Instr[VIP];VIP=Inst[3];break;end if  
+    (FlatIdent_3B868==1) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_3B868=2;end if (FlatIdent_3B868==7) then Inst=Instr[VIP];A=Inst[2];Stk[A]( 
+    Unpack(Stk,A + 1 ,Top));FlatIdent_3B868=8;end if (4==FlatIdent_3B868) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_3B868=5;end if (          
+      FlatIdent_3B868==5) then A=Inst[2];Results,Limit=_R(Stk[A](Stk[A + 1 ]));Top=(Limit + A) -1 ;FlatIdent_3B868=6;end if (FlatIdent_3B868==0) then Edx=nil;Results,  
+      Limit=nil;A=nil;FlatIdent_3B868=1;end if (FlatIdent_3B868==6) then Edx=0;for Idx=A,Top do local FlatIdent_6D884=0;local FlatIdent_19F98;while true do if (0==     
+      FlatIdent_6D884) then FlatIdent_19F98=0;while true do if (FlatIdent_19F98==0) then Edx=Edx + 1 ;Stk[Idx]=Results[Edx];break;end end break;end end end VIP=VIP + 1 
+         ;FlatIdent_3B868=7;end if (2==FlatIdent_3B868) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_3B868=3;end end end elseif (Enum<=2) then 
+         Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];elseif (Enum==3) then do return;end else local FlatIdent_65194=0;local Step;local Index;local A;while true do if (          
+        FlatIdent_65194==5) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Upvalues[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_65194=6;end if (FlatIdent_65194==6) 
+           then Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Index=Stk[A];FlatIdent_65194=7;end if (3==FlatIdent_65194) then Stk[Inst[2]]=Stk[Inst[3]] 
+            ;VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;FlatIdent_65194=4;end if (FlatIdent_65194==0) then Step=nil;Index=nil;A=nil;Stk[Inst[2]]= 
+              Upvalues[Inst[3]];VIP=VIP + 1 ;FlatIdent_65194=1;end if (FlatIdent_65194==2) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]]%Stk[Inst[4]] ; 
+                VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_65194=3;end if (4==FlatIdent_65194) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk 
+                  [Inst[2]]=Inst[3];FlatIdent_65194=5;end if (FlatIdent_65194==1) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]]%Stk[Inst[4]] ;VIP=VIP + 1 ;Inst=   
+                      Instr[VIP];Stk[Inst[2]]=Upvalues[Inst[3]];FlatIdent_65194=2;end if (FlatIdent_65194==7) then Step=Stk[A + 2 ];if (Step>0) then if (Index>Stk[ 
+                                  A + 1 ]) then VIP=Inst[3];else Stk[A + 3 ]=Index;end elseif (Index<Stk[A + 1 ]) then VIP=Inst[3];else Stk[A + 3 ]=Index;end break 
+                                      ;end end end elseif (Enum<=6) then if (Enum==5) then local FlatIdent_40096=0;local Results;local Edx;local Limit;local B;     
+                                      local A;while true do if (8==FlatIdent_40096) then Stk[Inst[2         ]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2 
+                                      ]]=Stk[Inst[3]][Inst[4]];FlatIdent_40096=9;end if (                   FlatIdent_40096==6) then VIP=VIP + 1 ;Inst=Instr[VIP] 
+                                      ;Stk[Inst[2]]={};VIP=VIP + 1 ;FlatIdent_40096=7;end if (7==           FlatIdent_40096) then Inst=Instr[VIP];Stk[Inst[2]]=   
+                                      Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_40096=8;          end if (FlatIdent_40096==5) then Stk[Inst[2]]=Stk[    
+                                      Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];for Idx=Inst[2           ],Inst[3] do Stk[Idx]=nil;end FlatIdent_40096=6;end 
+                                       if (11==FlatIdent_40096) then A=Inst[2];Results,Limit=_R(Stk           [A](Stk[A + 1 ]));Top=(Limit + A) -1 ;Edx=0;        
+                                      FlatIdent_40096=12;end if (FlatIdent_40096==14) then Inst=              Instr[VIP];VIP=Inst[3];break;end if (             
+                                        FlatIdent_40096==13) then Results={Stk[A](Unpack(Stk,A + 1            ,Top))};Edx=0;for Idx=A,Inst[4] do local          
+                                        FlatIdent_75224=0;while true do if (FlatIdent_75224==0)                 then Edx=Edx + 1 ;Stk[Idx]=Results[Edx];break;  
+                                        end end end VIP=VIP + 1 ;FlatIdent_40096=14;end if (                    FlatIdent_40096==4) then Inst=Instr[VIP];Stk[ 
+                                        Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];                     FlatIdent_40096=5;end if (10==FlatIdent_40096 
+                                        ) then Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];VIP=VIP + 1 ;Inst=                 Instr[VIP];FlatIdent_40096=11;end if (    
+                                        FlatIdent_40096==0) then Results=nil;Edx=nil;Results,                     Limit=nil;B=nil;FlatIdent_40096=1;end if  
+                                          (FlatIdent_40096==3) then VIP=VIP + 1 ;Inst=Instr[VIP];                   Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];   
+                                          VIP=VIP + 1 ;FlatIdent_40096=4;end if (                                     FlatIdent_40096==2) then Stk[   
+                                            Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=                           Instr[VIP];Stk[Inst[2]]=  
+                                            Stk[Inst[3]][Inst[4]];FlatIdent_40096=3;end if (                                              
+                                              FlatIdent_40096==9) then VIP=VIP + 1 ;Inst=   
+                                                Instr[VIP];A=Inst[2];B=Stk[Inst[3]];      
+                                                    FlatIdent_40096=10;end if (         
+                                                          FlatIdent_40096==12)    
 
-print("Vanish/Unvanish update, aimlock has no prediction.")
 
-getgenv().prefix = "/"
-getgenv().AutoHighArm = false;
-getgenv().lock = false;
-getgenv().AutoInfHealth = false;
-getgenv().autoRst = false;
-getgenv().stomp = false;
-getgenv().tp = false;
-getgenv().silent = false;
-getgenv().FLING = false;
-getgenv().VIEW = false;
-getgenv().customUI = false;
-getgenv().customMv = false;
-getgenv().foodspawn = false;
-getgenv().camera = game.Workspace.CurrentCamera;
-getgenv().user = nil;
-getgenv().VICTIM = nil;
-getgenv().silentVic = nil;
-getgenv().TS = game.TweenService;
-getgenv().tweeninfo = TweenInfo.new(0.5);
-getgenv().camLerp = 0.462;
-getgenv().RS = game:GetService("RunService");
-getgenv().prediction = 0.282;
-getgenv().teammates = {};
-getgenv().m = 8;
-getgenv().aim = false;
-
-function findfood()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name:lower() == "[pizza]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        elseif v.Name:lower() == '[taco]' and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        elseif v.Name:lower() == "[chicken]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        end
-    end
-end
-function customLayout()
-    local me = game.Players.LocalPlayer
-    me.PlayerGui.gui.Bar.Armor.BackgroundColor3 = Color3.fromRGB(127,77,10)
-    me.PlayerGui.gui.Bar.Armor.ImageLabel.BackgroundColor3 = Color3.fromRGB(217,122,20)
-    me.PlayerGui.gui.Bar.Health.BackgroundColor3 = Color3.fromRGB(94,31,31)
-    me.PlayerGui.gui.Bar.Health.ImageLabel.BackgroundColor3 = Color3.fromRGB(255,0,0)
-end
-local findarmour = function()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[High-Medium Armor]" then
-            return v
-        end
-    end
-    if not Highmed then
-        for _, v in pairs(game.Workspace:GetDescendants()) do
-            if v.Name == "[Medium Armor]" then
-                return v
-            end
-        end
-    end
-end
-local findtact = function()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[Tactical Shotgun]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        end
-    end
-end
-local findusp = function()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[USP]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        end
-    end
-end
-
-getgenv().armour = findarmour();
-getgenv().tact = findtact();
-getgenv().usp = findusp();
-getgenv().food = findfood()
-
-local function autoBuyArmour()
-    local me = game.Players.LocalPlayer.Name
-    if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 and armour then
-        fireclickdetector(armour.ClickDetector)
-    end
-end
-
--- CHATSPY
-loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
-
-local function calcAir(person)
-    local succ, err = pcall(function(person)
-        local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,2.3,0))
-        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,7.7,0))
-        local normal = Vector3.new(game.Workspace[person].LowerTorso.Position.Y + (game.Workspace[person].LowerTorso.Velocity.Y * (prediction / 2.5)))
-        if normal > highest then
-            normal = highest
-        elseif normal < lowest then
-            normal = lowest
-        end
-        if err then
-            print("Something went wrong with airshot calc: , err")
-        end
-        return normal
-    end)
-end
-
-local function getFullUser(input)
-    user = nil
-    local MATCHES = {}
-    local PLAYERS = game.Workspace:GetChildren()
-    local LEN = #input
-    if input == "" or input == " " then user = nil return end
-    for _, PLAYER in ipairs(PLAYERS) do
-        local PLR = PLAYER.Name:lower()
-        local INP = input:lower()
-        if string.sub(PLR,1,#INP) == INP and PLAYER:FindFirstChild("Humanoid") then
-            table.insert(MATCHES, PLAYER.Name)
-        end
-    end
-    if #MATCHES > 0 then
-        if MATCHES[1] ~= game.Players.LocalPlayer.Name then
-            user = MATCHES[1]
-        end
-        return user
-    else
-        user = nil
-        return user
-    end
-end
-
-local function getnear()
-    local LocalName = game.Players.LocalPlayer.Name
-    local dis = math.huge
-    local plr = nil
-    local plrs = {}
-    for _, v in pairs(game.Players:GetChildren()) do
-        if v ~= game.Players.LocalPlayer and not game.Workspace[v.Name]:GetAttribute("Knocked") and not table.find(teammates, v.Name) then
-            table.insert(plrs, v.Name)
-        end
-    end
-    for _, v in ipairs(plrs) do
-        local disDiff = (game.Workspace[LocalName].HumanoidRootPart.Position - game.Workspace[v].HumanoidRootPart.Position).magnitude
-        if disDiff < dis then
-            dis = disDiff
-            plr = game.Workspace[v]
-        end
-    end
-    return plr
-end
-
-local function silentLock()
-    spawn(function()
-        silentVic = getnear()
-        while wait() do
-            if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (prediction), silentVic.UpperTorso.Velocity.Y * (prediction / 3.75), silentVic.UpperTorso.Velocity.Z * (prediction))
-                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
-                    if silentVic.UpperTorso then
-                        camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
-                    end
-                end
-            end
-            if silentVic == nil then break end
-        end
-    end)
-end
-
-local function startLock(loser)
-    spawn(function()
-        while wait() do
-            if lock then
-                VICTIM = loser
-                target = game.Workspace[VICTIM]
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, target.UpperTorso.Velocity.Y * (prediction / 3.75), target.UpperTorso.Velocity.Z * prediction)
-                if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
-                    if target.UpperTorso then
-                        camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
-                    end
-                end
-            end
-            if not lock then break end 
-        end
-    end)
-end
-
-game.Workspace.ChildAdded:Connect(function(new)
-    if new.Name == user then
-        startLock(user)
-    end
-    if new.Name == "Part" then
-        for i,v in next, new:GetDescendants() do
-            print(i,v,v.ClassName)
-        end
-    end
-end)
-
-local function normalTp(username)
-    local LPN = game.Players.LocalPlayer.Name
-    local LP = game.Workspace[LPN]
-    local VP = game.Workspace[username]
-    if LP.HumanoidRootPart and VP.HumanoidRootPart then
-        LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
-    end
-end
-
-local function LockNotif()
-    if user then
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Lock Notification",
-            Text = [[
-            Display: ]] .. tostring(game.Workspace[user].Humanoid.DisplayName) .. [[
-            
-            Main user: ]] .. user,
-            Icon = "",
-            Duration = 0.7
-        })
-    end
-end
-
-local function UnLockNotif()
-    game.StarterGui:SetCore("SendNotification", {
-        Title = "Lock Notification",
-        Text = "Unlocked...",
-        Icon = "",
-        Duration = 0.7
-    })
-end
-
-local function autoStomp()
-    game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
-end
-            
-
-if game.CoreGui:FindFirstChild("DrRay") then
-    game.CoreGui:FindFirstChild("DrRay"):Destroy()
-    if game.CoreGui:FindFirstChild("ButtonHandler") then
-        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
-    end
-end
-
-local mt = getrawmetatable(game)
-local old = mt.__namecall
-
-local vanishPos
-game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    local pfx, cmd = string.sub(msg,1,1), string.sub(msg,2,#msg)
-    local name = game.Players.LocalPlayer.Name
-    local plr = game.Workspace[name]
-    vanishPos = plr.HumanoidRootPart.Position
-    if pfx == prefix and cmd == "vanish" then
-        plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos + Vector3.new(0,6666,0))
-        task.wait()
-        plr.HumanoidRootPart.Anchored = true
-    elseif pfx == prefix and cmd == "unvanish" then
-        plr.HumanoidRootPart.Anchored = false
-        task.wait()
-        plr.HumanoidRootPart.CFrame = CFrame.new(vanishPos)
-    else return end
-end)
-
-RS.RenderStepped:Connect(function()
-    if aim then
-        local pos = game.Workspace[user].LowerTorso.Position
-        local velocity = game.Workspace[user].LowerTorso.Velocity
-        -- pos = Vector3.new(plr + Vector3.new(velocity.X * prediction, 0, velocity.Z * prediction))
-        setreadonly(mt, false)
-        mt.__namecall = newcclosure(function(self, ...)
-            local args = {...}
-            if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
-                if tostring(args[1]) == 'MOUSE' and aim then
-                    args[2] = pos
-                else
-                    return old(self, unpack(args))
-                end
-            end
-            return old(self, unpack(args))
-        end)
-        setreadonly(mt, true)
-    end
-    if customUI then
-        customLayout()
-    end
-    if customMv then
-        customMacro()
-    end
-    if AutoHighArm then
-        autoBuyArmour()
-    end
-    if stomp then
-        autoStomp()
-    end
-    if foodspawn then
-        fireclickdetector(food.ClickDetector)
-    end
-    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
-    if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
-        rlBtn.Size = UDim2.new(0, 60, 0, 60)
-    end
-    local plrs = game.Players
-    local lplr = plrs.LocalPlayer
-    for _, v in pairs(plrs:GetPlayers()) do
-        if v:GetAttribute("group") == lplr:GetAttribute("group") and v:GetAttribute("group") ~= 0 then
-            table.insert(teammates, v.Name)
-        end
-    end
-end)
-
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
-local window = lib:Load("Made By Tariq", "Default")
-local tab = lib.newTab("Main", "")
-local tab2 = lib.newTab("Target", "")
-local tab3 = lib.newTab("Player", "")
-local tab4 = lib.newTab("AimLock test", "")
-local btnGui = Instance.new("ScreenGui")
-btnGui.Name = "ButtonHandler"
-btnGui.Parent = game.CoreGui
-btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
-local colours = {
-    "red",
-    "lightred",
-    "orange",
-    "yellow",
-    "blue",
-    "darkblue",
-    "teal",
-    "pink",
-    "purple",
-    "regular"
-}
-local colour = nil
-
-tab.newDropdown("Pick A Colour", "", colours, function(picked)
-    colour = picked
-    return colour
-end)
-tab.newButton("Apply Sky Colour", "", function()
-    game.Players.LocalPlayer:SetAttribute("skycolor", colour)
-end)
-tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
-    AutoHighArm = bool
-end)
-tab.newToggle("Auto Stomp", "", false, function(bool)
-    stomp = bool
-end)
-tab.newToggle("Custom Layout", "", false, function(bool)
-    customUI = bool
-end)
-tab.newToggle("Auto Spawn With Food", "", false, function(bool)
-    foodspawn = bool
-end)
-tab.newButton("Custom Macro View", "", function()
-    local LS = game.Players.LocalPlayer.PlayerScripts.Macro
-    for i, v in pairs(getsenv(LS)) do
-        for _, cons in next, getconstants(getsenv(LS).inout) do
-            setconstant(getsenv(LS).inout, 1, m)
-            print("new macro view set: ", m)
-        end
-    end
-end)
-tab.newButton("USP and Tact SG", "", function()
-    fireclickdetector(usp.ClickDetector)
-    fireclickdetector(tact.ClickDetector)
-end)
-tab2.newInput("Username", "Username to lock on.", function(inp)
-    getFullUser(inp)
-end)
-tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
-    if not bool then
-        UnLockNotif()
-        VICTIM = nil
-    end
-    if bool then
-        LockNotif()
-    end
-    lock = bool
-    startLock(user)
-end)
-tab2.newToggle("View Player", "Views selected player.", false, function(bool)
-    VIEW = bool
-    local NAME = game.Players.LocalPlayer.Name
-    local ME = game.Workspace[NAME]
-    local normalCam = ME.Humanoid
-    if user and game.Workspace[user] and VIEW then
-        if ME then
-            camera.CameraSubject = game.Workspace[user].Humanoid
-        else
-            camera.CameraSubject = normalCam
-        end
-    else
-        camera.CameraSubject = normalCam
-    end
-    if not VIEW then
-        camera.CameraSubject = normalCam
-    end
-end)
-tab2.newButton("Teleport To User", "", function()
-    normalTp(user)
-end)
-
-tab3.newInput("Macro View", "", function(amt)
-    local num = tonumber(amt)
-    print(num, type(num))
-    if type(num) == "number" then
-        m = num
-        print(m, type(m))
-    else
-        m = 8
-    end
-end)
-tab3.newInput("Camera Lerp Amount", "", function(amt)
-    local num = tonumber(amt)
-    print(num, type(num))
-    if type(num) == "number" then
-        camLerp = num
-        print(camLerp, type(camLerp))
-    else
-        camLerp = 0.462
-    end
-end)
-tab3.newInput("Prediction Amount", "", function(amt)
-    local num = tonumber(amt)
-    print(num, type(num))
-    if type(num) == "number" then
-        prediction = num
-        print(prediction, type(prediction))
-    else
-        prediction = 0.282
-    end
-end)
-tab3.newButton("Lock Button", "Creates a new lock button.", function()
-    if not game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
-        local btn = Instance.new("TextButton")
-        btn.Name = "LButton"
-        btn.Parent = btnGui
-        btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
-        btn.BorderSizePixel = 0
-        btn.Position = UDim2.new(0, 737, 0, 35)
-        btn.Size = UDim2.new(0, 100, 0, 50)
-        btn.Font = Enum.Font.GothamBlack
-        btn.Text = "Lock"
-        btn.TextColor3 = Color3.new(1,1,1)
-        btn.TextSize = 18
-        
-        local corner = Instance.new("UICorner")
-        corner.Parent = btn
-        corner.CornerRadius = UDim.new(0,10)
-        corner.Name = "CORNER"
-        
-        local slockbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
-        
-        
-        btn.MouseButton1Click:Connect(function()
-            if lock then
-                lock = false
-                UnLockNotif()
-                VICTIM = nil
-                btn.Text = "Lock"
-            elseif not lock and user then
-                if game.Players[user] then
-                    lock = true
-                    if slockbtn then
-                        silent = false
-                        silentVic = nil
-                        slockbtn.Text = "Silent Lock"
-                    end
-                    LockNotif()
-                    btn.Text = "Unlock"
-                else
-                    lock = false
-                    btn.Text = "Lock"
-                end
-            end
-            startLock(user)
-        end)
-    end
-end)
-tab3.newButton("Silent Lock", "Locks on the closest person.", function()
-    if not game.CoreGui.ButtonHandler:FindFirstChild("SilentButton") then
-        local silentBtn = Instance.new("TextButton")
-        silentBtn.Name = "SilentButton"
-        silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
-        silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
-        silentBtn.BorderSizePixel = 0
-        silentBtn.BackgroundTransparency = 0.1
-        silentBtn.Position = UDim2.new(0, 630, 0, -15)
-        silentBtn.Size = UDim2.new(0, 100, 0, 50)
-        silentBtn.Font = Enum.Font.GothamBlack
-        silentBtn.Text = "Silent Lock"
-        silentBtn.TextColor3 = Color3.new(1,1,1)
-        silentBtn.TextSize = 16
-        silentBtn.TextTransparency = 0.132
-        
-        local corner = Instance.new("UICorner")
-        corner.Parent = silentBtn
-        corner.CornerRadius = UDim.new(0,10)
-        corner.Name = "CORNER"
-        
-        local lockbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
-        
-        silentBtn.MouseButton1Click:Connect(function()
-            if not silent then
-                silent = true
-                if lockbtn then
-                    lock = false
-                    lockbtn.Text = "Lock"
-                end
-                silentBtn.Text = "Unlock Silent"
-                local bozo = getnear()
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "Silent Notification",
-                    Text = [[
-                    Display: ]] .. tostring(game.Workspace[bozo.Name].Humanoid.DisplayName) .. [[
-                    
-                    Main user: ]] .. bozo.Name,
-                    Icon = "",
-                    Duration = 0.7
-                })
-            elseif silent then
-                silent = false
-                UnLockNotif()
-                silentVic = nil
-                silentBtn.Text = "Silent Lock"
-            end
-            silentLock()
-        end)
-    end
-end)
-tab3.newButton("Armour Button", "Creates a new button for auto armour quick access.", function()
-    if not game.CoreGui.ButtonHandler:FindFirstChild("AButton") then
-        local armBtn = Instance.new("TextButton")
-        armBtn.Name = "AButton"
-        armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
-        armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
-        armBtn.BorderSizePixel = 0
-        armBtn.Position = UDim2.new(0, 757, 0, -3)
-        armBtn.Size = UDim2.new(0, 85, 0, 42.5)
-        armBtn.Font = Enum.Font.GothamBlack
-        armBtn.Text = "Auto Armour"
-        armBtn.TextColor3 = Color3.new(1, 1, 1)
-        armBtn.TextSize = 12
-        
-        local corner = Instance.new("UICorner")
-        corner.Parent = armBtn
-        corner.CornerRadius = UDim.new(0,10)
-        corner.Name = "CORNER"
-        
-        armBtn.MouseButton1Click:Connect(function()
-            if not AutoHighArm then
-                armBtn.BackgroundColor3 = Color3.fromRGB(215,5,10)
-                AutoHighArm = true
-                armBtn.Text = "Unauto Armour"
-            elseif AutoHighArm then
-                armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
-                AutoHighArm = false
-                armBtn.Text = "Auto Armour"
-            end
-        end)
-    end
-end)
-tab3.newButton("Destroy All Buttons", "Destroys all buttons created by this script.", function()
-    if game.CoreGui:FindFirstChild("ButtonHandler") then
-        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
-    end
-    btnGui = Instance.new("ScreenGui")
-    btnGui.Name = "ButtonHandler"
-    btnGui.Parent = game.CoreGui
-    btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-end)
-tab3.newButton("Kick", "", function()
-    local LP = game.Players.LocalPlayer
-    if LP then
-        LP:Kick("Did you get the last stomp?")
-    end
-end)
-tab4.newToggle("Aimlock", "just a test", false, function(bool)
-    aim = bool
-end)
+--------------------------------------------------------------------------------
+then for Idx=A,Top do Edx=Edx + 1 ;Stk[Idx]=Results[Edx];end VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];FlatIdent_40096=13;end if (1==FlatIdent_40096) then A=nil;Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_40096=2;end end else local FlatIdent_22216=0;local A;local T;local B;while true do if (0==FlatIdent_22216) then local FlatIdent_2C7C4=0;while true do if (FlatIdent_2C7C4==0) then A=Inst[2];T=Stk[A];FlatIdent_2C7C4=1;end if (1==FlatIdent_2C7C4) then FlatIdent_22216=1;break;end end end if (FlatIdent_22216==1) then B=Inst[3];for Idx=1,B do T[Idx]=Stk[A + Idx ];end break;end end end elseif (Enum<=7) then local FlatIdent_669F5=0;local FlatIdent_581C8;local Edx;local Results;local Limit;local B;local A;while true do if (FlatIdent_669F5==0) then FlatIdent_581C8=0;Edx=nil;FlatIdent_669F5=1;end if (1==FlatIdent_669F5) then Results=nil;Limit=nil;FlatIdent_669F5=2;end if (FlatIdent_669F5==3) then while true do if (FlatIdent_581C8==4) then local FlatIdent_40FD3=0;while true do if (FlatIdent_40FD3==0) then Top=(Limit + A) -1 ;Edx=0;FlatIdent_40FD3=1;end if (FlatIdent_40FD3==3) then FlatIdent_581C8=5;break;end if (FlatIdent_40FD3==2) then Inst=Instr[VIP];A=Inst[2];FlatIdent_40FD3=3;end if (FlatIdent_40FD3==1) then for Idx=A,Top do local FlatIdent_9851B=0;local FlatIdent_284EA;while true do if (FlatIdent_9851B==0) then FlatIdent_284EA=0;while true do if (FlatIdent_284EA==0) then Edx=Edx + 1 ;Stk[Idx]=Results[Edx];break;end end break;end end end VIP=VIP + 1 ;FlatIdent_40FD3=2;end end end if (FlatIdent_581C8==2) then Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;FlatIdent_581C8=3;end if (FlatIdent_581C8==0) then local FlatIdent_8CB90=0;while true do if (FlatIdent_8CB90==1) then B=nil;A=nil;FlatIdent_8CB90=2;end if (FlatIdent_8CB90==2) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_8CB90=3;end if (FlatIdent_8CB90==3) then FlatIdent_581C8=1;break;end if (FlatIdent_8CB90==0) then Edx=nil;Results,Limit=nil;FlatIdent_8CB90=1;end end end if (FlatIdent_581C8==1) then Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];B=Stk[Inst[3]];FlatIdent_581C8=2;end if (FlatIdent_581C8==5) then Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Top));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]();break;end if (FlatIdent_581C8==3) then local FlatIdent_4D907=0;while true do if (FlatIdent_4D907==3) then FlatIdent_581C8=4;break;end if (FlatIdent_4D907==0) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3]~=0 ;FlatIdent_4D907=1;end if (FlatIdent_4D907==2) then A=Inst[2];Results,Limit=_R(Stk[A](Unpack(Stk,A + 1 ,Inst[3])));FlatIdent_4D907=3;end if (FlatIdent_4D907==1) then VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_4D907=2;end end end end break;end if (2==FlatIdent_669F5) then B=nil;A=nil;FlatIdent_669F5=3;end end elseif (Enum==8) then local FlatIdent_67517=0;local A;local T;while true do if (FlatIdent_67517==1) then for Idx=A + 1 ,Inst[3] do Insert(T,Stk[Idx]);end break;end if (FlatIdent_67517==0) then A=Inst[2];T=Stk[A];FlatIdent_67517=1;end end else local FlatIdent_C79F=0;local B;local A;while true do if (FlatIdent_C79F==2) then A=Inst[2];B=Stk[Inst[3]];Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];FlatIdent_C79F=3;end if (FlatIdent_C79F==3) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_C79F=4;end if (FlatIdent_C79F==7) then Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_C79F=8;end if (FlatIdent_C79F==4) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_C79F=5;end if (FlatIdent_C79F==9) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]] + Stk[Inst[4]] ;VIP=VIP + 1 ;FlatIdent_C79F=10;end if (FlatIdent_C79F==5) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];FlatIdent_C79F=6;end if (FlatIdent_C79F==11) then Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_C79F=12;end if (10==FlatIdent_C79F) then Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;FlatIdent_C79F=11;end if (FlatIdent_C79F==8) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];FlatIdent_C79F=9;end if (FlatIdent_C79F==0) then B=nil;A=nil;Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_C79F=1;end if (FlatIdent_C79F==13) then Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];break;end if (FlatIdent_C79F==6) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;FlatIdent_C79F=7;end if (FlatIdent_C79F==12) then A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_C79F=13;end if (FlatIdent_C79F==1) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_C79F=2;end end end elseif (Enum<=14) then if (Enum<=11) then if (Enum==10) then local FlatIdent_59C45=0;local A;while true do if (FlatIdent_59C45==1) then for Idx=A,Top do local FlatIdent_2D7B8=0;local VA;while true do if (0==FlatIdent_2D7B8) then VA=Vararg[Idx-A ];Stk[Idx]=VA;break;end end end break;end if (FlatIdent_59C45==0) then A=Inst[2];Top=(A + Varargsz) -1 ;FlatIdent_59C45=1;end end else local FlatIdent_58A9D=0;local FlatIdent_521D6;local B;local A;while true do if (0==FlatIdent_58A9D) then FlatIdent_521D6=0;B=nil;FlatIdent_58A9D=1;end if (1==FlatIdent_58A9D) then A=nil;while true do if (FlatIdent_521D6==5) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];FlatIdent_521D6=6;end if (FlatIdent_521D6==6) then VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];FlatIdent_521D6=7;end if (FlatIdent_521D6==3) then VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];FlatIdent_521D6=4;end if (FlatIdent_521D6==4) then B=Stk[Inst[3]];Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];FlatIdent_521D6=5;end if (FlatIdent_521D6==1) then local FlatIdent_8CF9A=0;while true do if (0==FlatIdent_8CF9A) then VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_8CF9A=1;end if (FlatIdent_8CF9A==1) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];FlatIdent_521D6=2;break;end end end if (FlatIdent_521D6==0) then local FlatIdent_2458=0;while true do if (FlatIdent_2458==1) then Stk[Inst[2]]=Env[Inst[3]];FlatIdent_521D6=1;break;end if (FlatIdent_2458==0) then B=nil;A=nil;FlatIdent_2458=1;end end end if (FlatIdent_521D6==8) then if  not Stk[Inst[2]] then VIP=VIP + 1 ;else VIP=Inst[3];end break;end if (FlatIdent_521D6==7) then Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_521D6=8;end if (FlatIdent_521D6==2) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];FlatIdent_521D6=3;end end break;end end end elseif (Enum<=12) then local FlatIdent_38BA4=0;local FlatIdent_6D68E;local Edx;local Results;local A;while true do if (2==FlatIdent_38BA4) then while true do if (FlatIdent_6D68E==6) then local FlatIdent_69486=0;while true do if (FlatIdent_69486==0) then Inst=Instr[VIP];A=Inst[2];FlatIdent_69486=1;end if (FlatIdent_69486==1) then Results={Stk[A](Stk[A + 1 ])};FlatIdent_6D68E=7;break;end end end if (FlatIdent_6D68E==5) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;FlatIdent_6D68E=6;end if (FlatIdent_6D68E==3) then Stk[Inst[2]]=Stk[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_6D68E=4;end if (FlatIdent_6D68E==1) then local FlatIdent_24237=0;while true do if (FlatIdent_24237==0) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_24237=1;end if (FlatIdent_24237==1) then Inst=Instr[VIP];FlatIdent_6D68E=2;break;end end end if (FlatIdent_6D68E==4) then A=Inst[2];Stk[A]=Stk[A](Stk[A + 1 ]);VIP=VIP + 1 ;FlatIdent_6D68E=5;end if (2==FlatIdent_6D68E) then local FlatIdent_32708=0;while true do if (FlatIdent_32708==1) then Inst=Instr[VIP];FlatIdent_6D68E=3;break;end if (FlatIdent_32708==0) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_32708=1;end end end if (FlatIdent_6D68E==0) then local FlatIdent_6A6C4=0;while true do if (FlatIdent_6A6C4==0) then Edx=nil;Results=nil;FlatIdent_6A6C4=1;end if (FlatIdent_6A6C4==1) then A=nil;FlatIdent_6D68E=1;break;end end end if (7==FlatIdent_6D68E) then local FlatIdent_6038=0;while true do if (FlatIdent_6038==0) then Edx=0;for Idx=A,Inst[4] do Edx=Edx + 1 ;Stk[Idx]=Results[Edx];end FlatIdent_6038=1;end if (FlatIdent_6038==1) then VIP=VIP + 1 ;FlatIdent_6D68E=8;break;end end end if (FlatIdent_6D68E==8) then Inst=Instr[VIP];VIP=Inst[3];break;end end break;end if (FlatIdent_38BA4==1) then Results=nil;A=nil;FlatIdent_38BA4=2;end if (FlatIdent_38BA4==0) then FlatIdent_6D68E=0;Edx=nil;FlatIdent_38BA4=1;end end elseif (Enum==13) then local A;Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]] * Stk[Inst[4]] ;VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]]/Inst[4] ;VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]] * Stk[Inst[4]] ;VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]] * Stk[Inst[4]] ;VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];if Stk[Inst[2]] then VIP=VIP + 1 ;else VIP=Inst[3];end else local FlatIdent_1FA0=0;local FlatIdent_4D83A;local A;while true do if (0==FlatIdent_1FA0) then FlatIdent_4D83A=0;A=nil;FlatIdent_1FA0=1;end if (FlatIdent_1FA0==1) then while true do if (FlatIdent_4D83A==2) then local FlatIdent_7EE98=0;while true do if (FlatIdent_7EE98==0) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]];FlatIdent_7EE98=1;end if (1==FlatIdent_7EE98) then VIP=VIP + 1 ;FlatIdent_4D83A=3;break;end end end if (0==FlatIdent_4D83A) then A=nil;Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_4D83A=1;end if (FlatIdent_4D83A==1) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;FlatIdent_4D83A=2;end if (FlatIdent_4D83A==3) then Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Stk[A + 1 ]);FlatIdent_4D83A=4;end if (FlatIdent_4D83A==5) then VIP=VIP + 1 ;Inst=Instr[VIP];if (Stk[Inst[2]]<=Stk[Inst[4]]) then VIP=VIP + 1 ;else VIP=Inst[3];end break;end if (FlatIdent_4D83A==4) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Upvalues[Inst[3]];FlatIdent_4D83A=5;end end break;end end end elseif (Enum<=16) then if (Enum>15) then Stk[Inst[2]]=Stk[Inst[3]];else local FlatIdent_354BC=0;local FlatIdent_55D83;local Results;local Edx;local Limit;local B;local A;while true do if (FlatIdent_354BC==1) then Edx=nil;Limit=nil;FlatIdent_354BC=2;end if (FlatIdent_354BC==2) then B=nil;A=nil;FlatIdent_354BC=3;end if (FlatIdent_354BC==3) then while true do if (FlatIdent_55D83==6) then for Idx=A,Top do local FlatIdent_3B2E6=0;local FlatIdent_5202D;while true do if (FlatIdent_3B2E6==0) then FlatIdent_5202D=0;while true do if (0==FlatIdent_5202D) then Edx=Edx + 1 ;Stk[Idx]=Results[Edx];break;end end break;end end end VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];FlatIdent_55D83=7;end if (FlatIdent_55D83==0) then Results=nil;Edx=nil;Results,Limit=nil;B=nil;FlatIdent_55D83=1;end if (FlatIdent_55D83==5) then local FlatIdent_1E39B=0;while true do if (FlatIdent_1E39B==0) then A=Inst[2];Results,Limit=_R(Stk[A](Stk[A + 1 ]));FlatIdent_1E39B=1;end if (2==FlatIdent_1E39B) then FlatIdent_55D83=6;break;end if (1==FlatIdent_1E39B) then Top=(Limit + A) -1 ;Edx=0;FlatIdent_1E39B=2;end end end if (FlatIdent_55D83==2) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];FlatIdent_55D83=3;end if (FlatIdent_55D83==1) then local FlatIdent_D895=0;while true do if (FlatIdent_D895==0) then A=nil;Stk[Inst[2]]=Env[Inst[3]];FlatIdent_D895=1;end if (FlatIdent_D895==2) then FlatIdent_55D83=2;break;end if (FlatIdent_D895==1) then VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_D895=2;end end end if (3==FlatIdent_55D83) then local FlatIdent_936D7=0;while true do if (FlatIdent_936D7==0) then VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_936D7=1;end if (FlatIdent_936D7==2) then FlatIdent_55D83=4;break;end if (FlatIdent_936D7==1) then A=Inst[2];B=Stk[Inst[3]];FlatIdent_936D7=2;end end end if (FlatIdent_55D83==7) then Results={Stk[A](Unpack(Stk,A + 1 ,Top))};Edx=0;for Idx=A,Inst[4] do local FlatIdent_2EB74=0;local FlatIdent_C595;while true do if (FlatIdent_2EB74==0) then FlatIdent_C595=0;while true do if (FlatIdent_C595==0) then Edx=Edx + 1 ;Stk[Idx]=Results[Edx];break;end end break;end end end VIP=VIP + 1 ;FlatIdent_55D83=8;end if (4==FlatIdent_55D83) then Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_55D83=5;end if (8==FlatIdent_55D83) then Inst=Instr[VIP];VIP=Inst[3];break;end end break;end if (0==FlatIdent_354BC) then FlatIdent_55D83=0;Results=nil;FlatIdent_354BC=1;end end end elseif (Enum<=17) then Stk[Inst[2]]=Stk[Inst[3]][Stk[Inst[4]]];elseif (Enum==18) then Stk[Inst[2]][Inst[3]]=Inst[4];else local A=Inst[2];local C=Inst[4];local CB=A + 2 ;local Result={Stk[A](Stk[A + 1 ],Stk[CB])};for Idx=1,C do Stk[CB + Idx ]=Result[Idx];end local R=Result[1];if R then local FlatIdent_6147E=0;while true do if (FlatIdent_6147E==0) then Stk[CB]=R;VIP=Inst[3];break;end end else VIP=VIP + 1 ;end end elseif (Enum<=29) then if (Enum<=24) then if (Enum<=21) then if (Enum==20) then local FlatIdent_5A134=0;local FlatIdent_1E5DB;local B;local A;while true do if (FlatIdent_5A134==0) then FlatIdent_1E5DB=0;B=nil;FlatIdent_5A134=1;end if (FlatIdent_5A134==1) then A=nil;while true do if (FlatIdent_1E5DB==0) then B=nil;A=nil;Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;FlatIdent_1E5DB=1;end if (FlatIdent_1E5DB==1) then local FlatIdent_45D0C=0;while true do if (FlatIdent_45D0C==0) then Inst=Instr[VIP];A=Inst[2];FlatIdent_45D0C=1;end if (FlatIdent_45D0C==1) then Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;FlatIdent_45D0C=2;end if (2==FlatIdent_45D0C) then FlatIdent_1E5DB=2;break;end end end if (FlatIdent_1E5DB==4) then VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));FlatIdent_1E5DB=5;end if (FlatIdent_1E5DB==2) then local FlatIdent_1D0A6=0;while true do if (FlatIdent_1D0A6==0) then Inst=Instr[VIP];A=Inst[2];FlatIdent_1D0A6=1;end if (FlatIdent_1D0A6==2) then FlatIdent_1E5DB=3;break;end if (FlatIdent_1D0A6==1) then B=Stk[Inst[3]];Stk[A + 1 ]=B;FlatIdent_1D0A6=2;end end end if (FlatIdent_1E5DB==3) then local FlatIdent_3BEFE=0;while true do if (1==FlatIdent_3BEFE) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];FlatIdent_3BEFE=2;end if (0==FlatIdent_3BEFE) then Stk[A]=B[Inst[4]];VIP=VIP + 1 ;FlatIdent_3BEFE=1;end if (FlatIdent_3BEFE==2) then FlatIdent_1E5DB=4;break;end end end if (FlatIdent_1E5DB==5) then VIP=VIP + 1 ;Inst=Instr[VIP];if (Stk[Inst[2]]==Stk[Inst[4]]) then VIP=VIP + 1 ;else VIP=Inst[3];end break;end end break;end end else Stk[Inst[2]]=Inst[3];end elseif (Enum<=22) then local FlatIdent_69531=0;local B;local A;while true do if (FlatIdent_69531==6) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]= #Stk[Inst[3]];FlatIdent_69531=7;end if (FlatIdent_69531==4) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_69531=5;end if (5==FlatIdent_69531) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]];VIP=VIP + 1 ;FlatIdent_69531=6;end if (FlatIdent_69531==3) then Stk[A]=B[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Stk[A + 1 ]);FlatIdent_69531=4;end if (FlatIdent_69531==1) then Stk[A]=B[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Stk[A + 1 ]);FlatIdent_69531=2;end if (FlatIdent_69531==2) then VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];B=Stk[Inst[3]];Stk[A + 1 ]=B;FlatIdent_69531=3;end if (FlatIdent_69531==7) then VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;FlatIdent_69531=8;end if (8==FlatIdent_69531) then Inst=Instr[VIP];if (Stk[Inst[2]]==Stk[Inst[4]]) then VIP=VIP + 1 ;else VIP=Inst[3];end break;end if (FlatIdent_69531==0) then B=nil;A=nil;A=Inst[2];B=Stk[Inst[3]];Stk[A + 1 ]=B;FlatIdent_69531=1;end end elseif (Enum>23) then local FlatIdent_81F6A=0;local FlatIdent_5CA49;local Results;local Edx;local Limit;local B;local A;while true do if (FlatIdent_81F6A==2) then B=nil;A=nil;FlatIdent_81F6A=3;end if (FlatIdent_81F6A==1) then Edx=nil;Limit=nil;FlatIdent_81F6A=2;end if (FlatIdent_81F6A==0) then FlatIdent_5CA49=0;Results=nil;FlatIdent_81F6A=1;end if (FlatIdent_81F6A==3) then while true do if (FlatIdent_5CA49==2) then local FlatIdent_52478=0;while true do if (1==FlatIdent_52478) then Stk[A]=B[Inst[4]];VIP=VIP + 1 ;FlatIdent_52478=2;end if (FlatIdent_52478==2) then Inst=Instr[VIP];A=Inst[2];FlatIdent_52478=3;end if (FlatIdent_52478==3) then FlatIdent_5CA49=3;break;end if (FlatIdent_52478==0) then B=Stk[Inst[3]];Stk[A + 1 ]=B;FlatIdent_52478=1;end end end if (FlatIdent_5CA49==3) then Results,Limit=_R(Stk[A](Stk[A + 1 ]));Top=(Limit + A) -1 ;Edx=0;for Idx=A,Top do local FlatIdent_8E29D=0;while true do if (FlatIdent_8E29D==0) then Edx=Edx + 1 ;Stk[Idx]=Results[Edx];break;end end end VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_5CA49=4;end if (FlatIdent_5CA49==1) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];FlatIdent_5CA49=2;end if (FlatIdent_5CA49==0) then Results=nil;Edx=nil;Results,Limit=nil;B=nil;A=nil;Stk[Inst[2]]=Env[Inst[3]];FlatIdent_5CA49=1;end if (FlatIdent_5CA49==5) then VIP=Inst[3];break;end if (FlatIdent_5CA49==4) then A=Inst[2];Results={Stk[A](Unpack(Stk,A + 1 ,Top))};Edx=0;for Idx=A,Inst[4] do local FlatIdent_3831=0;while true do if (FlatIdent_3831==0) then Edx=Edx + 1 ;Stk[Idx]=Results[Edx];break;end end end VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_5CA49=5;end end break;end end else local FlatIdent_30671=0;local FlatIdent_21E03;local A;while true do if (FlatIdent_30671==1) then while true do if (FlatIdent_21E03==1) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_21E03=2;end if (4==FlatIdent_21E03) then local FlatIdent_5D2CC=0;while true do if (FlatIdent_5D2CC==2) then VIP=VIP + 1 ;FlatIdent_21E03=5;break;end if (FlatIdent_5D2CC==1) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3]~=0 ;FlatIdent_5D2CC=2;end if (FlatIdent_5D2CC==0) then Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;FlatIdent_5D2CC=1;end end end if (FlatIdent_21E03==6) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Inst[4];break;end if (5==FlatIdent_21E03) then Inst=Instr[VIP];Env[Inst[3]]=Stk[Inst[2]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Upvalues[Inst[3]];FlatIdent_21E03=6;end if (FlatIdent_21E03==2) then local FlatIdent_18D84=0;while true do if (FlatIdent_18D84==1) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];FlatIdent_18D84=2;end if (2==FlatIdent_18D84) then VIP=VIP + 1 ;FlatIdent_21E03=3;break;end if (FlatIdent_18D84==0) then Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;FlatIdent_18D84=1;end end end if (FlatIdent_21E03==3) then Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_21E03=4;end if (0==FlatIdent_21E03) then local FlatIdent_821F1=0;while true do if (FlatIdent_821F1==2) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];FlatIdent_21E03=1;break;end if (0==FlatIdent_821F1) then A=nil;Stk[Inst[2]]=Env[Inst[3]];FlatIdent_821F1=1;end if (FlatIdent_821F1==1) then VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_821F1=2;end end end end break;end if (FlatIdent_30671==0) then FlatIdent_21E03=0;A=nil;FlatIdent_30671=1;end end end elseif (Enum<=26) then if (Enum==25) then local FlatIdent_3E39=0;local FlatIdent_253F0;local A;while true do if (FlatIdent_3E39==0) then FlatIdent_253F0=0;A=nil;FlatIdent_3E39=1;end if (1==FlatIdent_3E39) then while true do if (0==FlatIdent_253F0) then A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));break;end end break;end end else local FlatIdent_2E3FF=0;local FlatIdent_810B1;local Step;local Index;local A;while true do if (FlatIdent_2E3FF==0) then FlatIdent_810B1=0;Step=nil;FlatIdent_2E3FF=1;end if (FlatIdent_2E3FF==2) then while true do if (FlatIdent_810B1==5) then A=Inst[2];Index=Stk[A];Step=Stk[A + 2 ];if (Step>0) then if (Index>Stk[A + 1 ]) then VIP=Inst[3];else Stk[A + 3 ]=Index;end elseif (Index<Stk[A + 1 ]) then VIP=Inst[3];else Stk[A + 3 ]=Index;end break;end if (FlatIdent_810B1==0) then Step=nil;Index=nil;A=nil;Stk[Inst[2]]=Stk[Inst[3]]%Stk[Inst[4]] ;VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_810B1=1;end if (FlatIdent_810B1==3) then Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_810B1=4;end if (FlatIdent_810B1==1) then Stk[Inst[2]]=Upvalues[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]]%Stk[Inst[4]] ;VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_810B1=2;end if (FlatIdent_810B1==4) then local FlatIdent_60AAB=0;while true do if (2==FlatIdent_60AAB) then VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_60AAB=3;end if (FlatIdent_60AAB==3) then FlatIdent_810B1=5;break;end if (FlatIdent_60AAB==0) then Stk[Inst[2]]=Upvalues[Inst[3]];VIP=VIP + 1 ;FlatIdent_60AAB=1;end if (FlatIdent_60AAB==1) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];FlatIdent_60AAB=2;end end end if (FlatIdent_810B1==2) then local FlatIdent_2C3E6=0;while true do if (FlatIdent_2C3E6==1) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];FlatIdent_2C3E6=2;end if (FlatIdent_2C3E6==3) then FlatIdent_810B1=3;break;end if (FlatIdent_2C3E6==2) then VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_2C3E6=3;end if (FlatIdent_2C3E6==0) then Stk[Inst[2]]=Stk[Inst[3]];VIP=VIP + 1 ;FlatIdent_2C3E6=1;end end end end break;end if (FlatIdent_2E3FF==1) then Index=nil;A=nil;FlatIdent_2E3FF=2;end end end elseif (Enum<=27) then local FlatIdent_935CE=0;local FlatIdent_8CB90;while true do if (FlatIdent_935CE==0) then FlatIdent_8CB90=0;while true do if (FlatIdent_8CB90==5) then if Stk[Inst[2]] then VIP=VIP + 1 ;else VIP=Inst[3];end break;end if (FlatIdent_8CB90==4) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_8CB90=5;end if (FlatIdent_8CB90==0) then local FlatIdent_AF23=0;while true do if (FlatIdent_AF23==1) then Inst=Instr[VIP];FlatIdent_8CB90=1;break;end if (FlatIdent_AF23==0) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_AF23=1;end end end if (FlatIdent_8CB90==1) then local FlatIdent_943B1=0;while true do if (FlatIdent_943B1==1) then Inst=Instr[VIP];FlatIdent_8CB90=2;break;end if (FlatIdent_943B1==0) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;FlatIdent_943B1=1;end end end if (2==FlatIdent_8CB90) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_8CB90=3;end if (FlatIdent_8CB90==3) then local FlatIdent_2394=0;while true do if (FlatIdent_2394==0) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;FlatIdent_2394=1;end if (FlatIdent_2394==1) then Inst=Instr[VIP];FlatIdent_8CB90=4;break;end end end end break;end end elseif (Enum>28) then Stk[Inst[2]]=Inst[3]~=0 ;else local FlatIdent_9525B=0;local A;while true do if (FlatIdent_9525B==0) then A=Inst[2];Stk[A]=Stk[A](Stk[A + 1 ]);break;end end end elseif (Enum<=34) then if (Enum<=31) then if (Enum>30) then local FlatIdent_2B908=0;local A;while true do if (FlatIdent_2B908==0) then A=Inst[2];Stk[A](Unpack(Stk,A + 1 ,Top));break;end end else local A;Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];do return;end end elseif (Enum<=32) then local FlatIdent_80A55=0;local B;local A;while true do if (FlatIdent_80A55==19) then Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_80A55=20;end if (FlatIdent_80A55==4) then Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;FlatIdent_80A55=5;end if (FlatIdent_80A55==14) then Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Inst[4];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;FlatIdent_80A55=15;end if (FlatIdent_80A55==12) then A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;FlatIdent_80A55=13;end if (FlatIdent_80A55==13) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;FlatIdent_80A55=14;end if (FlatIdent_80A55==11) then Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_80A55=12;end if (FlatIdent_80A55==22) then Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];B=Stk[Inst[3]];FlatIdent_80A55=23;end if (FlatIdent_80A55==10) then Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_80A55=11;end if (FlatIdent_80A55==9) then VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_80A55=10;end if (FlatIdent_80A55==5) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));FlatIdent_80A55=6;end if (FlatIdent_80A55==15) then Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;FlatIdent_80A55=16;end if (FlatIdent_80A55==17) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Inst[4];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];FlatIdent_80A55=18;end if (FlatIdent_80A55==18) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Stk[A + 1 ]);VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_80A55=19;end if (FlatIdent_80A55==24) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];B=Stk[Inst[3]];Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];break;end if (FlatIdent_80A55==16) then Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Inst[4];FlatIdent_80A55=17;end if (FlatIdent_80A55==1) then Stk[A]=Stk[A](Stk[A + 1 ]);VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Inst[4];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_80A55=2;end if (FlatIdent_80A55==23) then Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));FlatIdent_80A55=24;end if (FlatIdent_80A55==7) then VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Env[Inst[3]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];FlatIdent_80A55=8;end if (3==FlatIdent_80A55) then Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];Stk[A]=Stk[A](Unpack(Stk,A + 1 ,Inst[3]));VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]][Inst[3]]=Stk[Inst[4]];VIP=VIP + 1 ;FlatIdent_80A55=4;end if (FlatIdent_80A55==0) then B=nil;A=nil;Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];Stk[Inst[2]]=Inst[3];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];FlatIdent_80A55=1;end if (FlatIdent_80A55==2) then Stk[Inst[2]]=Stk[Inst[3]][Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];A=Inst[2];B=Stk[Inst[3]];Stk[A + 1 ]=B;Stk[A]=B[Inst[4]];VIP=VIP + 1 ;Inst=Instr[VIP];FlatIdent_80A55=3
