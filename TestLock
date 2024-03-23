@@ -1,5 +1,4 @@
--- TO DO LIST: --
--- maybe esp
+
 print("Vanish/Unvanish update, aimlock has no prediction.")
 
 getgenv().prefix = "/"
