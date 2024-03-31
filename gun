@@ -24,7 +24,7 @@ end
 
 local function camlock(vic)
     local aimpart = vic.Head
-    cam.CFrame = cam.CFrame:Lerp(CFrame.new(cam.CFrame.Position, aimpart.Position, camlerp)
+    cam.CFrame = cam.CFrame:Lerp(CFrame.new(cam.CFrame.Position, aimpart.Position, camlerp))
 end
 
 RS.RenderStepped:Connect(function()
@@ -33,6 +33,10 @@ RS.RenderStepped:Connect(function()
         camlock(target)
     end
 end)
+local btnGui = Instance.new("ScreenGui")
+btnGui.Name = "ButtonHandler"
+btnGui.Parent = game.CoreGui
+btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 local btn = Instance.new("TextButton")
 btn.Name = "SilentButton"
