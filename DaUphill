@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-
+print("Magnitude prediction update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -147,13 +147,14 @@ local function getnear()
     end
     return plr
 end
-
+local mag
 local function silentLock()
     spawn(function()
         silentVic = getnear()
-        while wait() do
+        while task.wait() do
             if silent then
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (silentVic.Humanoid.MoveDirection.X / 3.5), calcAir(silentVic.Name), silentVic.UpperTorso.Velocity.Z * (silentVic.Humanoid.MoveDirection.Z / 3.5))
+                mag = silentVic.Humanoid.MoveDirection.Magnitude
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag / 5.1), calcAir(silentVic.Name), silentVic.UpperTorso.Velocity.Z * (mag / 5.1))
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
@@ -167,7 +168,7 @@ end
 
 local function startLock(loser)
     spawn(function()
-        while wait() do
+        while task.wait() do
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
