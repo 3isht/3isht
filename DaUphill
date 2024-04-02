@@ -1,4 +1,5 @@
 -- TO DO LIST: --
+-- mag * (ping * 0.00113)
 -- maybe esp
 print("Magnitude prediction update.")
 getgenv().AutoHighArm = false;
@@ -25,6 +26,9 @@ getgenv().prediction = 0.282;
 getgenv().teammates = {};
 getgenv().m = 8;
 getgenv().aim = false;
+local value, ping
+value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+ping = tonumber(string.split(value, '(')[1])
 
 function findfood()
     for _, v in pairs(game.Workspace:GetDescendants()) do
@@ -154,7 +158,7 @@ local function silentLock()
         while task.wait() do
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag / 5.1), calcAir(silentVic.Name), silentVic.UpperTorso.Velocity.Z * (mag / 5.1))
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * 0.00113)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * 0.00113)) / 3.75), silentVic.UpperTorso.Velocity.Z * (mag * (ping * 0.00113)))
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
@@ -240,6 +244,8 @@ if game.CoreGui:FindFirstChild("DrRay") then
 end
 
 RS.RenderStepped:Connect(function()
+    value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+    ping = tonumber(string.split(value, '(')[1])
     if user ~= nil then
         local succ, err = pcall(function()
             local aimVic = game.Workspace[user]
@@ -385,7 +391,7 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     else
         camera.CameraSubject = normalCam
     end
-    if not VIEW then
+    if not VIEW or game.workspace[user] then
         camera.CameraSubject = normalCam
     end
 end)
