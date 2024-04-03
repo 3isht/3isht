@@ -1,0 +1,228 @@
+local MaxDistance = 50
+local FindSpeed = 0.5
+local FlingPower = 2.5
+local Offset = Vector3.new(0,-7.5,0)
+local AuraSize = 15
+local Whitelist = {}
+
+--[[
+COMMANDS
+.fix fixes it flinging moeny is bugged
+.stop stops flinging people
+.start/.play starts flinging people again
+.maxdistance <number> / .maxdist <number> changes max distance of fling nearest
+.mode {Nearest(n),Target(t),Aura(a)} Nearest flings nearest person in MaxDistance
+and Target flings a target ex .fling <DisplayName/Username> and aura makes part spin around u flinging people
+.whitelist/.wl <Target> whitelists a person from fling nearest
+.unwhitelist/.unwl <Target> removes whitelisted person
+.offset X Y Z changes part offset when stopped
+.flingpower/fp <number>
+.aurasize/asize <number)
+--]]
+
+
+local PartPosition = Vector3.new(0,50,0)
+local function GetUnAnchored()
+for i,v in pairs(workspace.MAP.Map.GarageExpansion:GetDescendants()) do
+if v:IsA('BasePart') and v.Anchored == false then
+return v
+end
+end
+return nil
+end
+if GetUnAnchored() == nil then return end
+local v = GetUnAnchored()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+workspace["FallenPartsDestroyHeight"] = 0/0
+local Stopped = false
+local Mode = "Nearest"
+local Target = nil
+local function GetNearest()
+local plr = nil
+local maxdist = MaxDistance
+for i,v in pairs(game.Players:GetPlayers()) do
+if v ~= game.Players.LocalPlayer and not table.find(Whitelist,v.Name) and v.Character and v.Character:FindFirstChild("BodyEffects") and v.Character:FindFirstChild("BodyEffects"):FindFirstChild("K.O") and v.Character:FindFirstChild("Humanoid").Sit == false and Stopped == false then
+if game.Players.LocalPlayer:DistanceFromCharacter(v.Character.LowerTorso.Position) < maxdist and Stopped == false then
+plr = v
+maxdist = game.Players.LocalPlayer:DistanceFromCharacter(v.Character.LowerTorso.Position)
+end
+end
+end
+return plr
+end
+local function GetPlayer(String)
+    local plr
+    local strl = String:lower()
+        for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+            if v.Name:lower():sub(1, #String) == String:lower() or v.DisplayName:lower():sub(1, #String) == String:lower() then
+                if v ~= game:GetService("Players").LocalPlayer and v.Character:FindFirstChild("Humanoid").Sit == false then
+                    plr = v
+                end
+            end 
+        end
+        if String == "" or String == " " then
+           plr = nil
+        end
+    return plr
+end
+
+if v:FindFirstChild("BodyPosition") then
+v:FindFirstChild("BodyPosition"):Destroy()
+v:FindFirstChild("BodyThrust"):Destroy()
+v:FindFirstChild("Highlight"):Destroy()
+end
+v.CanCollide = false
+if not v:FindFirstChild("Highlight") then
+Instance.new("Highlight",v)
+end
+local s = Instance.new("BodyPosition",v)
+s.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+s.P = 999999
+s.Position = PartPosition
+local b = Instance.new("BodyThrust",v)
+b.Force = Vector3.new(FlingPower*10000,FlingPower*10000,FlingPower*10000)
+game:GetService('RunService').Heartbeat:Connect(function()
+v.CanCollide = false
+v.Velocity = Vector3.new(0,25.1,0)
+if not v:FindFirstChild("Highlight") then
+Instance.new("Highlight",v)
+end
+if v.Anchored == false and v:FindFirstChild("BodyPosition") then
+pcall(function()
+if v:FindFirstChild("Highlight") then
+v:FindFirstChild("BodyPosition").Position = PartPosition
+v:FindFirstChild("Highlight"):Destroy()
+Instance.new("Highlight",v)
+v:FindFirstChild("Highlight").OutlineTransparency = 0
+v:FindFirstChild("Highlight").FillTransparency = 0
+v:FindFirstChild("Highlight").OutlineColor = Color3.fromHSV(tick()%5/5,1,1)
+v:FindFirstChild("Highlight").FillColor = Color3.fromHSV(tick()%5/5,1,1)
+end
+if Mode == "Nearest" then
+local nearesttt = GetNearest()
+if nearesttt == nil then
+PartPosition = game.Players.LocalPlayer.Character.LowerTorso.Position + Offset
+v:FindFirstChild("BodyThrust").Location = v.Position
+else
+if nearesttt.Character:FindFirstChild("BodyEffects"):FindFirstChild("K.O").Value == true then
+PartPosition = nearesttt.Character.LowerTorso.Position
+v:FindFirstChild("BodyThrust").Location = nearesttt.Character.LowerTorso.Position
+else
+PartPosition = nearesttt.Character.HumanoidRootPart.Position + Vector3.new(nearesttt.Character.HumanoidRootPart.Velocity.X / 1.5,0,nearesttt.Character.HumanoidRootPart.Velocity.Z / 1.5)
+v:FindFirstChild("BodyThrust").Location = nearesttt.Character.HumanoidRootPart.Position + Vector3.new(nearesttt.Character.HumanoidRootPart.Velocity.X / 1.5,0,nearesttt.Character.HumanoidRootPart.Velocity.Z / 1.5)
+end
+end
+elseif Mode == "Target" then
+if Target ~= nil then
+if Target.Character:FindFirstChild("BodyEffects"):FindFirstChild("K.O").Value == true then
+PartPosition = Target.Character.LowerTorso.Position
+v:FindFirstChild("BodyThrust").Location = Target.Character.LowerTorso.Position
+else
+PartPosition = Target.Character.HumanoidRootPart.Position + Vector3.new(Target.Character.HumanoidRootPart.Velocity.X / 1.5,0,Target.Character.HumanoidRootPart.Velocity.Z / 1.5)
+v:FindFirstChild("BodyThrust").Location = Target.Character.HumanoidRootPart.Position + Vector3.new(Target.Character.HumanoidRootPart.Velocity.X / 1.5,0,Target.Character.HumanoidRootPart.Velocity.Z / 1.5)
+end
+else
+PartPosition = game.Players.LocalPlayer.Character.LowerTorso.Position + Offset
+v:FindFirstChild("BodyThrust").Location = v.Position
+end
+elseif Mode == "Aura" then
+PartPosition = game.Players.LocalPlayer.Character.LowerTorso.Position
+v:FindFirstChild("BodyThrust").Location = v.Position
+v:FindFirstChild("BodyThrust").Force = Vector3.new(AuraSize*100,AuraSize*100,AuraSize*100)
+end
+end)
+end
+end)
+local abd
+local oldsiz
+spawn(function()
+while task.wait(.5) do
+spawn(function()
+abd = Target
+Target = nil
+task.wait()
+Target = abd
+end)
+if v:FindFirstChild("BodyPosition") then
+v:FindFirstChild("BodyPosition"):Destroy()
+v:FindFirstChild("BodyThrust"):Destroy()
+end
+v.CanCollide = false
+if not v:FindFirstChild("Highlight") then
+Instance.new("Highlight",v)
+end
+local s = Instance.new("BodyPosition",v)
+s.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+s.P = 999999
+local b = Instance.new("BodyThrust",v)
+b.Force = Vector3.new(FlingPower*100,FlingPower*100,FlingPower*100)
+end
+end)
+-- Commands
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+local split = string.split(msg," ")
+if msg:lower() == ".fix" then
+if v == nil then return end
+if v:FindFirstChild("BodyPosition") then
+v:FindFirstChild("BodyPosition"):Destroy()
+v:FindFirstChild("BodyThrust"):Destroy()
+end
+v.CanCollide = false
+if not v:FindFirstChild("Highlight") then
+Instance.new("Highlight",v)
+end
+local s = Instance.new("BodyPosition",v)
+s.MaxForce = Vector3.new(math.huge,math.huge,math.huge)
+s.P = 999999
+local b = Instance.new("BodyThrust",v)
+b.Force = Vector3.new(FlingPower*100,FlingPower*100,FlingPower*100)
+elseif msg:lower() == ".stop" then
+Stopped = true
+Target = nil
+elseif msg:lower() == ".play" or msg:lower() == ".start" then
+Stopped = false
+elseif split[1]:lower() == ".fling" then
+if not split[2] then return end
+if GetPlayer(split[2]) == nil then return end
+Target = GetPlayer(split[2])
+elseif split[1]:lower() == ".mode" then
+if split[2]:lower() == "nearest" or split[2]:lower() == "n" then
+Mode = "Nearest"
+elseif split[2]:lower() == "target" or split[2]:lower() == "t" then
+Mode = "Target"
+elseif split[2]:lower() == "aura" or split[2]:lower() == "a" then
+Mode = "Aura"
+else
+return
+end
+elseif split[1]:lower() == ".maxdistance" or split[1]:lower() == ".maxdist" then
+if tonumber(split[2]) ~= nil then
+MaxDistance = tonumber(split[2])
+end
+elseif split[1]:lower() == ".whitelist" or split[1]:lower() == ".wl" then
+if split[2] then
+if GetPlayer(split[2]) ~= nil then
+table.insert(Whitelist,GetPlayer(split[2]).Name)
+end
+end
+elseif split[1]:lower() == ".unwhitelist" or split[1]:lower() == ".unwl" then
+if split[2] then
+if GetPlayer(split[2]) ~= nil then
+table.remove(Whitelist,table.find(Whitelist,GetPlayer(split[2]).Name))
+end
+end
+elseif split[1]:lower() == ".offset" then
+if split[4] then else return end
+if tonumber(split[2]) ~= nil and tonumber(split[3]) ~= nil and tonumber(split[4]) ~= nil then
+Offset = Vector3.new(tonumber(split[2]),tonumber(split[3]),tonumber(split[4]))
+end
+elseif split[1]:lower() == ".flingpower" or split[1]:lower() == ".fp" and split[2] then
+if tonumber(split[2]) ~= nil then
+FlingPower = tonumber(split[2])
+end
+elseif split[1]:lower() == ".aurasize" or split[1]:lower() == ".asize" and split[2] then
+if tonumber(split[2]) ~= nil then
+AuraSize = tonumber(split[2])
+end
+end
+end)
