@@ -26,6 +26,7 @@ getgenv().prediction = 0.282;
 getgenv().teammates = {};
 getgenv().m = 8;
 getgenv().aim = false;
+getgenv().mag = nil;
 local value, ping
 value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
 ping = tonumber(string.split(value, '(')[1])
@@ -151,7 +152,7 @@ local function getnear()
     end
     return plr
 end
-local mag
+
 local function silentLock()
     spawn(function()
         silentVic = getnear()
