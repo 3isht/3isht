@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Magnitude \* ping prediction update.")
+print("Da fights update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -167,7 +167,11 @@ local function getnear()
         if disDiff < dis then
             dis = disDiff
             plr = game.Workspace[v]
+            
         end
+    end
+    if plr then
+        return plr
     end
     if not plr and folder then
         for _, v in ipairs(plrs) do
@@ -178,7 +182,11 @@ local function getnear()
             end
         end
     end
-    return plr
+    if plr then
+        return plr
+    else
+        print("Smth is wrong with it.")
+    end
 end
 
 local function silentLock()
