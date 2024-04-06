@@ -27,6 +27,8 @@ getgenv().teammates = {};
 getgenv().m = 8;
 getgenv().aim = false;
 getgenv().mag = nil;
+getgenv().aimpart = "UpperTorso"
+getgenv().aimparts = { "Head", "UpperTorso", "LowerTorso", "LeftArm", "RightArm", "LeftLeg", "RightLeg" }
 local value, ping
 value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
 ping = tonumber(string.split(value, '(')[1])
@@ -133,6 +135,23 @@ local function getFullUser(input)
     end
 end
 
+local folder = nil
+local Check = function() 
+    for _, v in next, game.workspace:GetChildren() do
+        if v.Name:lower() == "players" or string.sub(v.Name:lower(),1,#"players") == "players" then return true else return false end
+    end
+end
+if Check then
+    folder = function()
+        for _,v in next, game.workspace:GetChildren() do
+            if v.Name:lower() == "players" or string.sub(v.Name:lower(),1,#"players") == "players" then
+                return v.Name
+            else 
+                print("Script did not detect the players folder.")
+            end
+        end
+    end
+end
 local function getnear()
     local LocalName = game.Players.LocalPlayer.Name
     local dis = math.huge
@@ -148,6 +167,15 @@ local function getnear()
         if disDiff < dis then
             dis = disDiff
             plr = game.Workspace[v]
+        end
+    end
+    if not plr and folder then
+        for _, v in ipairs(plrs) do
+            local disDiff = (game.Workspace[folder][LocalName].HumanoidRootPart.Position - game.Workspace[folder][v].HumanoidRootPart.Position).magnitude
+            if disDiff < dis then
+                dis = disDiff
+                plr = game.Workspace[folder][v]
+            end
         end
     end
     return plr
@@ -177,6 +205,9 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
+                if not target and folder then
+                    target = game.workspace[folder][VICTIM]
+                end
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, calcAir(loser), target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
                     if target.UpperTorso then
@@ -188,17 +219,6 @@ local function startLock(loser)
         end
     end)
 end
-
-game.Workspace.ChildAdded:Connect(function(new)
-    if new.Name == user then
-        startLock(user)
-    end
-    if new.Name == "Part" then
-        for i,v in next, new:GetDescendants() do
-            print(i,v,v.ClassName)
-        end
-    end
-end)
 
 local function normalTp(username)
     local LPN = game.Players.LocalPlayer.Name
@@ -294,7 +314,13 @@ RS.RenderStepped:Connect(function()
     if foodspawn then
         fireclickdetector(food.ClickDetector)
     end
-    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
+    local rlBtn = function()
+        for _,v in next, game.Players.LocalPlayer.PlayerGui.gui["mobile ppl"]:GetDescendants() do
+            if v.Name == "rl" then
+                return v
+            end
+        end
+    end
     if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
         rlBtn.Size = UDim2.new(0, 60, 0, 60)
     end
@@ -308,7 +334,7 @@ RS.RenderStepped:Connect(function()
 end)
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
-local window = lib:Load("Made By Tariq", "Default")
+local window = lib:Load("void", "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Target", "")
 local tab3 = lib.newTab("Player", "")
@@ -356,7 +382,6 @@ tab.newButton("Custom Macro View", "", function()
     for i, v in pairs(getsenv(LS)) do
         for _, cons in next, getconstants(getsenv(LS).inout) do
             setconstant(getsenv(LS).inout, 1, m)
-            print("new macro view set: ", m)
         end
     end
 end)
@@ -383,16 +408,16 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
     local normalCam = ME.Humanoid
-    if user and game.Workspace[user] and VIEW then
-        if ME then
-            camera.CameraSubject = game.Workspace[user].Humanoid
-        else
-            camera.CameraSubject = normalCam
+    if (user and game.Workspace[user] and VIEW) or (user and game.workspace[folder][user] and VIEW) then
+        if ME and game.workpsace[folder][user] then
+            camera.CameraSubject = game.Workspace[folder][user].Humanoid
+        elseif ME and game.workspace[user] then
+            camera.CameraSubject = game.workspace[user].Humanoid
         end
     else
         camera.CameraSubject = normalCam
     end
-    if not VIEW or game.workspace[user] then
+    if (not VIEW or not game.workspace[user]) or (not VIEW or not game.workspace[folder][user]) then
         camera.CameraSubject = normalCam
     end
 end)
@@ -405,7 +430,6 @@ tab3.newInput("Macro View", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         m = num
-        print(m, type(m))
     else
         m = 8
     end
@@ -415,7 +439,6 @@ tab3.newInput("Camera Lerp Amount", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         camLerp = num
-        print(camLerp, type(camLerp))
     else
         camLerp = 0.462
     end
@@ -425,7 +448,6 @@ tab3.newInput("Prediction Amount", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         prediction = num
-        print(prediction, type(prediction))
     else
         prediction = 0.282
     end
@@ -572,9 +594,12 @@ end)
 tab3.newButton("Kick", "", function()
     local LP = game.Players.LocalPlayer
     if LP then
-        LP:Kick("Did you get the last stomp?")
+        LP:Kick("you have been permenantly banned.")
     end
 end)
 tab4.newToggle("Aimlock", "just a test", false, function(bool)
     aim = bool
+end)
+tab4.newDropdown("Aimlock Part", "part to aimlock on.", aimparts, function(part)
+    aimpart = part
 end)
