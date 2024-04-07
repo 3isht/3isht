@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Silent fix update v2.")
+print("Final silent lock fix ig.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -500,6 +500,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
         corner.Name = "CORNER"
         
         local lockbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
+        local bozo
         
         silentBtn.MouseButton1Click:Connect(function()
             if not silent then
@@ -509,7 +510,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                     lockbtn.Text = "Lock"
                 end
                 silentBtn.Text = "Unlock Silent"
-                local bozo = getnear()
+                bozo = getnear()
                 Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), game.Players:GetUserThumbnailAsync(game.Players[bozo.Name].UserId, type, size), 0.7)
             elseif silent then
                 silent = false
