@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Team check and remove update.")
+print("silent lock update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -157,9 +157,9 @@ local function getnear()
     return plr
 end
 
-local function silentLock()
+local function silentLock(vic)
     spawn(function()
-        silentVic = getnear()
+        silentVic = vic
         while task.wait() do
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
@@ -456,7 +456,6 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         
         local slockbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
         
-        
         btn.MouseButton1Click:Connect(function()
             if lock then
                 lock = false
@@ -466,16 +465,13 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
             elseif not lock and user then
                 if game.Players[user] then
                     lock = true
+                    Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
+                    btn.Text = "Unlock"
                     if slockbtn then
                         silent = false
                         silentVic = nil
                         slockbtn.Text = "Silent Lock"
                     end
-                    Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
-                    btn.Text = "Unlock"
-                else
-                    lock = false
-                    btn.Text = "Lock"
                 end
             end
             startLock(user)
@@ -530,7 +526,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                 silentVic = nil
                 silentBtn.Text = "Silent Lock"
             end
-            silentLock()
+            silentLock(bozo)
         end)
     end
 end)
