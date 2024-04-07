@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Final silent lock fix ig.")
+print("faster silent lock update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -309,6 +309,9 @@ RS.RenderStepped:Connect(function()
         if not plrs[mate] or mate:GetAttribute("group") ~= lplr:GetAttribute("group") then
             table.remove(teammates, i)
         end
+    end
+    for _, v in next, plrs:GetChildren() do
+        plrs:GetUserThumbnailAsync(v.UserId, type, size)
     end
 end)
 
