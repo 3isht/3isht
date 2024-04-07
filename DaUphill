@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Removed da fights update.")
+print("Notif icon update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -27,9 +27,13 @@ getgenv().teammates = {};
 getgenv().m = 8;
 getgenv().aim = false;
 getgenv().mag = nil;
+getgenv().aimpart = "UpperTorso"
+getgenv().aimparts = { "Head", "UpperTorso", "LowerTorso", "LeftArm", "RightArm", "LeftLeg", "RightLeg" }
 local value, ping
 value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
 ping = tonumber(string.split(value, '(')[1])
+local type = Enum.ThumbnailType.Headshot
+local size = Enum.ThumbnailSize.Size420x420
 
 function findfood()
     for _, v in pairs(game.Workspace:GetDescendants()) do
@@ -209,23 +213,18 @@ local function normalTp(username)
     end
 end
 
-local function LockNotif()
-    if user then
-        game.StarterGui:SetCore("SendNotification", {
-            Title = "Lock Notification",
-            Text = [[
-            Display: ]] .. tostring(game.Workspace[user].Humanoid.DisplayName) .. [[
-            
-            Main user: ]] .. user,
-            Icon = "",
-            Duration = 0.7
-        })
-    end
+local function Notif(name, desc, image, dur)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = name
+        Text = desc
+        Icon = image
+        Duration = dur
+    })
 end
 
 local function UnLockNotif()
     game.StarterGui:SetCore("SendNotification", {
-        Title = "Lock Notification",
+        Title = "UnLock Notification",
         Text = "Unlocked...",
         Icon = "",
         Duration = 0.7
@@ -250,9 +249,9 @@ RS.RenderStepped:Connect(function()
     if user ~= nil then
         local succ, err = pcall(function()
             local aimVic = game.Workspace[user]
-            local vicVelo = aimVic.LowerTorso.Velocity
+            local vicVelo = aimVic[aimpart].Velocity
             local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction)
-            pos = Vector3.new(aimVic.LowerTorso.Position + sum)
+            pos = Vector3.new(aimVic[aimpart].Position + sum)
             if err then
                 print("Something went wrong: ", err)
             end
@@ -270,7 +269,7 @@ RS.RenderStepped:Connect(function()
             local args = {...}
             if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
                 if tostring(args[1]) == 'MOUSE' and aim then
-                    args[2] = pos
+                    args[2] = game.workspace[user][aimpart].Position
                 else
                     return old(self, unpack(args))
                 end
@@ -373,7 +372,7 @@ tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
         VICTIM = nil
     end
     if bool then
-        LockNotif()
+        Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420), 0.7)
     end
     lock = bool
     startLock(user)
@@ -392,7 +391,7 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     else
         camera.CameraSubject = normalCam
     end
-    if not VIEW or game.workspace[user] then
+    if not VIEW or not game.workspace[user] then
         camera.CameraSubject = normalCam
     end
 end)
@@ -466,7 +465,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
                         silentVic = nil
                         slockbtn.Text = "Silent Lock"
                     end
-                    LockNotif()
+                    Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
                     btn.Text = "Unlock"
                 else
                     lock = false
@@ -509,10 +508,11 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                 end
                 silentBtn.Text = "Unlock Silent"
                 local bozo = getnear()
+                Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), game.Players:GetUserThumbnailAsync(game.Players[bozo.Name].UserId, type, size), 0.7)
                 game.StarterGui:SetCore("SendNotification", {
-                    Title = "Silent Notification",
+                    Title = "",
                     Text = [[
-                    Display: ]] .. tostring(game.Workspace[bozo.Name].Humanoid.DisplayName) .. [[
+                    Display: ]] .. tostring(game.Workspace[bozo.Name].Humanoid.DisplayName)  [[
                     
                     Main user: ]] .. bozo.Name,
                     Icon = "",
@@ -577,4 +577,7 @@ tab3.newButton("Kick", "", function()
 end)
 tab4.newToggle("Aimlock", "just a test", false, function(bool)
     aim = bool
+end)
+tab4.newDropdown("Aimlock Part", "part to aimlock on.", aimparts, function(part)
+    aimpart = part
 end)
