@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Silent fix update.")
+print("Silent fix update v2.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -159,7 +159,7 @@ end
 
 local function silentLock(vic)
     spawn(function()
-        silentVic = vic
+        silentVic = game.workspace[vic]
         while task.wait() do
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
@@ -517,7 +517,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                 silentVic = nil
                 silentBtn.Text = "Silent Lock"
             end
-            silentLock(bozo)
+            silentLock(bozo.Name)
         end)
     end
 end)
