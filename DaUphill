@@ -1,7 +1,8 @@
+local success, error = pcall(function()
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Notif icon update.")
+print("notif icon update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -581,3 +582,9 @@ end)
 tab4.newDropdown("Aimlock Part", "part to aimlock on.", aimparts, function(part)
     aimpart = part
 end)
+    
+end)
+
+if not success then
+    print("Error detected: ".. error)
+end
