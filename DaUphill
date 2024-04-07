@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("True da fights check update.")
+print("Removed da fights update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -27,8 +27,6 @@ getgenv().teammates = {};
 getgenv().m = 8;
 getgenv().aim = false;
 getgenv().mag = nil;
-getgenv().aimpart = "UpperTorso"
-getgenv().aimparts = { "Head", "UpperTorso", "LowerTorso", "LeftArm", "RightArm", "LeftLeg", "RightLeg" }
 local value, ping
 value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
 ping = tonumber(string.split(value, '(')[1])
@@ -49,7 +47,7 @@ function customLayout()
 end
 local findarmour = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[High-Medium Armor]" or v.Name == "[High Armor]" then
+        if v.Name == "[High-Medium Armor]" then
             return v
         end
     end
@@ -71,34 +69,6 @@ end
 local findusp = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
         if v.Name == "[USP]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        end
-    end
-end
-local folder = nil
-local Check = function() 
-    for _, v in next, game.workspace:GetChildren() do
-        if v.Name:lower() == "players" or string.sub(v.Name:lower(),1,#"players") == "players" then
-            return true
-        else
-            return false
-        end
-    end
-end
-if Check then
-    folder = function()
-        for _,v in next, game.workspace:GetChildren() do
-            if v.Name:lower() == "players" then
-                return v.Name
-            else 
-                print("Script did not detect the players folder.")
-            end
-        end
-    end
-end
-local rlBtn = function()
-    for _,v in next, game.Players.LocalPlayer.PlayerGui.gui["mobile ppl"]:GetDescendants() do
-        if v.Name == "rl" then
             return v
         end
     end
@@ -169,34 +139,18 @@ local function getnear()
     local plr = nil
     local plrs = {}
     for _, v in pairs(game.Players:GetChildren()) do
-        if v ~= game.Players.LocalPlayer and not table.find(teammates, v.Name) then
+        if v ~= game.Players.LocalPlayer and not game.Workspace[v.Name]:GetAttribute("Knocked") and not table.find(teammates, v.Name) then
             table.insert(plrs, v.Name)
         end
     end
     for _, v in ipairs(plrs) do
         local disDiff = (game.Workspace[LocalName].HumanoidRootPart.Position - game.Workspace[v].HumanoidRootPart.Position).magnitude
-        if disDiff < dis and not game.Workspace[v]:GetAttribute("Knocked") then
+        if disDiff < dis then
             dis = disDiff
             plr = game.Workspace[v]
         end
     end
-    if plr then
-        return plr
-    end
-    if not plr and folder then
-        for _, v in ipairs(plrs) do
-            local disDiff = (game.Workspace[folder][LocalName].HumanoidRootPart.Position - game.Workspace[folder][v].HumanoidRootPart.Position).magnitude
-            if disDiff < dis then
-                dis = disDiff
-                plr = game.Workspace[folder][v]
-            end
-        end
-    end
-    if plr then
-        return plr
-    else
-        print("Smth is wrong with it.")
-    end
+    return plr
 end
 
 local function silentLock()
@@ -206,7 +160,7 @@ local function silentLock()
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
                 local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * 0.00146)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * 0.00146)) / 3.75), silentVic.UpperTorso.Velocity.Z * (mag * (ping * 0.00146)))
-                if (silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name]) or (silentVic and game.Players[silentVic.Name]) then
+                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
                     end
@@ -223,11 +177,8 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
-                if not target and Check then
-                    target = game.workspace[folder][VICTIM]
-                end
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, calcAir(loser), target.UpperTorso.Velocity.Z * prediction)
-                if (target and not target:GetAttribute("Knocked") and game.Players[target.Name]) or (target and game.Players[target.Name) then
+                if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
                     if target.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
                     end
@@ -237,6 +188,17 @@ local function startLock(loser)
         end
     end)
 end
+
+game.Workspace.ChildAdded:Connect(function(new)
+    if new.Name == user then
+        startLock(user)
+    end
+    if new.Name == "Part" then
+        for i,v in next, new:GetDescendants() do
+            print(i,v,v.ClassName)
+        end
+    end
+end)
 
 local function normalTp(username)
     local LPN = game.Players.LocalPlayer.Name
@@ -332,7 +294,8 @@ RS.RenderStepped:Connect(function()
     if foodspawn then
         fireclickdetector(food.ClickDetector)
     end
-    if rlBtn and rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
+    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
+    if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
         rlBtn.Size = UDim2.new(0, 60, 0, 60)
     end
     local plrs = game.Players
@@ -345,7 +308,7 @@ RS.RenderStepped:Connect(function()
 end)
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
-local window = lib:Load("void", "Default")
+local window = lib:Load("Made By Tariq", "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Target", "")
 local tab3 = lib.newTab("Player", "")
@@ -393,6 +356,7 @@ tab.newButton("Custom Macro View", "", function()
     for i, v in pairs(getsenv(LS)) do
         for _, cons in next, getconstants(getsenv(LS).inout) do
             setconstant(getsenv(LS).inout, 1, m)
+            print("new macro view set: ", m)
         end
     end
 end)
@@ -419,16 +383,16 @@ tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     local NAME = game.Players.LocalPlayer.Name
     local ME = game.Workspace[NAME]
     local normalCam = ME.Humanoid
-    if (user and game.Workspace[user] and VIEW) or (user and game.workspace[folder][user] and VIEW) then
-        if ME and game.workpsace[folder][user] then
-            camera.CameraSubject = game.Workspace[folder][user].Humanoid
-        elseif ME and game.workspace[user] then
-            camera.CameraSubject = game.workspace[user].Humanoid
+    if user and game.Workspace[user] and VIEW then
+        if ME then
+            camera.CameraSubject = game.Workspace[user].Humanoid
+        else
+            camera.CameraSubject = normalCam
         end
     else
         camera.CameraSubject = normalCam
     end
-    if (not VIEW or not game.workspace[user]) or (not VIEW or not game.workspace[folder][user]) then
+    if not VIEW or game.workspace[user] then
         camera.CameraSubject = normalCam
     end
 end)
@@ -441,6 +405,7 @@ tab3.newInput("Macro View", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         m = num
+        print(m, type(m))
     else
         m = 8
     end
@@ -450,6 +415,7 @@ tab3.newInput("Camera Lerp Amount", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         camLerp = num
+        print(camLerp, type(camLerp))
     else
         camLerp = 0.462
     end
@@ -459,6 +425,7 @@ tab3.newInput("Prediction Amount", "", function(amt)
     print(num, type(num))
     if type(num) == "number" then
         prediction = num
+        print(prediction, type(prediction))
     else
         prediction = 0.282
     end
@@ -605,12 +572,9 @@ end)
 tab3.newButton("Kick", "", function()
     local LP = game.Players.LocalPlayer
     if LP then
-        LP:Kick("you have been permenantly banned.")
+        LP:Kick("Did you get the last stomp?")
     end
 end)
 tab4.newToggle("Aimlock", "just a test", false, function(bool)
     aim = bool
-end)
-tab4.newDropdown("Aimlock Part", "part to aimlock on.", aimparts, function(part)
-    aimpart = part
 end)
