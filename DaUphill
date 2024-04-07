@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("silent lock update.")
+print("Silent fix update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -511,15 +511,6 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                 silentBtn.Text = "Unlock Silent"
                 local bozo = getnear()
                 Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), game.Players:GetUserThumbnailAsync(game.Players[bozo.Name].UserId, type, size), 0.7)
-                game.StarterGui:SetCore("SendNotification", {
-                    Title = "",
-                    Text = [[
-                    Display: ]] .. tostring(game.Workspace[bozo.Name].Humanoid.DisplayName)  [[
-                    
-                    Main user: ]] .. bozo.Name,
-                    Icon = "",
-                    Duration = 0.7
-                })
             elseif silent then
                 silent = false
                 UnLockNotif()
