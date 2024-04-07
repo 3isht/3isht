@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("working icon (i hope) update.")
+print("Team check and remove update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -106,11 +106,11 @@ local function calcAir(person)
         elseif normal < lowest then
             normal = lowest
         end
-        if err then
-            print("Something went wrong with airshot calc: , err")
-        end
         return normal
     end)
+    if err then
+        print("Something went wrong with airshot calc: ", err)
+    end
 end
 
 local function getFullUser(input)
@@ -302,6 +302,12 @@ RS.RenderStepped:Connect(function()
     for _, v in pairs(plrs:GetPlayers()) do
         if v:GetAttribute("group") == lplr:GetAttribute("group") and v:GetAttribute("group") ~= 0 then
             table.insert(teammates, v.Name)
+        end
+    end
+    for i = #teammates, 1, -1 do
+        local mate = teammates[i]
+        if not plrs[mate] or mate:GetAttribute("group") ~= lplr:GetAttribute("group") then
+            table.remove(teammates, i)
         end
     end
 end)
@@ -581,4 +587,3 @@ end)
 tab4.newDropdown("Aimlock Part", "part to aimlock on.", aimparts, function(part)
     aimpart = part
 end)
-    
