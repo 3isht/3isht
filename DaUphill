@@ -1,7 +1,6 @@
 -- TO DO LIST: --
--- mag * (ping * 0.00113)
 -- maybe esp
-print("faster silent lock update.")
+print("added more food options + some stuff added/modified update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -36,10 +35,27 @@ local type = Enum.ThumbnailType.HeadShot
 local size = Enum.ThumbnailSize.Size420x420
 
 function findfood()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name:lower() == "[pizza]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
+    local found = {}
+    local succ, err = pcall(function()
+        for _, v in pairs(game.Workspace:GetDescendants()) do
+            if v.Name:lower() == "[pizza]" and v:FindFirstChildWhichIsA("ClickDetector") then
+                table.insert(found, v)
+            elseif v.Name:lower() == "[burger]" and v:FindFirstChildWhichIsA("ClickDetector") then
+                table.insert(found, v)
+            elseif v.Name:lower() == "[donut]" and v:FindFirstChildWhichIsA("ClickDetector") then
+                table.insert(found, v)
+            elseif v.Name:lower() == "[popcorn]" and v:FindFirstChildWhichIsA("ClickDetector") then
+                table.insert(found, v)
+            elseif v.Name:lower() == "[chicken]" and v:FindFirstChildWhichIsA("ClickDetector") then
+                table.insert(found, v)
+            end
         end
+    end)
+    if succ then
+        return found
+    end
+    if err then
+        print("Unable to find food... ", err)
     end
 end
 function customLayout()
@@ -51,13 +67,13 @@ function customLayout()
 end
 local findarmour = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[High-Medium Armor]" then
+        if v.Name:lower() == "[high-medium armor]" or v.Name:lower() == "[high armor]" then
             return v
         end
     end
     if not Highmed then
         for _, v in pairs(game.Workspace:GetDescendants()) do
-            if v.Name == "[Medium Armor]" then
+            if v.Name:lower() == "[medium armor]" then
                 return v
             end
         end
@@ -234,7 +250,6 @@ end
 local function autoStomp()
     game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
 end
-            
 
 if game.CoreGui:FindFirstChild("DrRay") then
     game.CoreGui:FindFirstChild("DrRay"):Destroy()
@@ -291,9 +306,11 @@ RS.RenderStepped:Connect(function()
         autoStomp()
     end
     if foodspawn then
-        fireclickdetector(food.ClickDetector)
+        for _,v in ipairs(food) do
+            fireclickdetector(v.ClickDetector)
+        end
     end
-    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui.gui["mobile ppl"].rl
+    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("gui")["mobile ppl"].rl
     if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
         rlBtn.Size = UDim2.new(0, 60, 0, 60)
     end
@@ -364,7 +381,6 @@ tab.newButton("Custom Macro View", "", function()
     for i, v in pairs(getsenv(LS)) do
         for _, cons in next, getconstants(getsenv(LS).inout) do
             setconstant(getsenv(LS).inout, 1, m)
-            print("new macro view set: ", m)
         end
     end
 end)
