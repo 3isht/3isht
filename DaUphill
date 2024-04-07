@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("notif icon update.")
+print("working icon (i hope) update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
