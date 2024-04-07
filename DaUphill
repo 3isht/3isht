@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("da fights update reworked.")
+print("added more food options + some stuff added/modified update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -175,13 +175,7 @@ end
 
 local function silentLock(vic)
     spawn(function()
-        for _,v in next, game.workspace:GetDescendants() do
-            if v.Name == vic then
-                silentVic = v
-            else
-                print("Player logged probably...")
-            end
-        end
+        silentVic = game.workspace[vic]
         while task.wait() do
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
@@ -202,11 +196,7 @@ local function startLock(loser)
         while task.wait() do
             if lock then
                 VICTIM = loser
-                for _,v in next, game.workspace:GetDescendants() do
-                    if v.Name == VICTIM then
-                        target = v
-                    end
-                end
+                target = game.Workspace[VICTIM]
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, calcAir(loser), target.UpperTorso.Velocity.Z * prediction)
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
                     if target.UpperTorso then
@@ -292,15 +282,10 @@ RS.RenderStepped:Connect(function()
         setreadonly(mt, false)
         mt.__namecall = newcclosure(function(self, ...)
             local args = {...}
-            if getnamecallmethod() == 'FireServer' and self.Name:upper() == 'MAINEVENT' then
-                if tostring(args[1]):upper() == 'MOUSE' and aim then
-                    for _,v in next, game.workspace:GetDescendants() do
-                        if v.Name == user then
-                            args[2] = v[aimpart].Position
-                        end
-                    end
+            if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
+                if tostring(args[1]) == 'MOUSE' and aim then
+                    args[2] = game.workspace[user][aimpart].Position
                 else
-                    print(args)
                     return old(self, unpack(args))
                 end
             end
