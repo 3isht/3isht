@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
-print("Da fights update.")
+print("True da fights check update.")
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -49,7 +49,7 @@ function customLayout()
 end
 local findarmour = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[High-Medium Armor]" then
+        if v.Name == "[High-Medium Armor]" or v.Name == "[High Armor]" then
             return v
         end
     end
@@ -71,6 +71,34 @@ end
 local findusp = function()
     for _, v in pairs(game.Workspace:GetDescendants()) do
         if v.Name == "[USP]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            return v
+        end
+    end
+end
+local folder = nil
+local Check = function() 
+    for _, v in next, game.workspace:GetChildren() do
+        if v.Name:lower() == "players" or string.sub(v.Name:lower(),1,#"players") == "players" then
+            return true
+        else
+            return false
+        end
+    end
+end
+if Check then
+    folder = function()
+        for _,v in next, game.workspace:GetChildren() do
+            if v.Name:lower() == "players" then
+                return v.Name
+            else 
+                print("Script did not detect the players folder.")
+            end
+        end
+    end
+end
+local rlBtn = function()
+    for _,v in next, game.Players.LocalPlayer.PlayerGui.gui["mobile ppl"]:GetDescendants() do
+        if v.Name == "rl" then
             return v
         end
     end
@@ -135,39 +163,21 @@ local function getFullUser(input)
     end
 end
 
-local folder = nil
-local Check = function() 
-    for _, v in next, game.workspace:GetChildren() do
-        if v.Name:lower() == "players" or string.sub(v.Name:lower(),1,#"players") == "players" then return true else return false end
-    end
-end
-if Check then
-    folder = function()
-        for _,v in next, game.workspace:GetChildren() do
-            if v.Name:lower() == "players" or string.sub(v.Name:lower(),1,#"players") == "players" then
-                return v.Name
-            else 
-                print("Script did not detect the players folder.")
-            end
-        end
-    end
-end
 local function getnear()
     local LocalName = game.Players.LocalPlayer.Name
     local dis = math.huge
     local plr = nil
     local plrs = {}
     for _, v in pairs(game.Players:GetChildren()) do
-        if v ~= game.Players.LocalPlayer and not game.Workspace[v.Name]:GetAttribute("Knocked") and not table.find(teammates, v.Name) then
+        if v ~= game.Players.LocalPlayer and not table.find(teammates, v.Name) then
             table.insert(plrs, v.Name)
         end
     end
     for _, v in ipairs(plrs) do
         local disDiff = (game.Workspace[LocalName].HumanoidRootPart.Position - game.Workspace[v].HumanoidRootPart.Position).magnitude
-        if disDiff < dis then
+        if disDiff < dis and not game.Workspace[v]:GetAttribute("Knocked") then
             dis = disDiff
             plr = game.Workspace[v]
-            
         end
     end
     if plr then
@@ -196,7 +206,7 @@ local function silentLock()
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
                 local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * 0.00146)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * 0.00146)) / 3.75), silentVic.UpperTorso.Velocity.Z * (mag * (ping * 0.00146)))
-                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
+                if (silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name]) or (silentVic and game.Players[silentVic.Name]) then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
                     end
@@ -213,11 +223,11 @@ local function startLock(loser)
             if lock then
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
-                if not target and folder then
+                if not target and Check then
                     target = game.workspace[folder][VICTIM]
                 end
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * prediction, calcAir(loser), target.UpperTorso.Velocity.Z * prediction)
-                if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
+                if (target and not target:GetAttribute("Knocked") and game.Players[target.Name]) or (target and game.Players[target.Name) then
                     if target.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
                     end
@@ -322,14 +332,7 @@ RS.RenderStepped:Connect(function()
     if foodspawn then
         fireclickdetector(food.ClickDetector)
     end
-    local rlBtn = function()
-        for _,v in next, game.Players.LocalPlayer.PlayerGui.gui["mobile ppl"]:GetDescendants() do
-            if v.Name == "rl" then
-                return v
-            end
-        end
-    end
-    if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
+    if rlBtn and rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
         rlBtn.Size = UDim2.new(0, 60, 0, 60)
     end
     local plrs = game.Players
