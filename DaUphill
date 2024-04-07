@@ -1,4 +1,3 @@
-local success, error = pcall(function()
 -- TO DO LIST: --
 -- mag * (ping * 0.00113)
 -- maybe esp
@@ -33,7 +32,7 @@ getgenv().aimparts = { "Head", "UpperTorso", "LowerTorso", "LeftArm", "RightArm"
 local value, ping
 value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
 ping = tonumber(string.split(value, '(')[1])
-local type = Enum.ThumbnailType.Headshot
+local type = Enum.ThumbnailType.HeadShot
 local size = Enum.ThumbnailSize.Size420x420
 
 function findfood()
@@ -216,9 +215,9 @@ end
 
 local function Notif(name, desc, image, dur)
     game.StarterGui:SetCore("SendNotification", {
-        Title = name
-        Text = desc
-        Icon = image
+        Title = name,
+        Text = desc,
+        Icon = image,
         Duration = dur
     })
 end
@@ -373,7 +372,7 @@ tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
         VICTIM = nil
     end
     if bool then
-        Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420), 0.7)
+        Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
     end
     lock = bool
     startLock(user)
@@ -583,8 +582,3 @@ tab4.newDropdown("Aimlock Part", "part to aimlock on.", aimparts, function(part)
     aimpart = part
 end)
     
-end)
-
-if not success then
-    print("Error detected: ".. error)
-end
