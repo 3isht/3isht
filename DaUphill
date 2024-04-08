@@ -1,6 +1,7 @@
 -- TO DO LIST: --
 -- maybe esp
 print("hmmm added more food options + some stuff added/modified update.")
+getgenv().res = 0.00148
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -179,7 +180,7 @@ local function silentLock(vic)
         while task.wait() do
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * 0.00146)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * 0.00146)) / 3.23), silentVic.UpperTorso.Velocity.Z * (mag * (ping * 0.00146)))
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * res)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.23), silentVic.UpperTorso.Velocity.Z * (mag * (ping * res)))
                 if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
                     if silentVic.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
