@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("hmmm added more food options + some stuff added/modified update.")
+print("res added.")
 getgenv().res = 0.00148
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
