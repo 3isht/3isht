@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- maybe esp
 print("res added.")
-getgenv().res = 0.00148
+getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().AutoInfHealth = false;
@@ -25,6 +25,7 @@ getgenv().RS = game:GetService("RunService");
 getgenv().prediction = 0.282;
 getgenv().teammates = {};
 getgenv().m = 8;
+getgenv().n = 6
 getgenv().aim = false;
 getgenv().mag = nil;
 getgenv().aimpart = "UpperTorso"
@@ -259,25 +260,32 @@ if game.CoreGui:FindFirstChild("DrRay") then
     end
 end
 
+local xchange
+local zchange
+
 RS.RenderStepped:Connect(function()
     value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
     ping = tonumber(string.split(value, '(')[1])
     if user ~= nil then
         local succ, err = pcall(function()
-            local aimVic = game.Workspace[user]
-            local vicVelo = aimVic[aimpart].Velocity
-            local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction)
-            pos = Vector3.new(aimVic[aimpart].Position + sum)
+            local hum = game.workspace[user].Humanoid
+            if hum.MoveDirection.X > 0 then
+                xchange = n
+            end
+            if hum.MoveDirection.X < 0 then
+                xchange = -n
+            end
+            if hum.MoveDirection.Z > 0 then
+                zchange = n
+            end
+            if hum.MoveDirection.Z < 0 then
+                zchange = -n
+            end
+            pos = Vector3.new(game.workspace[user][aimpart].Position.X + xchange, game.workspace[user][aimpart].Position.Y, game.workspace[user][aimpart].Position.Z + zchange)
             if err then
                 print("Something went wrong: ", err)
             end
         end)
-        --[[
-        local aimVic = game.Workspace[user].LowerTorso.Position
-        local vicVelo = game.Workspace[user].LowerTorso.Velocity
-        local sum = Vector3.new(vicVelo.X * prediction, 0, vicVelo.Z * prediction)
-        pos = Vector3.new(aimVic + sum)
-        ]]
     end
     if aim then
         setreadonly(mt, false)
