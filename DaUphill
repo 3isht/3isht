@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("lock fix.")
+print("aimlock/lock fixed.")
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
@@ -114,23 +114,6 @@ end
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
 
-local function calcAir(person)
-    local succ, err = pcall(function(person)
-        local highest = Vector3.new(game.Workspace[person].Head.Position.Y + Vector3.new(0,2.3,0))
-        local lowest = Vector3.new(game.Workspace[person].LowerTorso.Position.Y - Vector3.new(0,7.7,0))
-        local normal = Vector3.new(game.Workspace[person].LowerTorso.Position.Y + (game.Workspace[person].LowerTorso.Velocity.Y * (prediction / 2.5)))
-        if normal > highest then
-            normal = highest
-        elseif normal < lowest then
-            normal = lowest
-        end
-        return normal
-    end)
-    if err then
-        print("Something went wrong with airshot calc: ", err)
-    end
-end
-
 local function getFullUser(input)
     user = nil
     local MATCHES = {}
@@ -197,8 +180,7 @@ local function startLock(loser)
     spawn(function()
         while task.wait() do
             if lock then
-                VICTIM = loser
-                target = game.Workspace[VICTIM]
+                target = game.Workspace[loser]
                 mag = target.Humanoid.MoveDirection.Magnitude
                 local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), target.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.23), target.UpperTorso.Velocity.Z * (mag * (ping * res)))
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
@@ -294,7 +276,7 @@ RS.RenderStepped:Connect(function()
             local args = {...}
             if getnamecallmethod() == 'FireServer' and self.Name == 'MAINEVENT' then
                 if tostring(args[1]) == 'MOUSE' and aim then
-                    args[2] = game.workspace[user][aimpart].Position
+                    args[2] = pos
                 else
                     return old(self, unpack(args))
                 end
@@ -434,16 +416,6 @@ tab2.newButton("Teleport To User", "", function()
     normalTp(user)
 end)
 
-tab3.newInput("Macro View", "", function(amt)
-    local num = tonumber(amt)
-    print(num, type(num))
-    if type(num) == "number" then
-        m = num
-        print(m, type(m))
-    else
-        m = 8
-    end
-end)
 tab3.newInput("Camera Lerp Amount", "", function(amt)
     local num = tonumber(amt)
     print(num, type(num))
@@ -596,6 +568,14 @@ tab3.newButton("Kick", "", function()
     local LP = game.Players.LocalPlayer
     if LP then
         LP:Kick("Did you get the last stomp?")
+    end
+end)
+tab4.newInput("Aimlock stud predict", "", function(amt)
+    local num = tonumber(amt)
+    if type(num) == "number" then
+        n = num
+    else
+        n = 6
     end
 end)
 tab4.newToggle("Aimlock", "just a test", false, function(bool)
