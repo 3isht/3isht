@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("lock fix.")
+print("res added.")
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
@@ -200,7 +200,7 @@ local function startLock(loser)
                 VICTIM = loser
                 target = game.Workspace[VICTIM]
                 mag = target.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), target.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.23, target.UpperTorso.Velocity.Z * (mag * (ping * res)))
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), target.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.23), target.UpperTorso.Velocity.Z * (mag * (ping * res)))
                 if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
                     if target.UpperTorso then
                         camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
