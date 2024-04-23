@@ -512,7 +512,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                 end
                 silentBtn.Text = "Unlock Silent"
                 bozo = getnear()
-                Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), game.Players:GetUserThumbnailAsync(game.Players[bozo.Name].UserId, type, size), 0.7)
+                Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), ""), 0.7)
             elseif silent then
                 silent = false
                 UnLockNotif()
