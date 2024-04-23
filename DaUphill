@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("aimlock/lock fixed.")
+print("no thumbnail update.")
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
