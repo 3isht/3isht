@@ -1,6 +1,6 @@
 -- TO DO LIST: --
 -- maybe esp
-print("no thumbnail update.")
+print("no thumbnail update².")
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
@@ -319,9 +319,6 @@ RS.RenderStepped:Connect(function()
             table.remove(teammates, i)
         end
     end
-    for _, v in next, plrs:GetChildren() do
-        plrs:GetUserThumbnailAsync(v.UserId, type, size)
-    end
 end)
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
@@ -512,7 +509,7 @@ tab3.newButton("Silent Lock", "Locks on the closest person.", function()
                 end
                 silentBtn.Text = "Unlock Silent"
                 bozo = getnear()
-                Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), ""), 0.7)
+                Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), "", 0.7)
             elseif silent then
                 silent = false
                 UnLockNotif()
