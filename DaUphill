@@ -1,6 +1,7 @@
 -- TO DO LIST: --
 -- maybe esp
-print("no thumbnail update².")
+-- game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
+print("no thumbnail update.")
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
@@ -25,11 +26,12 @@ getgenv().RS = game:GetService("RunService");
 getgenv().prediction = 0.282;
 getgenv().teammates = {};
 getgenv().m = 8;
-getgenv().n = 6
+getgenv().n = 5.5;
+getgenv().limit = 320;
 getgenv().aim = false;
 getgenv().mag = nil;
 getgenv().aimpart = "UpperTorso"
-getgenv().aimparts = { "Head", "UpperTorso", "LowerTorso", "LeftArm", "RightArm", "LeftLeg", "RightLeg" }
+getgenv().aimparts = { "HumanoidRootPart", "Head", "UpperTorso", "LowerTorso", "LeftArm", "RightArm", "LeftLeg", "RightLeg" }
 local value, ping
 value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
 ping = tonumber(string.split(value, '(')[1])
@@ -42,13 +44,17 @@ function findfood()
         for _, v in pairs(game.Workspace:GetDescendants()) do
             if v.Name:lower() == "[pizza]" and v:FindFirstChildWhichIsA("ClickDetector") then
                 table.insert(found, v)
-            elseif v.Name:lower() == "[burger]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            end
+            if v.Name:lower() == "[burger]" and v:FindFirstChildWhichIsA("ClickDetector") then
                 table.insert(found, v)
-            elseif v.Name:lower() == "[donut]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            end
+            if v.Name:lower() == "[donut]" and v:FindFirstChildWhichIsA("ClickDetector") then
                 table.insert(found, v)
-            elseif v.Name:lower() == "[popcorn]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            end
+            if v.Name:lower() == "[popcorn]" and v:FindFirstChildWhichIsA("ClickDetector") then
                 table.insert(found, v)
-            elseif v.Name:lower() == "[chicken]" and v:FindFirstChildWhichIsA("ClickDetector") then
+            end
+            if v.Name:lower() == "[chicken]" and v:FindFirstChildWhichIsA("ClickDetector") then
                 table.insert(found, v)
             end
         end
@@ -194,17 +200,6 @@ local function startLock(loser)
     end)
 end
 
-game.Workspace.ChildAdded:Connect(function(new)
-    if new.Name == user then
-        startLock(user)
-    end
-    if new.Name == "Part" then
-        for i,v in next, new:GetDescendants() do
-            print(i,v,v.ClassName)
-        end
-    end
-end)
-
 local function normalTp(username)
     local LPN = game.Players.LocalPlayer.Name
     local LP = game.Workspace[LPN]
@@ -249,6 +244,9 @@ local zchange
 RS.RenderStepped:Connect(function()
     value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
     ping = tonumber(string.split(value, '(')[1])
+    if ping > limit then
+        ping = limit
+    end
     if user ~= nil then
         local succ, err = pcall(function()
             local hum = game.workspace[user].Humanoid
@@ -564,7 +562,7 @@ end)
 tab3.newButton("Kick", "", function()
     local LP = game.Players.LocalPlayer
     if LP then
-        LP:Kick("Did you get the last stomp?")
+        LP:Kick("Dipped, GG.")
     end
 end)
 tab4.newInput("Aimlock stud predict", "", function(amt)
@@ -572,7 +570,7 @@ tab4.newInput("Aimlock stud predict", "", function(amt)
     if type(num) == "number" then
         n = num
     else
-        n = 6
+        n = 5.5
     end
 end)
 tab4.newToggle("Aimlock", "just a test", false, function(bool)
