@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- maybe esp
 -- game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
-print("no thumbnail update.")
+print("better lock and anti lock update.")
 getgenv().smooth = false;
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
