@@ -75,7 +75,7 @@ function ANTI()
     hrp.Velocity = Vector3.new(vel.X, -80, vel.Z)
     hrp.Velocity = Vector3.new(vel.X, vel.Y, vel.Z)
     hrp.Velocity = Vector3.new(vel.X, -80, vel.Z)
-    hrp.HipHeight = 3
+    game.Players.LocalPlayer.Character.Humanoid.HipHeight = 2.80
 end
 function customLayout()
     local me = game.Players.LocalPlayer
