@@ -1,7 +1,8 @@
 -- TO DO LIST: --
 -- maybe esp
 -- game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
-print("better lock and anti lock update.")
+print("Antilock stuff.")
+getgenv().antilock = false;
 getgenv().smooth = false;
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
@@ -68,14 +69,6 @@ function findfood()
     if err then
         print("Unable to find food... ", err)
     end
-end
-function ANTI()
-    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-    local vel = hrp.Velocity 
-    hrp.Velocity = Vector3.new(vel.X, -80, vel.Z)
-    hrp.Velocity = Vector3.new(vel.X, vel.Y, vel.Z)
-    hrp.Velocity = Vector3.new(vel.X, -80, vel.Z)
-    game.Players.LocalPlayer.Character.Humanoid.HipHeight = 2.80
 end
 function customLayout()
     local me = game.Players.LocalPlayer
@@ -276,7 +269,15 @@ game.Players.LocalPlayer.Chatted:Connect(function(message)
         else return end
     end
 end)
-
+RS.RenderStepped:Connect(function()
+    if antilock then
+        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+        local vel = hrp.Velocity
+        hrp.Velocity = Vector3.new(0,0,(4^9))
+        RS.RenderStepped:Wait()
+        hrp.Velocity = vel
+    end
+end)
 RS.RenderStepped:Connect(function()
     value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
     ping = tonumber(string.split(value, '(')[1])
@@ -448,12 +449,7 @@ tab3.newToggle("Camlock Smoothing", "", false, function(bool)
     smooth = bool
 end)
 tab3.newToggle("Anti-Lock", "", false, function(bool)
-    if bool then
-        RS.RenderStepped:Connect(ANTI)
-    end
-    if not bool then
-        RS.RenderStepped:Disconnect(ANTI)
-    end
+    antilock = bool
 end)
 tab3.newInput("Smoothing amount", "", function(amt)
     local num = tonumber(amt)
