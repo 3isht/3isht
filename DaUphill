@@ -2,9 +2,12 @@
 -- maybe esp
 -- game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
 print("no thumbnail update.")
+getgenv().antilock = false;
+getgenv().smooth = false;
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
+getgenv().resolve = false;
 getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
 getgenv().stomp = false;
@@ -19,9 +22,10 @@ getgenv().camera = game.Workspace.CurrentCamera;
 getgenv().user = nil;
 getgenv().VICTIM = nil;
 getgenv().silentVic = nil;
+getgenv().SA = 0.5
 getgenv().TS = game.TweenService;
-getgenv().tweeninfo = TweenInfo.new(0.5);
-getgenv().camLerp = 0.536;
+getgenv().TI = TweenInfo.new(SA, Enum.EasingStyle.Quad);
+getgenv().camLerp = 0.463;
 getgenv().RS = game:GetService("RunService");
 getgenv().prediction = 0.282;
 getgenv().teammates = {};
@@ -109,6 +113,7 @@ getgenv().food = findfood()
 local mt = getrawmetatable(game)
 local pos
 local old = mt.__namecall
+local T
 
 local function autoBuyArmour()
     local me = game.Players.LocalPlayer.Name
@@ -119,28 +124,19 @@ end
 
 -- CHATSPY
 loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
+-- ANTI CHAT LOGGER
+loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
 
-local function getFullUser(input)
-    user = nil
-    local MATCHES = {}
-    local PLAYERS = game.Workspace:GetChildren()
-    local LEN = #input
-    if input == "" or input == " " then user = nil return end
+local function getuser(input)
+    local PLAYERS = game.Players:GetChildren()
+    if input == "" or input == " " then return end
     for _, PLAYER in ipairs(PLAYERS) do
         local PLR = PLAYER.Name:lower()
+        local DISPLAY = PLAYER.DisplayName:lower()
         local INP = input:lower()
-        if string.sub(PLR,1,#INP) == INP and PLAYER:FindFirstChild("Humanoid") then
-            table.insert(MATCHES, PLAYER.Name)
+        if string.sub(PLR,1,#INP) == INP or string.sub(DISPLAY,1,#INP) == INP then
+            return PLAYER.Name
         end
-    end
-    if #MATCHES > 0 then
-        if MATCHES[1] ~= game.Players.LocalPlayer.Name then
-            user = MATCHES[1]
-        end
-        return user
-    else
-        user = nil
-        return user
     end
 end
 
@@ -170,12 +166,26 @@ local function silentLock(vic)
         while task.wait() do
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * res)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.23), silentVic.UpperTorso.Velocity.Z * (mag * (ping * res)))
-                if silentVic and not silentVic:GetAttribute("Knocked") and game.Players[silentVic.Name] then
-                    if silentVic.UpperTorso then
-                        camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, silentVic.UpperTorso.Position + TargetVelocity), camLerp)
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * res)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.44), silentVic.UpperTorso.Velocity.Z * (mag * (ping * res)))
+                if silentVic and game.Players[silentVic.Name] and not silentVic:GetAttribute("Knocked") then
+                    if not resolve then
+                        if smooth then
+                            T = TS:Create(camera, TI, {CFrame = CFrame.new(silentVic.UpperTorso.CFrame + TargetVelocity)})
+                        else
+                            camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
+                        end
+                    else
+                        if smooth then
+                            T = TS:Create(camera.CFrame.p, TI, ((silentVic.FakeLimbs.Head.Position - Vector3.new(0,1.7,0)) + TargetVelocity))
+                            T:Play()
+                        else
+                            camera.CFrame = CFrame.new(camera.CFrame.p, ((silentVic.FakeLimbs.Head.Position - Vector3.new(0,1.7,0)) + TargetVelocity))
+                        end
                     end
                 end
+            end
+            if silent and smooth then
+                T:Play()
             end
             if not silent then break end
         end
@@ -186,12 +196,17 @@ local function startLock(loser)
     spawn(function()
         while task.wait() do
             if lock then
-                target = game.Workspace[loser]
+                target = game.Players[loser].Character
+                if target == nil then
+                    target = game.Workspace[loser]
+                end
                 mag = target.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), target.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.23), target.UpperTorso.Velocity.Z * (mag * (ping * res)))
-                if target and not target:GetAttribute("Knocked") and game.Players[target.Name] then
-                    if target.UpperTorso then
-                        camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.Position, target.UpperTorso.Position + TargetVelocity), camLerp)
+                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), target.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.44), target.UpperTorso.Velocity.Z * (mag * (ping * res)))
+                if target and game.Players[target.Name] and not target:GetAttribute("Knocked") then
+                    if not resolve then
+                        camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
+                    else
+                        camera.CFrame = CFrame.new(camera.CFrame.p, ((target.FakeLimbs.Head.Position - Vector3.new(0,1.7,0)) + TargetVelocity))
                     end
                 end
             end
@@ -200,10 +215,10 @@ local function startLock(loser)
     end)
 end
 
-local function normalTp(username)
+local function normalTp(person)
     local LPN = game.Players.LocalPlayer.Name
     local LP = game.Workspace[LPN]
-    local VP = game.Workspace[username]
+    local VP = game.Workspace[person.Name]
     if LP.HumanoidRootPart and VP.HumanoidRootPart then
         LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
     end
@@ -241,6 +256,28 @@ end
 local xchange
 local zchange
 
+game.Players.LocalPlayer.Chatted:Connect(function(message)
+    local msg = string.split(message," ")
+    local cmd = msg[1]
+    local name = msg[2]
+    if cmd == ".ws" then
+        local plr = getuser(name)
+        if not teammates[plr] then
+            table.insert(teammates, plr)
+            Notify("Whitelist", plr.. " has been whitelisted!", "", 0.7)
+            for i,v in next, teammates do print(v) end
+        else return end
+    end
+end)
+RS.RenderStepped:Connect(function()
+    if antilock then
+        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+        local vel = hrp.Velocity
+        hrp.Velocity = Vector3.new(0,0,(4^9))
+        RS.RenderStepped:Wait()
+        hrp.Velocity = vel
+    end
+end)
 RS.RenderStepped:Connect(function()
     value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
     ping = tonumber(string.split(value, '(')[1])
@@ -302,7 +339,7 @@ RS.RenderStepped:Connect(function()
     end
     local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("gui")["mobile ppl"].rl
     if rlBtn.Size ~= UDim2.new(0, 60, 0, 60) then
-        rlBtn.Size = UDim2.new(0, 60, 0, 60)
+        rlBtn.Size = UDim2.new(0, 70, 0, 70)
     end
     local plrs = game.Players
     local lplr = plrs.LocalPlayer
@@ -311,16 +348,10 @@ RS.RenderStepped:Connect(function()
             table.insert(teammates, v.Name)
         end
     end
-    for i = #teammates, 1, -1 do
-        local mate = teammates[i]
-        if not plrs[mate] or mate:GetAttribute("group") ~= lplr:GetAttribute("group") then
-            table.remove(teammates, i)
-        end
-    end
 end)
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
-local window = lib:Load("Made By Tariq", "Default")
+local window = lib:Load(game.Players.LocalPlayer.DisplayName, "Default")
 local tab = lib.newTab("Main", "")
 local tab2 = lib.newTab("Target", "")
 local tab3 = lib.newTab("Player", "")
@@ -376,7 +407,7 @@ tab.newButton("USP and Tact SG", "", function()
     fireclickdetector(tact.ClickDetector)
 end)
 tab2.newInput("Username", "Username to lock on.", function(inp)
-    getFullUser(inp)
+    user = getuser(inp)
 end)
 tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     if not bool then
@@ -384,7 +415,7 @@ tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
         VICTIM = nil
     end
     if bool then
-        Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
+        Notif("Lock Notif", "Locked on: "..user, "", 0.7)
     end
     lock = bool
     startLock(user)
@@ -411,25 +442,26 @@ tab2.newButton("Teleport To User", "", function()
     normalTp(user)
 end)
 
-tab3.newInput("Camera Lerp Amount", "", function(amt)
+tab3.newToggle("Camlock Resolver", "Still fixing it.", false, function(bool)
+    resolve = bool
+end)
+tab3.newToggle("Camlock Smoothing", "", false, function(bool)
+    smooth = bool
+end)
+tab3.newToggle("Anti-Lock", "", false, function(bool)
+    antilock = bool
+end)
+tab3.newInput("Smoothing amount", "", function(amt)
     local num = tonumber(amt)
-    print(num, type(num))
-    if type(num) == "number" then
-        camLerp = num
-        print(camLerp, type(camLerp))
-    else
-        camLerp = 0.462
-    end
+    SA = num
 end)
 tab3.newInput("Prediction Amount", "", function(amt)
-    local num = tonumber(amt)
-    print(num, type(num))
-    if type(num) == "number" then
-        prediction = num
-        print(prediction, type(prediction))
-    else
-        prediction = 0.282
+    if amt == "def" then
+        amt = 1473
     end
+    local num = tonumber(0.00 .. amt)
+    print(num)
+    res = num
 end)
 tab3.newButton("Lock Button", "Creates a new lock button.", function()
     if not game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
@@ -450,9 +482,8 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
         corner.CornerRadius = UDim.new(0,10)
         corner.Name = "CORNER"
         
-        local slockbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
-        
         btn.MouseButton1Click:Connect(function()
+            local slockbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
             if lock then
                 lock = false
                 UnLockNotif()
@@ -461,7 +492,7 @@ tab3.newButton("Lock Button", "Creates a new lock button.", function()
             elseif not lock and user then
                 if game.Players[user] then
                     lock = true
-                    Notif("Lock Notif", "Locked on: "..user, game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
+                    Notif("Lock Notif", "Locked on: "..user, "", 0.7)
                     btn.Text = "Unlock"
                     if slockbtn then
                         silent = false
