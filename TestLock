@@ -4,7 +4,7 @@
 print("Antilock stuff.")
 getgenv().antilock = false;
 getgenv().smooth = false;
-getgenv().res = 0.001473
+getgenv().res = 0.001476
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().resolve = false;
