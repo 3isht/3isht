@@ -1,10 +1,10 @@
 -- TO DO LIST: --
 -- maybe esp
 -- game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
-print("Antilock stuff.")
+print("anti lock update.")
 getgenv().antilock = false;
 getgenv().smooth = false;
-getgenv().res = 0.001476
+getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().resolve = false;
@@ -41,6 +41,39 @@ value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueSt
 ping = tonumber(string.split(value, '(')[1])
 local type = Enum.ThumbnailType.HeadShot
 local size = Enum.ThumbnailSize.Size420x420
+
+-- Anti lock stuff
+getgenv().AntiDirection = "Behind"
+getgenv().Direction = nil
+
+if getgenv().AntiDirection == "Behind" then
+    getgenv().Direction = Vector3.new(0, 0, -1)
+elseif getgenv().AntiDirection == "Down" then
+    getgenv().Direction = Vector3.new(0, -1, 0)
+elseif getgenv().AntiDirection == "Forward" then
+    getgenv().Direction = Vector3.new(0, 0, 1)
+elseif getgenv().AntiDirection == "Left" then
+    getgenv().Direction = Vector3.new(-1, 0, 0)
+elseif getgenv().AntiDirection == "One" then
+    getgenv().Direction = Vector3.new(1, 1, 1)
+elseif getgenv().AntiDirection == "Right" then
+    getgenv().Direction = Vector3.new(1, 0, 0)
+elseif getgenv().AntiDirection == "Up" then
+    getgenv().Direction = Vector3.new(0, 1, 0)
+elseif getgenv().AntiDirection == "Zero" then
+    getgenv().Direction = Vector3.new(0, 0, 0)
+end
+
+
+game:GetService("RunService").Heartbeat:Connect(function()
+    if getgenv().antilock then
+    local abc = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = getgenv().Direction * (2^16)
+        game:GetService("RunService").RenderStepped:Wait()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = abc
+    end
+end)
+
 
 function findfood()
     local found = {}
@@ -270,15 +303,6 @@ game.Players.LocalPlayer.Chatted:Connect(function(message)
     end
 end)
 RS.RenderStepped:Connect(function()
-    if antilock then
-        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-        local vel = hrp.Velocity
-        hrp.Velocity = Vector3.new(0,0,(4^9))
-        RS.RenderStepped:Wait()
-        hrp.Velocity = vel
-    end
-end)
-RS.RenderStepped:Connect(function()
     value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
     ping = tonumber(string.split(value, '(')[1])
     if ping > limit then
@@ -448,8 +472,11 @@ end)
 tab3.newToggle("Camlock Smoothing", "", false, function(bool)
     smooth = bool
 end)
-tab3.newToggle("Anti-Lock", "", false, function(bool)
+tab3.newToggle("Anti-lock", "", false, function(bool)
     antilock = bool
+end)
+tab3.newDropdown("Anti-lock's direction", "direction to anti lock.", { "Forward", "Behind", "Up", "Down", "Right", "Left", "One", "Zero" }, function(pick)
+    AntiDirection = pick
 end)
 tab3.newInput("Smoothing amount", "", function(amt)
     local num = tonumber(amt)
@@ -457,9 +484,9 @@ tab3.newInput("Smoothing amount", "", function(amt)
 end)
 tab3.newInput("Prediction Amount", "", function(amt)
     if amt == "def" then
-        amt = 1473
+        amt = 0.001473
     end
-    local num = tonumber(0.00 .. amt)
+    local num = tonumber(amt)
     print(num)
     res = num
 end)
