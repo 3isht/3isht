@@ -1,7 +1,4 @@
--- TO DO LIST: --
--- maybe esp
--- game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
-print("resolver update.")
+print("new anti-lock and resolver update.")
 getgenv().antilock = false;
 getgenv().smooth = false;
 getgenv().res = 0.001473
@@ -67,10 +64,13 @@ end
 
 game:GetService("RunService").Heartbeat:Connect(function()
     if getgenv().antilock then
-    local abc = game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = getgenv().Direction * (2^16)
-        game:GetService("RunService").RenderStepped:Wait()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity = abc
+        print("Anti-lock on.")
+        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+        local abc, cf = hrp.AssemblyLinearVelocity, hrp.CFrame
+        hrp.AssemblyLinearVelocity = getgenv().Direction * (2^16)
+        hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+        RS.RenderStepped:Wait()
+        hrp.AssemblyLinearVelocity = abc
     end
 end)
 
@@ -199,12 +199,12 @@ local function silentLock(vic)
         while task.wait() do
             if silent then
                 mag = silentVic.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * res)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.44), silentVic.UpperTorso.Velocity.Z * (mag * (ping * res)))
+                local TargetVelocity = Vector3.new(silentVic.UpperTorso.AssemblyLinearVelocity.X * (mag * (ping * res)), silentVic.UpperTorso.AssemblyLinearVelocity.Y * ((mag * (ping * res)) / 3.44), silentVic.UpperTorso.AssemblyLinearVelocity.Z * (mag * (ping * res)))
                 if silentVic and game.Players[silentVic.Name] and not silentVic:GetAttribute("Knocked") then
                     if not resolve then
                         camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
                     else
-                        TargetVelocity = Vector3.new(silentVic.HumanoidRootPart.Velocity.X * (mag * (ping * res)), 0, silentVic.HumanoidRootPart.Velocity.Z * (mag * (ping * res)))
+                        TargetVelocity = Vector3.new(silentVic.UpperTorso.AssemblyLinearVelocity.X * (mag * (ping * res)), 0, silentVic.UpperTorso.AssemblyLinearVelocity.Z * (mag * (ping * res)))
                         camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
                     end
                 end
@@ -226,12 +226,12 @@ local function startLock(loser)
                     target = game.Workspace[loser]
                 end
                 mag = target.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), target.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.44), target.UpperTorso.Velocity.Z * (mag * (ping * res)))
+                local TargetVelocity = Vector3.new(target.UpperTorso.AssemblyLinearVelocity.X * (mag * (ping * res)), target.UpperTorso.AssemblyLinearVelocity.Y * ((mag * (ping * res)) / 3.44), target.UpperTorso.AssemblyLinearVelocity.Z * (mag * (ping * res)))
                 if target and game.Players[target.Name] and not target:GetAttribute("Knocked") then
                     if not resolve then
                         camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
                     else
-                        TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), 0, target.UpperTorso.Velocity.Z * (mag * (ping * res)))
+                        TargetVelocity = Vector3.new(target.UpperTorso.AssemblyLinearVelocity.X * (mag * (ping * res)), 0, target.UpperTorso.AssemblyLinearVelocity.Z * (mag * (ping * res)))
                         camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
                     end
                 end
