@@ -1,7 +1,7 @@
 -- TO DO LIST: --
 -- maybe esp
 -- game.Players:GetUserThumbnailAsync(game.Players[user].UserId, type, size), 0.7)
-print("anti lock update.")
+print("resolver update.")
 getgenv().antilock = false;
 getgenv().smooth = false;
 getgenv().res = 0.001473
@@ -202,18 +202,10 @@ local function silentLock(vic)
                 local TargetVelocity = Vector3.new(silentVic.UpperTorso.Velocity.X * (mag * (ping * res)), silentVic.UpperTorso.Velocity.Y * ((mag * (ping * res)) / 3.44), silentVic.UpperTorso.Velocity.Z * (mag * (ping * res)))
                 if silentVic and game.Players[silentVic.Name] and not silentVic:GetAttribute("Knocked") then
                     if not resolve then
-                        if smooth then
-                            T = TS:Create(camera, TI, {CFrame = CFrame.new(silentVic.UpperTorso.CFrame + TargetVelocity)})
-                        else
-                            camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
-                        end
+                        camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
                     else
-                        if smooth then
-                            T = TS:Create(camera.CFrame.p, TI, ((silentVic.FakeLimbs.Head.Position - Vector3.new(0,1.7,0)) + TargetVelocity))
-                            T:Play()
-                        else
-                            camera.CFrame = CFrame.new(camera.CFrame.p, ((silentVic.FakeLimbs.Head.Position - Vector3.new(0,1.7,0)) + TargetVelocity))
-                        end
+                        TargetVelocity = Vector3.new(silentVic.HumanoidRootPart.Velocity.X * (mag * (ping * res)), 0, silentVic.HumanoidRootPart.Velocity.Z * (mag * (ping * res)))
+                        camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
                     end
                 end
             end
@@ -239,7 +231,8 @@ local function startLock(loser)
                     if not resolve then
                         camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
                     else
-                        camera.CFrame = CFrame.new(camera.CFrame.p, ((target.FakeLimbs.Head.Position - Vector3.new(0,1.7,0)) + TargetVelocity))
+                        TargetVelocity = Vector3.new(target.UpperTorso.Velocity.X * (mag * (ping * res)), 0, target.UpperTorso.Velocity.Z * (mag * (ping * res)))
+                        camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
                     end
                 end
             end
