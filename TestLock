@@ -1,12 +1,11 @@
-print("new anti-lock and resolver update.")
-getgenv().ResolveVelocity = 2
+print("better resolver update.")
+getgenv().ResolveVelocity = Vector3.new(3,0,3)
 getgenv().antilock = false;
 getgenv().smooth = false;
 getgenv().res = 0.001473
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
 getgenv().resolve = false;
-getgenv().AutoInfHealth = false;
 getgenv().autoRst = false;
 getgenv().stomp = false;
 getgenv().tp = false;
@@ -205,6 +204,15 @@ local function silentLock(vic)
                     if not resolve then
                         camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
                     else
+                        if silentVic.Humanoid.MoveDirection.X > 0 then
+                            ResolveVelocity.X = ResolveVelocity.X
+                        elseif silentVic.Humanoid.MoveDirection.X < 0 then
+                            ResolveVelocity.X = -ResolveVelocity.X then
+                            elseif silentVic.Humanoid.MoveDirection.Z < 0 then
+                                ResolveVelocity.Z = ResolveVelocity.Z
+                            elseif silentVic.Humanoid.MoveDirection.Z > 0 then
+                                ResolveVelocity.Z = -ResolveVelocity.Z
+                            end
                         TargetVelocity = Vector3.new(ResolveVelocity * (mag * (ping * res)), 0, ResolveVelocity * (mag * (ping * res)))
                         camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
                     end
