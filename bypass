@@ -3,8 +3,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/antho
 wait()
 local chatService, players = game:GetService("Chat"), game:GetService("Players")
 
-getgenv().word = "RAPE￰"
-
 local custom_chars = {
     [" "] = "￰",
     ["i"] = "і",
@@ -65,7 +63,7 @@ old = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
             local rep = string.gsub(newMessage, i, v .. "⁥")
             newMessage = rep
         end
-        newMessage = word .. "￰" .. newMessage .. default
+        newMessage = "RAPE" .. newMessage .. default
 
         args[1] = newMessage
         coroutine.wrap(c)
