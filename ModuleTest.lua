@@ -1,8 +1,8 @@
 local module = {}
 
-function module.lockButton()
+function module.lockButton(name)
     local btn = Instance.new("TextButton")
-    btn.Name = "LButton"
+    btn.Name = name
     btn.Parent = game:GetService("CoreGui"):FindFirstChild("ButtonHandler")
     btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
     btn.BorderSizePixel = 0
@@ -19,9 +19,9 @@ function module.lockButton()
     corner.Name = "CORNER"
 end
 
-function module.silentButton()
+function module.silentButton(name)
     local silentBtn = Instance.new("TextButton")
-    silentBtn.Name = "SilentButton"
+    silentBtn.Name = name
     silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
     silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
     silentBtn.BorderSizePixel = 0
@@ -42,9 +42,9 @@ function module.silentButton()
     local lockbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
 end
 
-function module.armourButton()
+function module.armourButton(name)
     local armBtn = Instance.new("TextButton")
-    armBtn.Name = "AButton"
+    armBtn.Name = name
     armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
     armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
     armBtn.BorderSizePixel = 0
