@@ -42,4 +42,23 @@ function module.silentButton()
     local lockbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
 end
 
+function module.armourButton()
+    local armBtn = Instance.new("TextButton")
+    armBtn.Name = "AButton"
+    armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
+    armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
+    armBtn.BorderSizePixel = 0
+    armBtn.Position = UDim2.new(0, 757, 0, -3)
+    armBtn.Size = UDim2.new(0, 85, 0, 42.5)
+    armBtn.Font = Enum.Font.GothamBlack
+    armBtn.Text = "Auto Armour"
+    armBtn.TextColor3 = Color3.new(1, 1, 1)
+    armBtn.TextSize = 12
+        
+    local corner = Instance.new("UICorner")
+    corner.Parent = armBtn
+    corner.CornerRadius = UDim.new(0,10)
+    corner.Name = "CORNER"
+end
+
 return module
