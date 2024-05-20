@@ -5,7 +5,7 @@ getgenv().ResolveVelocity = Vector3.new(ResolveX,0,ResolveZ)
 getgenv().antilock = false;
 getgenv().smooth = false;
 getgenv().dot = false
-getgenv().smoothen = 0.7734
+getgenv().smoothen = 0.7834
 getgenv().res = 0.001476
 getgenv().AutoHighArm = false;
 getgenv().lock = false;
@@ -479,6 +479,9 @@ tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
     end
     lock = bool
     startLock(user)
+end)
+tab2.newToggle("Lock Dot", "Puts a dot on the targeted player.", false, function(bool)
+    dot = bool
 end)
 tab2.newToggle("View Player", "Views selected player.", false, function(bool)
     VIEW = bool
