@@ -29,7 +29,7 @@ function module.silentButton(name)
     silentBtn.Position = UDim2.new(0, 630, 0, -15)
     silentBtn.Size = UDim2.new(0, 100, 0, 50)
     silentBtn.Font = Enum.Font.GothamBlack
-    silentBtn.Text = "Silent Lock"
+    silentBtn.Text = "Silent lock"
     silentBtn.TextColor3 = Color3.new(1,1,1)
     silentBtn.TextSize = 16
     silentBtn.TextTransparency = 0.132
