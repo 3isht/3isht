@@ -1,678 +1,556 @@
-print("better resolver update.")
-getgenv().ResolveX = 150
-getgenv().ResolveZ = 150
-getgenv().ResolveVelocity = Vector3.new(ResolveX,0,ResolveZ)
-getgenv().antilock = false;
-getgenv().smooth = false;
-getgenv().dot = false
-getgenv().smoothen = 0.7834
-getgenv().res = 0.001476
-getgenv().AutoHighArm = false;
-getgenv().lock = false;
-getgenv().resolve = false;
-getgenv().autoRst = false;
-getgenv().stomp = false;
-getgenv().tp = false;
-getgenv().silent = false;
-getgenv().FLING = false;
-getgenv().VIEW = false;
-getgenv().customUI = false;
-getgenv().customMv = false;
-getgenv().foodspawn = false;
-getgenv().camera = game.Workspace.CurrentCamera;
-getgenv().user = nil;
-getgenv().VICTIM = nil;
-getgenv().silentVic = nil;
-getgenv().TS = game.TweenService;
-getgenv().camLerp = 0.463;
-getgenv().RS = game:GetService("RunService");
-getgenv().prediction = 0.282;
-getgenv().teammates = {};
-getgenv().m = 8;
-getgenv().n = 5.5;
-getgenv().limit = 320;
-getgenv().aim = false;
-getgenv().mag = nil;
-getgenv().aimpart = "UpperTorso"
-getgenv().aimparts = { "HumanoidRootPart", "Head", "UpperTorso", "LowerTorso", "LeftArm", "RightArm", "LeftLeg", "RightLeg" }
-local value, ping
-value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-ping = tonumber(string.split(value, '(')[1])
-local type = Enum.ThumbnailType.HeadShot
-local size = Enum.ThumbnailSize.Size420x420
+getgenv().settings = {
+    ["Aimlock"] = false, -- Aimlock toggle.
+    ["AimlockPrediction"] = 5.3, -- Aimlock prediction
+    ["Aimpart"] = "UpperTorso",-- Aimpart for lock --\\ Head | UpperTorso | LowerTorso | etc... //-- 
+    ["Aimparts"] = { "Head", "UpperTorso","LowerTorso", "HumanoidRootPart" },
+    ["AntiPosition"] = "Sky", -- Sky|Ground|Prediction
+    -- \\ Locates it up in the Sky | Underground | Trolls The Locker | Disables the locker's prediction //
+    ["Antilock"] = false, -- Anti Lock toggle.
+    ["AutoArmour"] = false, -- Auto Buys Armour
+    ["AutoFood"] = false, -- Auto Buys Food toggle.
+    ["AutoPredict"] = true, -- Automatically predicts correctly (HIGHLY RECOMMENDED).
+    ["AutoPrediction"] = 0.001533, -- Automatic camlock prediction based on ping (RECOMMENDED).
+    ["AutoStomp"] = false, -- Auto Stomps toggle.
+    ["AutoStompDelay"] = 0, -- Auto Stomp Delay \\ 0 = no delay // (Seconds).
+    ["Camlock"] = false, -- CamLock toggle.
+    ["Dot"] = false, -- Creates a dot on "Target".
+    ["Prediction"] = 0.267, -- Manual camlock prediction.
+    ["Resolver"] = false, -- Anti-Lock Resolver.
+    ["ResolverType"] = "Recalculate velocity", -- Recalculate velocity|Move Direction|Zero
+    ["Scriptable"] = false, -- Maybe a better camlock update? 🗣🔥‼️
+    ["Silent"] = false, -- Silent CamLock toggle.
+    ["Smoothing"] = false, -- Smoothes camlock camera movement.
+    ["SmoothingAmount"] = 0.721, -- Smooth amount << Higher = Slower >>
+    ["Target"] = nil, -- Person targeted.
+    ["SilentVictim"] = "", -- Silent CamLock Target.
+    ["view"] = false, -- View toggle.
+    ["whitelist"] = {}, -- Whitelisted players.
+    ["AutoTactical"] = false, -- Auto buys tactical.
+    ["RefreshRate"] = 30 -- Resolver refresh rate.
+}
+local ButtonsModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/ModuleTest.lua"))()
+local me = game.Players.LocalPlayer
+local rs = game:GetService("RunService")
+local cc = game.workspace.CurrentCamera
+settings.offset = 2.77
+local value, ping, armour, lockbutton, silentbutton, armourbutton, basket, tac, usp, sg
+local oldPos, oldTick = Vector3.new(0,0,0), tick()
 
-local Dot = Drawing.new("Circle")
-Dot.Visible = false
-Dot.Filled = true
-Dot.Thickness = 1
-Dot.Radius = 3
-Dot.Color = Color3.fromRGB(0,190,210)
+local dot = Drawing.new("Circle")
+dot.Visible = false
+dot.Filled = true
+dot.Thickness = 1
+dot.Radius = 3
+dot.Color = Color3.fromRGB(175,30,0)
 
--- Anti lock stuff
-getgenv().AntiDirection = "Behind"
-getgenv().Direction = nil
-
-if getgenv().AntiDirection == "Behind" then
-    getgenv().Direction = Vector3.new(0, 0, -1)
-elseif getgenv().AntiDirection == "Down" then
-    getgenv().Direction = Vector3.new(0, -1, 0)
-elseif getgenv().AntiDirection == "Forward" then
-    getgenv().Direction = Vector3.new(0, 0, 1)
-elseif getgenv().AntiDirection == "Left" then
-    getgenv().Direction = Vector3.new(-1, 0, 0)
-elseif getgenv().AntiDirection == "One" then
-    getgenv().Direction = Vector3.new(1, 1, 1)
-elseif getgenv().AntiDirection == "Right" then
-    getgenv().Direction = Vector3.new(1, 0, 0)
-elseif getgenv().AntiDirection == "Up" then
-    getgenv().Direction = Vector3.new(0, 1, 0)
-elseif getgenv().AntiDirection == "Zero" then
-    getgenv().Direction = Vector3.new(0, 0, 0)
+function autostomp()
+    if not settings["AutoStomp"] then return end
+    repeat
+        game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
+        if settings["AutoStompDelay"] > 0 then
+            task.wait(settings["AutoStompDelay"])
+        end
+    until not settings["AutoStomp"]
 end
 
-
-game:GetService("RunService").Heartbeat:Connect(function()
-    if getgenv().antilock then
-        print("Anti-lock on.")
-        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-        local abc, cf = hrp.AssemblyLinearVelocity, hrp.CFrame
-        hrp.AssemblyLinearVelocity = getgenv().Direction * (2^16)
-        hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
-        RS.RenderStepped:Wait()
-        hrp.AssemblyLinearVelocity = abc
+function getarmour()
+    for _, child in game.workspace:GetDescendants() do
+        if child.Name:lower() == "[high-medium armor]" and child:FindFirstChildWhichIsA("ClickDetector") then
+            return child end
+        if child.Name:lower() == "[medium armor]" and child:FindFirstChildWhichIsA("ClickDetector") then
+            return child end
     end
-end)
+end
+function gettac()
+    for _,child in game.workspace:GetDescendants() do
+        if child.Name:lower() == "[tactical shotgun]" and child:FindFirstChildWhichIsA("ClickDetector") then
+            return child end
+    end
+end
+armour = getarmour()
+tac = gettac()
 
-
-function findfood()
-    local found = {}
+-- Returns a table.
+function getfood()
+    local f = {}
     local succ, err = pcall(function()
-        for _, v in pairs(game.Workspace:GetDescendants()) do
+        for _, v in next, game.workspace:GetDescendants() do
             if v.Name:lower() == "[pizza]" and v:FindFirstChildWhichIsA("ClickDetector") then
-                table.insert(found, v)
+                table.insert(f, v)
             end
             if v.Name:lower() == "[burger]" and v:FindFirstChildWhichIsA("ClickDetector") then
-                table.insert(found, v)
+                table.insert(f, v)
             end
             if v.Name:lower() == "[donut]" and v:FindFirstChildWhichIsA("ClickDetector") then
-                table.insert(found, v)
+                table.insert(f, v)
             end
             if v.Name:lower() == "[popcorn]" and v:FindFirstChildWhichIsA("ClickDetector") then
-                table.insert(found, v)
+                table.insert(f, v)
             end
             if v.Name:lower() == "[chicken]" and v:FindFirstChildWhichIsA("ClickDetector") then
-                table.insert(found, v)
+                table.insert(f, v)
             end
         end
     end)
-    if succ then
-        return found
-    end
     if err then
-        print("Unable to find food... ", err)
+        print("Something errored in getfood() : "..err)
     end
+    return f
 end
-function customLayout()
-    local me = game.Players.LocalPlayer
-    me.PlayerGui.gui.Bar.Armor.BackgroundColor3 = Color3.fromRGB(127,77,10)
-    me.PlayerGui.gui.Bar.Armor.ImageLabel.BackgroundColor3 = Color3.fromRGB(217,122,20)
-    me.PlayerGui.gui.Bar.Health.BackgroundColor3 = Color3.fromRGB(94,31,31)
-    me.PlayerGui.gui.Bar.Health.ImageLabel.BackgroundColor3 = Color3.fromRGB(255,0,0)
-end
-local findarmour = function()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name:lower() == "[high-medium armor]" or v.Name:lower() == "[high armor]" then
-            return v
-        end
-    end
-    if not Highmed then
-        for _, v in pairs(game.Workspace:GetDescendants()) do
-            if v.Name:lower() == "[medium armor]" then
-                return v
+
+basket = getfood()
+
+-- Returns Player Full Form.
+function getnear()
+    local max = math.huge
+    local distance = nil
+    local nearest = nil
+    for i, player in game.Players:GetChildren() do
+        if player.Name ~= me.Name and not game.workspace[player.Name]:GetAttribute("Knocked") and not table.find(settings["whitelist"], player.Name) then
+            distance = (me.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
+            if distance < max then
+                max = distance
+                nearest = player
             end
         end
     end
-end
-local findtact = function()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[Tactical Shotgun]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        end
-    end
-end
-local findusp = function()
-    for _, v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "[USP]" and v:FindFirstChildWhichIsA("ClickDetector") then
-            return v
-        end
-    end
+    return nearest
 end
 
-getgenv().armour = findarmour();
-getgenv().tact = findtact();
-getgenv().usp = findusp();
-getgenv().food = findfood()
-local mt = getrawmetatable(game)
-local pos
-local old = mt.__namecall
-local T
-
-local function autoBuyArmour()
-    local me = game.Players.LocalPlayer.Name
-    if AutoHighArm and game.Workspace:FindFirstChild(me):GetAttribute("Armor") < 120 and armour then
-        fireclickdetector(armour.ClickDetector)
-    end
-end
-
--- CHATSPY
-loadstring(game:HttpGet("https://pastebin.com/raw/nzXicwc1", true))()
--- ANTI CHAT LOGGER
-loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
-
-local function getuser(input)
-    local PLAYERS = game.Players:GetChildren()
-    if input == "" or input == " " then return end
-    for _, PLAYER in ipairs(PLAYERS) do
-        local PLR = PLAYER.Name:lower()
-        local DISPLAY = PLAYER.DisplayName:lower()
-        local INP = input:lower()
-        if string.sub(PLR,1,#INP) == INP or string.sub(DISPLAY,1,#INP) == INP then
-            return PLAYER.Name
+-- Returns a string (username).
+function getuser(inp)
+    if inp == " " or inp == "" then return end
+    local low = inp:lower()
+    for _,v in next, game.Players:GetChildren() do
+        if string.sub(v.Name:lower(),1,#low) == low or string.sub(v.DisplayName:lower(),1,#low) == low then
+            return v.Name
         end
     end
 end
 
-local function getnear()
-    local LocalName = game.Players.LocalPlayer.Name
-    local dis = math.huge
-    local plr = nil
-    local plrs = {}
-    for _, v in pairs(game.Players:GetChildren()) do
-        if v ~= game.Players.LocalPlayer and not game.Workspace[v.Name]:GetAttribute("Knocked") and not table.find(teammates, v.Name) then
-            table.insert(plrs, v.Name)
-        end
-    end
-    for _, v in ipairs(plrs) do
-        local disDiff = (game.Workspace[LocalName].HumanoidRootPart.Position - game.Workspace[v].HumanoidRootPart.Position).magnitude
-        if disDiff < dis then
-            dis = disDiff
-            plr = game.Workspace[v]
-        end
-    end
-    return plr
-end
-
-local function silentLock(vic)
-    spawn(function()
-        silentVic = game.workspace[vic]
-        while task.wait() do
-            if silent then
-                mag = silentVic.Humanoid.MoveDirection.Magnitude
-                local TargetVelocity = Vector3.new(silentVic.UpperTorso.AssemblyLinearVelocity.X * (mag * (ping * res)), silentVic.UpperTorso.AssemblyLinearVelocity.Y * ((mag * (ping * res)) / 3.44), silentVic.UpperTorso.AssemblyLinearVelocity.Z * (mag * (ping * res)))
-                if silentVic and game.Players[silentVic.Name] and not silentVic:GetAttribute("Knocked") then
-                    if smooth then
-                        if not resolve then
-                            camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity)), smoothen, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
-                        else
-                            if silentVic.Humanoid.MoveDirection.X > 0 then
-                                ResolveX = ResolveX
-                            elseif silentVic.Humanoid.MoveDirection.X < 0 then
-                                ResolveX = -ResolveX
-                            elseif silentVic.Humanoid.MoveDirection.Z < 0 then
-                                ResolveZ = ResolveZ
-                            elseif silentVic.Humanoid.MoveDirection.Z > 0 then
-                                ResolveZ = -ResolveZ
-                            end
-                            TargetVelocity = Vector3.new(ResolveVelocity * (mag * (ping * res)), 0, ResolveVelocity * (mag * (ping * res)))
-                            camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
-                        end
-                    else
-                        if not resolve then
-                            camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
-                        else
-                            if silentVic.Humanoid.MoveDirection.X > 0 then
-                                ResolveX = ResolveX
-                            elseif silentVic.Humanoid.MoveDirection.X < 0 then
-                                ResolveX = -ResolveX
-                            elseif silentVic.Humanoid.MoveDirection.Z < 0 then
-                                ResolveZ = ResolveZ
-                            elseif silentVic.Humanoid.MoveDirection.Z > 0 then
-                                ResolveZ = -ResolveZ
-                            end
-                            TargetVelocity = Vector3.new(ResolveVelocity * (mag * (ping * res)), 0, ResolveVelocity * (mag * (ping * res)))
-                            camera.CFrame = CFrame.new(camera.CFrame.p, (silentVic.UpperTorso.Position + TargetVelocity))
-                        end
-                    end
-                end
-            end
-            if not silent then break end
-        end
-    end)
-end
-
-local function startLock(loser)
-    spawn(function()
-        while task.wait() do
-            if lock then
-                target = game.Players[loser].Character
-                local myName = game.Players.LocalPlayer.Name
-                if target == nil then
-                    target = game.Workspace[loser]
-                end
-                mag = target.Humanoid.MoveDirection.magnitude
-                local TargetVelocity = Vector3.new(target.UpperTorso.AssemblyLinearVelocity.X * (mag * (ping * res)), target.UpperTorso.AssemblyLinearVelocity.Y * ((mag * (ping * res)) / 3.44), target.UpperTorso.AssemblyLinearVelocity.Z * (mag * (ping * res)))
-                if target and game.Players[target.Name] and not target:GetAttribute("Knocked") then
-                    if smooth then
-                        if not resolve then
-                            camera.CFrame = camera.CFrame:Lerp(CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity)), smoothen, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
-                        else
-                            TargetVelocity = Vector3.new(ResolveVelocity * (mag * (ping * res)), 0, ResolveVelocity * (mag * (ping * res)))
-                            camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
-                        end
-                    else
-                        if not resolve then
-                            camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
-                        else
-                            TargetVelocity = Vector3.new(ResolveVelocity * (mag * (ping * res)), 0, ResolveVelocity * (mag * (ping * res)))
-                            camera.CFrame = CFrame.new(camera.CFrame.p, (target.UpperTorso.Position + TargetVelocity))
-                        end
-                    end
-                end
-            end
-            if not lock then break end 
-        end
-    end)
-end
-
-local function normalTp(person)
-    local LPN = game.Players.LocalPlayer.Name
-    local LP = game.Workspace[LPN]
-    local VP = game.Workspace[person.Name]
-    if LP.HumanoidRootPart and VP.HumanoidRootPart then
-        LP.HumanoidRootPart.CFrame = CFrame.new(VP.UpperTorso.Position)
-    end
-end
-
-local function Notif(name, desc, image, dur)
+function Notify(name,desc,dur)
     game.StarterGui:SetCore("SendNotification", {
         Title = name,
         Text = desc,
-        Icon = image,
         Duration = dur
     })
 end
 
-local function UnLockNotif()
-    game.StarterGui:SetCore("SendNotification", {
-        Title = "UnLock Notification",
-        Text = "Unlocked...",
-        Icon = "",
-        Duration = 0.7
-    })
-end
-
-local function autoStomp()
-    game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
-end
-
-if game.CoreGui:FindFirstChild("DrRay") then
-    game.CoreGui:FindFirstChild("DrRay"):Destroy()
-    if game.CoreGui:FindFirstChild("ButtonHandler") then
-        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
+function resolve(name)
+    if settings["ResolverType"] == "Recalculate velocity" then
+        local noob = game.Players[name]
+        task.wait()
+        local Time = tick() - oldTick
+        local newPos = noob.Character.HumanoidRootPart.Position
+        local newVel = (newPos - oldPos) / Time
+        
+        if tick() - oldTick >= 1 / settings.refresh then
+            oldTick, oldPos = tick(), noob.Character.HumanoidRootPart.Position
+        end
+        return newVel
+    elseif settings["ResolverType"] == "Zero" then
+        return Vector3.new(0,0,0)
     end
 end
 
-local xchange
-local zchange
-
-game.Players.LocalPlayer.Chatted:Connect(function(message)
-    local msg = string.split(message," ")
-    local cmd = msg[1]
-    local name = msg[2]
-    if cmd == ".ws" then
-        local plr = getuser(name)
-        if not teammates[plr] then
-            table.insert(teammates, plr)
-            Notify("Whitelist", plr.. " has been whitelisted!", "", 0.7)
-            for i,v in next, teammates do print(v) end
-        else return end
-    end
-end)
-RS.Heartbeat:Connect(function()
-    value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-    ping = tonumber(string.split(value, '(')[1])
-    if ping > limit then
-        ping = limit
-    end
-    if user ~= nil then
-        local succ, err = pcall(function()
-            local noob = game.workspace[user]
-            local hum = noob.Humanoid
-            local magni = noob.HumanoidRootPart.MoveDirection.Magnitude
-            local vel = Vector3.new(noob[aimpart].Velocity.X * (magni * (ping*res)), noob[aimpart].Velocity.Y * ((magni * (ping*res)) /2.65), noob[aimpart].Velocity.Z * (magni * (ping*res)))
-            pos = Vector3.new(noob.Character[aimpart].Position + vel)
-            if err then
-                print("Something went wrong: ", err)
-            end
-        end)
-    end
-    if aim then
-        setreadonly(mt, false)
-        mt.__namecall = newcclosure(function(self, ...)
-            local args = {...}
-            if getnamecallmethod() == 'FireServer' and self.Name:upper() == 'MAINEVENT' then
-                if tostring(args[1]):upper() == 'MOUSE' and aim then
-                    args[2] = pos
-                else
-                    return old(self, unpack(args))
+function camlock()
+    spawn(function()
+        local noob = game.Players[settings["Target"]]
+        local calculation, mag, goal
+        local type = cc.CameraType
+        task.wait()
+        if settings["Scriptable"] then cc.CameraType = Enum.CameraType.Scriptable end
+        while task.wait() do
+            if settings["Camlock"] and settings["Target"] ~= me.Name and not game.workspace[settings["Target"]]:GetAttribute("Knocked") then
+                local ALV = noob.Character[settings["Aimpart"]].AssemblyLinearVelocity
+                if noob and not game.workspace[noob.Name]:GetAttribute("Knocked") then
+                    if settings["Smoothing"] then
+                        if settings["AutoPredict"] then
+                            mag = (noob.Character.Humanoid.MoveDirection).magnitude
+                            
+                            calculation = Vector3.new(ALV.X * (mag * (ping * settings["AutoPrediction"])), noob.Character["RightFoot"].AssemblyLinearVelocity.Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), ALV.Z * (mag * (ping * settings["AutoPrediction"])))
+                            goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                        else 
+                            calculation = Vector3.new(ALV.X * (settings["Prediction"]), noob.Character["RightFoot"].AssemblyLinearVelocity.Y * (settings["Prediction"] / settings.offset) ,ALV.Z * (settings["Prediction"]))
+                            goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                        end
+                        if settings["Resolve"] then
+                            if settings["AutoPredict"] then
+                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                                cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                            else 
+                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["Prediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["Prediction"])))
+                                goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                                cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                            end
+                        end
+                    else
+                        if settings["AutoPredict"] then
+                            mag = (noob.Character.Humanoid.MoveDirection).magnitude
+                            
+                            calculation = Vector3.new(ALV.X * (mag * (ping * settings["AutoPrediction"])), noob.Character["RightFoot"].AssemblyLinearVelocity.Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), ALV.Z * (mag * (ping * settings["AutoPrediction"])))
+                            goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = goal
+                        else 
+                            calculation = Vector3.new(ALV.X * (settings["Prediction"]),noob.Character["RightFoot"].AssemblyLinearVelocity.Y * (settings["Prediction"] / settings.offset),ALV.Z * (settings["Prediction"]))
+                            goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = goal
+                        end
+                        if settings["Resolve"] then
+                            if settings["AutoPredict"] then
+                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                                cc.CFrame = goal
+                            else 
+                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["Prediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["Prediction"])))
+                                goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
+                                cc.CFrame = goal
+                            end
+                        end
+                    end
                 end
             end
-            return old(self, unpack(args))
-        end)
-        setreadonly(mt, true)
+            if not settings["Camlock"] or not game.Players[settings["Target"]] then break end
+        end
+    end)
+end
+
+function silentlock()
+    spawn(function()
+        settings["SilentVictim"] = getnear()
+        local calculation, mag, goal
+        local type = cc.CameraType
+        task.wait()
+        if settings["Scriptable"] then cc.CameraType = Enum.CameraType.Scriptable end
+        Notify("Silent Notif", "  Silent: "..settings["SilentVictim"].Name, 1)
+        while task.wait() do
+            if settings["Silent"] and settings["SilentVictim"] and not game.workspace[settings["SilentVictim"].Name]:GetAttribute("Knocked") then
+                local ALV = settings["SilentVictim"].Character[settings["Aimpart"]].AssemblyLinearVelocity
+                if settings["Smoothing"] then
+                    if settings["AutoPredict"] then
+                        mag = (settings["SilentVictim"].Character.Humanoid.MoveDirection).magnitude
+                        
+                        calculation = Vector3.new(ALV.X * (mag * (ping * settings["AutoPrediction"])),settings["SilentVictim"].Character["RightFoot"].AssemblyLinearVelocity.Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), ALV.Z * (mag * (ping * settings["AutoPrediction"])))
+                        goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                        cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                    else
+                        calculation = Vector3.new(ALV.X * (settings["Prediction"]),settings["SilentVictim"].Character["RightFoot"].AssemblyLinearVelocity.Y * (settings["Prediction"] / settings.offset),ALV.Z * (settings["Prediction"]))
+                        goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                        cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                    end
+                    if settings["Resolve"] then
+                        if settings["AutoPredict"] then
+                            calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                            goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                        else 
+                            calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["Prediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["Prediction"])))
+                            goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                        end
+                    end
+                else
+                    if settings["AutoPredict"] then
+                        mag = (settings["SilentVictim"].Character.Humanoid.MoveDirection).magnitude
+                        
+                        calculation = Vector3.new(ALV.X * (mag * (ping * settings["AutoPrediction"])), settings["SilentVictim"].Character["RightFoot"].AssemblyLinearVelocity.Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), ALV.Z * (mag * (ping * settings["AutoPrediction"])))
+                        goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                        cc.CFrame = goal
+                    else
+                        calculation = Vector3.new(ALV.X * (settings["Prediction"]),settings["SilentVictim"].Character["RightFoot"].AssemblyLinearVelocity.Y * (settings["Prediction"] / settings.offset),ALV.Z * (settings["Prediction"]))
+                        goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                        cc.CFrame = goal
+                    end
+                    if settings["Resolve"] then
+                        if settings["AutoPredict"] then
+                            calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                            goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = goal
+                        else 
+                            calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["Prediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["Prediction"])))
+                            goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
+                            cc.CFrame = goal
+                        end
+                    end
+                end
+            end
+            if not settings["Silent"] or not settings["SilentVictim"] then break end
+        end
+    end)
+end
+
+-- Antilock function: Done, Needs to check on it.
+rs.Heartbeat:Connect(function()
+    if settings["Antilock"] then
+        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+        local vel, cf = hrp.AssemblyLinearVelocity, hrp.CFrame
+        if settings["AntiPosition"] == "Sky" then
+            hrp.AssemblyLinearVelocity = Vector3.new(0,6e6,0)
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+        elseif settings["AntiPosition"] == "Ground" then
+            hrp.AssemblyLinearVelocity = Vector3.new(0,-6e6,0)
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+        -- elseif settings["AntiPosition"] == "Troll" then
+            --[[
+            hrp.AssemblyLinearVelocity = Vector3.new(0,0,math.random(-666,666))
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+            rs.RenderStepped:Wait(3)
+            hrp.AssemblyLinearVelocity = Vector3.new(math.random(-666,666),0,0)
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+            ]]
+        elseif settings["AntiPosition"] == "Prediction" then
+            hrp.AssemblyLinearVelocity = Vector3.new(0,0,0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+        end
     end
-    if dot then
-        local pos, ons = camera:WorldToViewportPoint(game.workspace[user].UpperTorso.Position)
-        if ons then
-            Dot.Visible = true
-            Dot.Position = Vector2.new(pos.X, pos.Y)
+end)
+
+-- Heartbeat functions:
+rs.Heartbeat:Connect(function()
+    -- Reload button resize: Done.
+    if me.PlayerGui:WaitForChild("gui")["mobile ppl"].rl then
+        me.PlayerGui:WaitForChild("gui")["mobile ppl"].rl.Size = UDim2.new(0,70,0,70)
+    end
+    -- Getting ping for auto prediction:
+    value = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+    ping = tonumber(string.split(value, '(')[1])
+    -- Auto Armour: Done.
+    if settings["AutoArmour"] then
+        fireclickdetector(armour.ClickDetector)
+    end
+    -- Auto Food: Still Fixing.
+    if settings["AutoFood"] then
+        for i,food in basket do
+            fireclickdetector(food.ClickDetector)
+        end
+    end
+    if settings["AutoTactical"] then
+        fireclickdetector(tac.ClickDetector)
+    end
+    -- Update Dot: Still Fixing.
+    if settings["Dot"] and settings["Target"] ~= me.Name then
+        local pos, onscreen = cc:WorldToViewportPoint(game.Players[settings["Target"]].Character[settings["Aimpart"]].Position)
+        if onscreen and pos ~= mypos and game.Players[settings["Target"]] then
+            dot.Visible = true
+            dot.Position = Vector2.new(pos.X, pos.Y)
+        else
+            dot.Visible = false
         end
     else
-        Dot.Visible = false
+        dot.Visible = false
     end
-    if customUI then
-        customLayout()
-    end
-    if customMv then
-        customMacro()
-    end
-    if AutoHighArm then
-        autoBuyArmour()
-    end
-    if stomp then
-        autoStomp()
-    end
-    if foodspawn then
-        for _,v in ipairs(food) do
-            fireclickdetector(v.ClickDetector)
+    
+    -- Aimlock: Not done scripting...
+    if settings["Aimlock"] then
+        local Remote = game:GetService("ReplicatedStorage"):FindFirstChild("MAINEVENT")
+        local calculation, result
+        local victim = game.Players[settings["Target"]]
+        local ALV = victim.Character[settings["Aimpart"]].AssemblyLinearVelocity
+        if settings["AutoPredict"] then
+            calculation = Vector3.new(ALV.X * (ping * settings["AutoPrediction"]), ALV.Y * ((ping * settings["AutoPrediction"])/settings.offset), ALV.Z * (ping * settings["AutoPrediction"]))
+        else
+            calculation = Vector3.new(ALV.X * (ping * settings["Prediction"]), ALV.Y * ((ping * settings["Prediction"])/settings.offset), ALV.Z * (ping * settings["Prediction"]))
         end
+        result = Vector3.new(victim.Character[settings["Aimpart"]].Position + calculation)
+        Remote:FireServer("MOUSE", result)
     end
-    local rlBtn = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("gui")["mobile ppl"].rl
-    if rlBtn.Size ~= UDim2.new(0, 70, 0, 70) then
-        rlBtn.Size = UDim2.new(0, 70, 0, 70)
-    end
-    local plrs = game.Players
-    local lplr = plrs.LocalPlayer
-    for _, v in pairs(plrs:GetPlayers()) do
-        if v:GetAttribute("group") == lplr:GetAttribute("group") and v:GetAttribute("group") ~= 0 then
-            table.insert(teammates, v.Name)
+end)
+
+--\\--| Whitelist Stuff |--//--
+-- Done and working!
+me.Chatted:Connect(function(message)
+    local succ, err = pcall(function()
+        local cmd, ShortName = string.split(message, " ")
+        local name = getuser(ShortName)
+        if cmd == ".ws" then
+            if not table.find(settings["whitelist"],name) then
+                table.insert(settings["whitelist"],name)
+                Notify("Whitelist Notification",name.." has been whitelisted!", 1)
+            else
+                Notify("Already Whitelisted",name.." was already whitelisted...", 1)
+            end
+        elseif cmd == ".unws" then
+            if table.find(settings["whitelist"],name) then
+                table.remove(settings["whitelist"],name)
+                Notify("Un-whitelist Notification",name.." has been un-whitelisted!", 1)
+            else
+                Notify("Person Not Found",name.." was already unwhitelisted!", 1)
+            end
         end
-    end
+    end)
+    if succ then print("Done whitelisting ".. succ)
+    elseif err then print("Error occurred:  ".. err) end
 end)
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
 local window = lib:Load(game.Players.LocalPlayer.DisplayName, "Default")
-local tab = lib.newTab("Main", "")
-local tab2 = lib.newTab("Target", "")
-local tab3 = lib.newTab("Player", "")
-local tab4 = lib.newTab("AimLock test", "")
+local Target = lib.newTab("Target", "")
+local Main = lib.newTab("Main", "")
+local Misc = lib.newTab("Misc", "")
+local Setting = lib.newTab("Setting", "")
+local Credits = lib.newTab("Credits", "")
+
+
 local btnGui = Instance.new("ScreenGui")
 btnGui.Name = "ButtonHandler"
 btnGui.Parent = game.CoreGui
 btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-local colours = {
-    "red",
-    "lightred",
-    "orange",
-    "yellow",
-    "blue",
-    "darkblue",
-    "teal",
-    "pink",
-    "purple",
-    "regular"
-}
-local colour = nil
+--// Target Stuff:
+Target.newInput("Username", "Enter a username to be your target.", function(input)
+    settings["Target"] = getuser(input)
+end)
+Target.newToggle("Aimlock", "Aimlocks without having to aim.", false, function(bool)
+    settings["Aimlock"] = bool
+end)
+Target.newToggle("Lock Dot", "Creates dot on the target.", false, function(bool)
+    settings["Dot"] = bool
+end)
+Target.newToggle("View", "Views the current target.", false, function(bool)
+    settings["view"] = bool
+    local old = me.Character.Humanoid
+    task.wait()
+    if settings["view"] then
+        if game.Players[settings["Target"]] and game.Players[settings["Target"]].Character.Humanoid then
+            cc.CameraSubject = game.Players[settings["Target"]].Character.Humanoid
+        else
+            cc.CameraSubject = old
+        end
+    else
+        cc.CameraSubject = old
+    end
+end)
 
-tab.newDropdown("Pick A Colour", "", colours, function(picked)
-    colour = picked
-    return colour
+--// Main stuff:
+Main.newToggle("Auto Prediction","Turns auto prediction on/off", true, function(bool)
+    settings["AutoPredict"] = bool
 end)
-tab.newButton("Apply Sky Colour", "", function()
-    game.Players.LocalPlayer:SetAttribute("skycolor", colour)
+Main.newToggle("Smooth Camlock","Makes the camlock smooth.", false, function(bool)
+    settings["Smoothing"] = bool
 end)
-tab.newToggle("Auto Buy High-Medium Armour", "", false, function(bool)
-    AutoHighArm = bool
+Main.newToggle("Resolver","Antilock resolver.", false, function(bool)
+    settings["Resolver"] = bool
 end)
-tab.newToggle("Auto Stomp", "", false, function(bool)
-    stomp = bool
+Main.newToggle("Scriptable Camera", "Makes your camera scriptable when lock is on. (helps with camlock a lot)", false, function(bool)
+    settings["Scriptable"] = bool
 end)
-tab.newToggle("Custom Layout", "", false, function(bool)
-    customUI = bool
+Main.newToggle("Anti-lock","Turns anti-lock on/off.", false, function(bool)
+    settings["Antilock"] = bool
 end)
-tab.newToggle("Auto Spawn With Food", "", false, function(bool)
-    foodspawn = bool
+Main.newToggle("Auto Stomp","Auto stomps whenever you walk on someone's body.", false, function(bool)
+    settings["AutoStomp"] = bool
 end)
-tab.newButton("Custom Macro View", "", function()
+Main.newToggle("Auto Food","Spawns you with food and rebuys when eaten.", false, function(bool)
+    settings["AutoFood"] = bool
+end)
+Main.newToggle("Auto Tactical","Auto buys tactical shotgun when not in inventory.", false, function()
+    settings["AutoTactical"] = bool
+end)
+Main.newButton("Custom Macro View", "Fixes the macro button and makes it third person.", function()
     local LS = game.Players.LocalPlayer.PlayerScripts.Macro
     for i, v in pairs(getsenv(LS)) do
         for _, cons in next, getconstants(getsenv(LS).inout) do
-            setconstant(getsenv(LS).inout, 1, m)
+            setconstant(getsenv(LS).inout, 1, 7.6)
         end
     end
-end)
-tab.newButton("USP and Tact SG", "", function()
-    fireclickdetector(usp.ClickDetector)
-    fireclickdetector(tact.ClickDetector)
-end)
-tab2.newInput("Username", "Username to lock on.", function(inp)
-    user = getuser(inp)
-end)
-tab2.newToggle("Lock On User", "Starts the lock.", false, function(bool)
-    if not bool then
-        UnLockNotif()
-        VICTIM = nil
-    end
-    if bool then
-        Notif("Lock Notif", "Locked on: "..user, "", 0.7)
-    end
-    lock = bool
-    startLock(user)
-end)
-tab2.newToggle("Lock Dot", "Puts a dot on the targeted player.", false, function(bool)
-    dot = bool
-end)
-tab2.newToggle("View Player", "Views selected player.", false, function(bool)
-    VIEW = bool
-    local NAME = game.Players.LocalPlayer.Name
-    local ME = game.Workspace[NAME]
-    local normalCam = ME.Humanoid
-    if user and game.Workspace[user] and VIEW then
-        if ME then
-            camera.CameraSubject = game.Workspace[user].Humanoid
-        else
-            camera.CameraSubject = normalCam
-        end
-    else
-        camera.CameraSubject = normalCam
-    end
-    if not VIEW or not game.workspace[user] then
-        camera.CameraSubject = normalCam
-    end
-end)
-tab2.newButton("Teleport To User", "", function()
-    normalTp(user)
 end)
 
-tab3.newToggle("Camlock Resolver", "Still fixing it.", false, function(bool)
-    resolve = bool
-end)
-tab3.newToggle("Camlock Smoothing", "", false, function(bool)
-    smooth = bool
-end)
-tab3.newToggle("Anti-lock", "", false, function(bool)
-    antilock = bool
-end)
-tab3.newDropdown("Anti-lock's direction", "direction to anti lock.", { "Forward", "Behind", "Up", "Down", "Right", "Left", "One", "Zero" }, function(pick)
-    AntiDirection = pick
-end)
-tab3.newInput("Smoothing amount", "", function(amt)
-    local num = tonumber(amt)
-    smoothen = num
-end)
-tab3.newInput("Prediction Amount", "", function(amt)
-    if amt == "def" then
-        amt = 0.001473
-    end
-    local num = tonumber(amt)
-    print(num)
-    res = num
-end)
-tab3.newButton("Lock Button", "Creates a new lock button.", function()
-    if not game.CoreGui.ButtonHandler:FindFirstChild("LButton") then
-        local btn = Instance.new("TextButton")
-        btn.Name = "LButton"
-        btn.Parent = btnGui
-        btn.BackgroundColor3 = Color3.fromRGB(3,40,53)
-        btn.BorderSizePixel = 0
-        btn.Position = UDim2.new(0, 737, 0, 35)
-        btn.Size = UDim2.new(0, 100, 0, 50)
-        btn.Font = Enum.Font.GothamBlack
-        btn.Text = "Lock"
-        btn.TextColor3 = Color3.new(1,1,1)
-        btn.TextSize = 18
-        
-        local corner = Instance.new("UICorner")
-        corner.Parent = btn
-        corner.CornerRadius = UDim.new(0,10)
-        corner.Name = "CORNER"
-        
-        btn.MouseButton1Click:Connect(function()
-            local slockbtn = game.CoreGui.ButtonHandler:FindFirstChild("SilentButton")
-            if lock then
-                lock = false
-                UnLockNotif()
-                VICTIM = nil
-                btn.Text = "Lock"
-            elseif not lock and user then
-                if game.Players[user] then
-                    lock = true
-                    Notif("Lock Notif", "Locked on: "..user, "", 0.7)
-                    btn.Text = "Unlock"
-                    if slockbtn then
-                        silent = false
-                        silentVic = nil
-                        slockbtn.Text = "Silent Lock"
-                    end
-                end
+--// Misc Stuff:
+Misc.newButton("Lock Button", "Creates a lock button", function()
+    ButtonsModule.lockButton("L")
+    lockbutton = game:GetService("CoreGui").ButtonHandler.L
+    
+    lockbutton.MouseButton1Click:Connect(function()
+        local silentbuttoncheck = game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild("S")
+        if game.Players[settings["Target"]] then
+            if not settings["Camlock"] then
+                settings["Camlock"] = true
+                camlock()
+                Notify("Lock Notif", "  Target: "..settings["Target"], 1)
+                settings["Silent"] = false
+                lockbutton.Text = "Unlock"
+                silentbutton.Text = "Silent lock"
+            else
+                settings["Camlock"] = false
+                lockbutton.Text = "Lock"
             end
-            startLock(user)
-        end)
-    end
+        else
+            settings["Camlock"] = false
+            lockbutton.Text = "Lock"
+        end
+    end)
+    Notify("Button Notif", "Lock button has been successfully created!", 1)
 end)
-tab3.newButton("Silent Lock", "Locks on the closest person.", function()
-    if not game.CoreGui.ButtonHandler:FindFirstChild("SilentButton") then
-        local silentBtn = Instance.new("TextButton")
-        silentBtn.Name = "SilentButton"
-        silentBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
-        silentBtn.BackgroundColor3 = Color3.fromRGB(3,40,53)
-        silentBtn.BorderSizePixel = 0
-        silentBtn.BackgroundTransparency = 0.1
-        silentBtn.Position = UDim2.new(0, 630, 0, -15)
-        silentBtn.Size = UDim2.new(0, 100, 0, 50)
-        silentBtn.Font = Enum.Font.GothamBlack
-        silentBtn.Text = "Silent Lock"
-        silentBtn.TextColor3 = Color3.new(1,1,1)
-        silentBtn.TextSize = 16
-        silentBtn.TextTransparency = 0.132
-        
-        local corner = Instance.new("UICorner")
-        corner.Parent = silentBtn
-        corner.CornerRadius = UDim.new(0,10)
-        corner.Name = "CORNER"
-        
-        local lockbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
-        local bozo
-        
-        silentBtn.MouseButton1Click:Connect(function()
-            if not silent then
-                silent = true
-                if lockbtn then
-                    lock = false
-                    lockbtn.Text = "Lock"
-                end
-                silentBtn.Text = "Unlock Silent"
-                bozo = getnear()
-                Notif("Silent Notification", "Display: ".. tostring(game.workspace[bozo.Name].Humanoid.DisplayName), "", 0.7)
-            elseif silent then
-                silent = false
-                UnLockNotif()
-                silentVic = nil
-                silentBtn.Text = "Silent Lock"
-            end
-            silentLock(bozo.Name)
-        end)
-    end
+Misc.newButton("Silent Button", "Creates a silent button", function()
+    ButtonsModule.silentButton("S")
+    silentbutton = game:GetService("CoreGui").ButtonHandler.S
+    
+    silentbutton.MouseButton1Click:Connect(function()
+        local lockbutton = game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild("L")
+        if not settings["Silent"] then
+            settings["Silent"] = true
+            silentlock()
+            settings["Camlock"] = false
+            silentbutton.Text = "Unlock"
+            lockbutton.Text = "Lock"
+        else
+            settings["Silent"] = false
+            silentbutton.Text = "Silent lock"
+        end
+    end)
+    Notify("Button Notif", "Silent button has been successfully created!", 1)
 end)
-tab3.newButton("Armour Button", "Creates a new button for auto armour quick access.", function()
-    if not game.CoreGui.ButtonHandler:FindFirstChild("AButton") then
-        local armBtn = Instance.new("TextButton")
-        armBtn.Name = "AButton"
-        armBtn.Parent = game.CoreGui:FindFirstChild("ButtonHandler")
-        armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
-        armBtn.BorderSizePixel = 0
-        armBtn.Position = UDim2.new(0, 757, 0, -3)
-        armBtn.Size = UDim2.new(0, 85, 0, 42.5)
-        armBtn.Font = Enum.Font.GothamBlack
-        armBtn.Text = "Auto Armour"
-        armBtn.TextColor3 = Color3.new(1, 1, 1)
-        armBtn.TextSize = 12
-        
-        local corner = Instance.new("UICorner")
-        corner.Parent = armBtn
-        corner.CornerRadius = UDim.new(0,10)
-        corner.Name = "CORNER"
-        
-        armBtn.MouseButton1Click:Connect(function()
-            if not AutoHighArm then
-                armBtn.BackgroundColor3 = Color3.fromRGB(215,5,10)
-                AutoHighArm = true
-                armBtn.Text = "Unauto Armour"
-            elseif AutoHighArm then
-                armBtn.BackgroundColor3 = Color3.fromRGB(10,215,10)
-                AutoHighArm = false
-                armBtn.Text = "Auto Armour"
-            end
-        end)
-    end
+Misc.newButton("Armour Button", "Creates a armour button", function()
+    ButtonsModule.armourButton("A")
+    armourbutton = game:GetService("CoreGui").ButtonHandler.A
+    armourbutton.MouseButton1Click:Connect(function()
+        if not settings["AutoArmour"] then
+            settings["AutoArmour"] = true
+            armourbutton.BackgroundColor3 = Color3.fromRGB(215,40,20)
+            armourbutton.Text = "Stop Auto Armour"
+        else
+            settings["AutoArmour"] = false
+            armourbutton.BackgroundColor3 = Color3.fromRGB(5,190,10)
+            armourbutton.Text = "Auto Armour"
+        end
+    end)
+    Notify("Button Notif", "Armour button has been successfully created!", 1)
 end)
-tab3.newButton("Destroy All Buttons", "Destroys all buttons created by this script.", function()
-    if game.CoreGui:FindFirstChild("ButtonHandler") then
-        game.CoreGui:FindFirstChild("ButtonHandler"):Destroy()
-    end
-    btnGui = Instance.new("ScreenGui")
-    btnGui.Name = "ButtonHandler"
-    btnGui.Parent = game.CoreGui
-    btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+--// Settings stuff:
+Setting.newDropdown("Anti-lock Position", "Adjusts the position of the anti-lock.", { "Sky", "Ground", "Prediction" }, function(picked)
+    settings["AntiPosition"] = picked
 end)
-tab3.newButton("Kick", "", function()
-    local LP = game.Players.LocalPlayer
-    if LP then
-        LP:Kick("Dipped, GG.")
-    end
+Setting.newDropdown("Aimpart", "Adjusts the part of the camlock.", settings["Aimparts"], function(picked)
+    settings["Aimpart"] = picked
 end)
-tab4.newInput("Aimlock stud predict", "", function(amt)
-    local num = tonumber(amt)
-    if type(num) == "number" then
-        n = num
-    else
-        n = 5.5
-    end
+Setting.newDropdown("Resolve Type", "Adjusts the anti-lock resolver type.", { "Recalculate velocity", "Zero" }, function(picked)
+    settings["ResolverType"] = picked
 end)
-tab4.newToggle("Aimlock", "just a test", false, function(bool)
-    aim = bool
+Setting.newInput("Aimlock Prediction Amount", "Adjusts the aimlock prediction.", function(inp)
+    settings["AimlockPrediction"] = tonumber(inp)
 end)
-tab4.newDropdown("Aimlock Part", "part to aimlock on.", aimparts, function(part)
-    aimpart = part
+Setting.newInput("Auto Prediction Amount", "Adjusts the ping-based prediction (MUST BE 0.00number).", function(inp)
+    settings["AutoPrediction"] = tonumber(inp)
+end)
+Setting.newInput("Prediction Amount", "Adjusts the prediction.", function(inp)
+    settings["Prediction"] = tonumber(inp)
+end)
+Setting.newInput("Smoothening Amount", "Adjusts the smoothening amount.", function(inp)
+    settings["SmoothingAmount"] = tonumber(inp)
+end)
+Setting.newInput("Auto Stomp Delay", "Adjusts the auto stomp delay.", function(inp)
+    settings["AutoStompDelay"] = tonumber(inp)
 end)
