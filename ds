@@ -7,9 +7,9 @@ getgenv().settings = {
     -- \\ Locates it up in the Sky | Underground | Trolls The Locker | Disables the locker's prediction //
     ["Antilock"] = false, -- Anti Lock toggle.
     ["AutoArmour"] = false, -- Auto Buys Armour
-    ["AutoFood"] = false, -- Auto Buys Food toggle.
+    ["AutoFood"] = true, -- Auto Buys Food toggle.
     ["AutoPredict"] = true, -- Automatically predicts correctly (HIGHLY RECOMMENDED).
-    ["AutoPrediction"] = 0.001533, -- Automatic camlock prediction based on ping (RECOMMENDED).
+    ["AutoPrediction"] = 0.001776, -- Automatic camlock prediction based on ping (RECOMMENDED).
     ["AutoStomp"] = false, -- Auto Stomps toggle.
     ["AutoStompDelay"] = 0, -- Auto Stomp Delay \\ 0 = no delay // (Seconds).
     ["Camlock"] = false, -- CamLock toggle.
@@ -19,8 +19,8 @@ getgenv().settings = {
     ["ResolverType"] = "Recalculate velocity", -- Recalculate velocity|Move Direction|Zero
     ["Scriptable"] = false, -- Maybe a better camlock update? 🗣🔥‼️
     ["Silent"] = false, -- Silent CamLock toggle.
-    ["Smoothing"] = false, -- Smoothes camlock camera movement.
-    ["SmoothingAmount"] = 0.721, -- Smooth amount << Higher = Slower >>
+    ["Smoothing"] = true, -- Smoothes camlock camera movement.
+    ["SmoothingAmount"] = 0.433, -- Smooth amount << Higher = Slower >>
     ["Target"] = nil, -- Person targeted.
     ["SilentVictim"] = "", -- Silent CamLock Target.
     ["view"] = false, -- View toggle.
@@ -31,10 +31,13 @@ getgenv().settings = {
 local ButtonsModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/ModuleTest.lua"))()
 local me = game.Players.LocalPlayer
 local rs = game:GetService("RunService")
-local cc = game.workspace.CurrentCamera
+local cc, mt = game.workspace.CurrentCamera, getrawmetatable(game)
 settings.offset = 2.77
 local value, ping, armour, lockbutton, silentbutton, armourbutton, basket, tac, usp, sg
-local oldPos, oldTick = Vector3.new(0,0,0), tick()
+
+print("Auto prediction\n0.001812\nSmoothening amount\n0.422")
+print("Auto prediction\n0.001769\nSmoothening amount\n0.422")
+
 
 local dot = Drawing.new("Circle")
 dot.Visible = false
@@ -47,13 +50,14 @@ dot.Color = Color3.fromRGB(175,30,0)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/chatspy"))()
 
 function autostomp()
-    if not settings["AutoStomp"] then return end
-    repeat
+    while settings["AutoStomp"] do
         game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
         if settings["AutoStompDelay"] > 0 then
             task.wait(settings["AutoStompDelay"])
         end
-    until not settings["AutoStomp"]
+        
+        if not settings["AutoStomp"] then break end
+    end
 end
 
 function getarmour()
@@ -66,7 +70,7 @@ function getarmour()
 end
 function gettac()
     for _,child in game.workspace:GetDescendants() do
-        if child.Name:lower() == "[tactical shotgun]" and child:FindFirstChildWhichIsA("ClickDetector") then
+        if child.Name == "[Tactical Shotgun]" and child:FindFirstChildWhichIsA("ClickDetector") then
             return child end
     end
 end
@@ -142,13 +146,15 @@ end
 function resolve(name)
     if settings["ResolverType"] == "Recalculate velocity" then
         local noob = game.Players[name]
+        local oldPos, oldTick = noob.Character["Aimpart"].Position, tick()
         task.wait()
-        local Time = tick() - oldTick
         local newPos = noob.Character.HumanoidRootPart.Position
+        local newTick = tick()
+        local Time = newTick - oldTick
         local newVel = (newPos - oldPos) / Time
         
-        if tick() - oldTick >= 1 / settings.refresh then
-            oldTick, oldPos = tick(), noob.Character.HumanoidRootPart.Position
+        if tick() - oldTick >= 1 / settings["RefreshRate"] then
+            oldTick, oldPos = newTick, newPos
         end
         return newVel
     elseif settings["ResolverType"] == "Zero" then
@@ -300,18 +306,16 @@ rs.Heartbeat:Connect(function()
             hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
-        -- elseif settings["AntiPosition"] == "Troll" then
-            --[[
+        elseif settings["AntiPosition"] == "Troll" then
             hrp.AssemblyLinearVelocity = Vector3.new(0,0,math.random(-666,666))
-            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            hrp.CFrame = cf * CFrame.Angles(0,0,math.rad(0.1))
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
-            rs.RenderStepped:Wait(3)
+            rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = Vector3.new(math.random(-666,666),0,0)
-            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            hrp.CFrame = cf * CFrame.Angles(math.rad(0.1),0,0)
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
-            ]]
         elseif settings["AntiPosition"] == "Prediction" then
             hrp.AssemblyLinearVelocity = Vector3.new(0,0,0)
             rs.RenderStepped:Wait()
@@ -323,7 +327,7 @@ end)
 -- Heartbeat functions:
 rs.Heartbeat:Connect(function()
     -- Reload button resize: Done.
-    if me.PlayerGui:WaitForChild("gui")["mobile ppl"].rl then
+    if me.PlayerGui:FindFirstChild("gui"):FindFirstChild("mobile ppl"):FindFirstChild("rl") then
         me.PlayerGui:WaitForChild("gui")["mobile ppl"].rl.Size = UDim2.new(0,70,0,70)
     end
     -- Getting ping for auto prediction:
@@ -355,21 +359,42 @@ rs.Heartbeat:Connect(function()
         dot.Visible = false
     end
     
+    
+    
+    -- Aimlock: Not done scripting...
+    -- ...
+end)
+
+
     -- Aimlock: Not done scripting...
     if settings["Aimlock"] then
-        local Remote = game:GetService("ReplicatedStorage"):FindFirstChild("MAINEVENT")
+        setreadonly(mt, false)
         local calculation, result
-        local victim = game.Players[settings["Target"]]
-        local ALV = victim.Character[settings["Aimpart"]].AssemblyLinearVelocity
-        if settings["AutoPredict"] then
-            calculation = Vector3.new(ALV.X * (ping * settings["AutoPrediction"]), ALV.Y * ((ping * settings["AutoPrediction"])/settings.offset), ALV.Z * (ping * settings["AutoPrediction"]))
-        else
-            calculation = Vector3.new(ALV.X * (ping * settings["Prediction"]), ALV.Y * ((ping * settings["Prediction"])/settings.offset), ALV.Z * (ping * settings["Prediction"]))
-        end
-        result = Vector3.new(victim.Character[settings["Aimpart"]].Position + calculation)
-        Remote:FireServer("MOUSE", result)
+        local victim, old = game.Players[settings["Target"]], mt.__namecall
+        local ALV, mag = victim.Character[settings["Aimpart"]].AssemblyLinearVelocity, victim.Character.Humanoid.MoveDirection.magnitude
+        mt.__namecall = newcclosure(function(Self, ...)
+            local Args = {...}
+            local method = tostring(getnamecallmethod())
+            
+            if method == "FireServer" and Self.Name == "MAINEVENT" then
+                if tostring(Args[1]) == "MOUSE" and victim then
+                    if settings["AutoPredict"] then
+                        calculation = Vector3.new(ALV.X * (mag * (ping * settings["AutoPrediction"])), 0, ALV.Z * (mag * (ping * settings["AutoPrediction"])))
+                    else
+                        calculation = Vector3.new(ALV.X * settings["Prediction"], 0, ALV.Z * settings["Prediction"])
+                    end
+                    
+                    result = Vector3.new(victim.Character[settings["Aimpart"]].Position + calculation)
+                    Args[2] = result
+                else
+                    print("smth went wrong with the aimlock.")
+                    return old(Self, unpack(Args))
+                end
+            end
+            
+            return old(Self, unpack(Args))
+        end)
     end
-end)
 
 --\\--| Whitelist Stuff |--//--
 -- Done and working!
@@ -440,7 +465,7 @@ end)
 Main.newToggle("Auto Prediction","Turns auto prediction on/off", true, function(bool)
     settings["AutoPredict"] = bool
 end)
-Main.newToggle("Smooth Camlock","Makes the camlock smooth.", false, function(bool)
+Main.newToggle("Smooth Camlock","Makes the camlock smooth.", true, function(bool)
     settings["Smoothing"] = bool
 end)
 Main.newToggle("Resolver","Antilock resolver.", false, function(bool)
@@ -454,8 +479,11 @@ Main.newToggle("Anti-lock","Turns anti-lock on/off.", false, function(bool)
 end)
 Main.newToggle("Auto Stomp","Auto stomps whenever you walk on someone's body.", false, function(bool)
     settings["AutoStomp"] = bool
+    if settings["AutoStomp"] then
+        autostomp()
+    end
 end)
-Main.newToggle("Auto Food","Spawns you with food and rebuys when eaten.", false, function(bool)
+Main.newToggle("Auto Food","Spawns you with food and rebuys when eaten.", true, function(bool)
     settings["AutoFood"] = bool
 end)
 Main.newToggle("Auto Tactical","Auto buys tactical shotgun when not in inventory.", false, function()
@@ -533,7 +561,7 @@ Misc.newButton("Armour Button", "Creates a armour button", function()
 end)
 
 --// Settings stuff:
-Setting.newDropdown("Anti-lock Position", "Adjusts the position of the anti-lock.", { "Sky", "Ground", "Prediction" }, function(picked)
+Setting.newDropdown("Anti-lock Position", "Adjusts the position of the anti-lock.", { "Sky", "Ground", "Troll", "Prediction" }, function(picked)
     settings["AntiPosition"] = picked
 end)
 Setting.newDropdown("Aimpart", "Adjusts the part of the camlock.", settings["Aimparts"], function(picked)
