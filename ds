@@ -1,3 +1,16 @@
+local AntiCheatNamecall
+
+AntiCheatNamecall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
+    local Arguments = {...}
+    local AntiCheats = {"BreathingHAMON", "TeleportDetect", "JJARC", "TakePoisonDamage", "CHECKER_1", "CHECKER", "GUI_CHECK", "OneMoreTime", "checkingSPEED", "BANREMOTE", "PERMAIDBAN", "KICKREMOTE", "BR_KICKPC", "FORCEFIELD", "Christmas_Sock", "VirusCough", "Symbiote", "Symbioted", "RequestAFKDisplay"}
+    
+    if table.find(AntiCheats, Arguments[1]) and getnamecallmethod() == "FireServer" then
+        return
+    end
+    
+    return AntiCheatNamecall(Self, ...)
+end))
+
 getgenv().settings = {
     ["Aimlock"] = false, -- Aimlock toggle.
     ["AimlockPrediction"] = 5.3, -- Aimlock prediction
@@ -9,7 +22,7 @@ getgenv().settings = {
     ["AutoArmour"] = false, -- Auto Buys Armour
     ["AutoFood"] = true, -- Auto Buys Food toggle.
     ["AutoPredict"] = true, -- Automatically predicts correctly (HIGHLY RECOMMENDED).
-    ["AutoPrediction"] = 0.001776, -- Automatic camlock prediction based on ping (RECOMMENDED).
+    ["AutoPrediction"] = 0.001772, -- Automatic camlock prediction based on ping (RECOMMENDED).
     ["AutoStomp"] = false, -- Auto Stomps toggle.
     ["AutoStompDelay"] = 0, -- Auto Stomp Delay \\ 0 = no delay // (Seconds).
     ["Camlock"] = false, -- CamLock toggle.
@@ -20,7 +33,7 @@ getgenv().settings = {
     ["Scriptable"] = false, -- Maybe a better camlock update? 🗣🔥‼️
     ["Silent"] = false, -- Silent CamLock toggle.
     ["Smoothing"] = true, -- Smoothes camlock camera movement.
-    ["SmoothingAmount"] = 0.433, -- Smooth amount << Higher = Slower >>
+    ["SmoothingAmount"] = 0.422, -- Smooth amount << Higher = Slower >>
     ["Target"] = nil, -- Person targeted.
     ["SilentVictim"] = "", -- Silent CamLock Target.
     ["view"] = false, -- View toggle.
@@ -52,15 +65,15 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/ch
 function autostomp()
     while settings["AutoStomp"] do
         game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
-        if settings["AutoStompDelay"] > 0 then
-            task.wait(settings["AutoStompDelay"])
-        end
+        --if settings["AutoStompDelay"] > 0 then
+          --  task.wait(settings["AutoStompDelay"])
+        --end
         
         if not settings["AutoStomp"] then break end
     end
 end
 
-function getarmour()
+local getarmour = function()
     for _, child in game.workspace:GetDescendants() do
         if child.Name:lower() == "[high-medium armor]" and child:FindFirstChildWhichIsA("ClickDetector") then
             return child end
@@ -68,7 +81,7 @@ function getarmour()
             return child end
     end
 end
-function gettac()
+local gettac = function()
     for _,child in game.workspace:GetDescendants() do
         if child.Name == "[Tactical Shotgun]" and child:FindFirstChildWhichIsA("ClickDetector") then
             return child end
@@ -129,7 +142,7 @@ function getuser(inp)
     if inp == " " or inp == "" then return end
     local low = inp:lower()
     for _,v in next, game.Players:GetChildren() do
-        if string.sub(v.Name:lower(),1,#low) == low or string.sub(v.DisplayName:lower(),1,#low) == low then
+        if string.sub(v.Name:lower(),1,#low) == low or string.sub(v.DisplayName:lower(),1,#low) == low and v.Name ~= me.Name then
             return v.Name
         end
     end
@@ -145,6 +158,7 @@ end
 
 function resolve(name)
     if settings["ResolverType"] == "Recalculate velocity" then
+        print("Worked here")
         local noob = game.Players[name]
         local oldPos, oldTick = noob.Character["Aimpart"].Position, tick()
         task.wait()
@@ -156,8 +170,10 @@ function resolve(name)
         if tick() - oldTick >= 1 / settings["RefreshRate"] then
             oldTick, oldPos = newTick, newPos
         end
+        print(newVel)
         return newVel
     elseif settings["ResolverType"] == "Zero" then
+        print("Returned 0")
         return Vector3.new(0,0,0)
     end
 end
@@ -236,7 +252,7 @@ function silentlock()
         if settings["Scriptable"] then cc.CameraType = Enum.CameraType.Scriptable end
         Notify("Silent Notif", "  Silent: "..settings["SilentVictim"].Name, 1)
         while task.wait() do
-            if settings["Silent"] and settings["SilentVictim"] and not game.workspace[settings["SilentVictim"].Name]:GetAttribute("Knocked") then
+            if settings["Silent"] and settings["SilentVictim"] and not table.find(settings["whitelist"], settings["SilentVictim"].Name) and not game.workspace[settings["SilentVictim"].Name]:GetAttribute("Knocked") then
                 local ALV = settings["SilentVictim"].Character[settings["Aimpart"]].AssemblyLinearVelocity
                 if settings["Smoothing"] then
                     if settings["AutoPredict"] then
@@ -303,7 +319,7 @@ rs.Heartbeat:Connect(function()
             hrp.AssemblyLinearVelocity = vel
         elseif settings["AntiPosition"] == "Ground" then
             hrp.AssemblyLinearVelocity = Vector3.new(0,-6e6,0)
-            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(-0.1),0)
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif settings["AntiPosition"] == "Troll" then
@@ -347,9 +363,9 @@ rs.Heartbeat:Connect(function()
         fireclickdetector(tac.ClickDetector)
     end
     -- Update Dot: Still Fixing.
-    if settings["Dot"] and game.Players[settings["Target"]] then
+    if settings["Dot"] then
         local pos, onscreen = cc:WorldToViewportPoint(game.Players[settings["Target"]].Character[settings["Aimpart"]].Position)
-        if onscreen then
+        if onscreen and game.Players:FindFirstChild(settings["Target"]) then
             dot.Visible = true
             dot.Position = Vector2.new(pos.X, pos.Y)
         else
@@ -368,7 +384,6 @@ end)
 
     -- Aimlock: Not done scripting...
     if settings["Aimlock"] then
-        setreadonly(mt, false)
         local calculation, result
         local victim, old = game.Players[settings["Target"]], mt.__namecall
         local ALV, mag = victim.Character[settings["Aimpart"]].AssemblyLinearVelocity, victim.Character.Humanoid.MoveDirection.magnitude
@@ -399,27 +414,28 @@ end)
 --\\--| Whitelist Stuff |--//--
 -- Done and working!
 me.Chatted:Connect(function(message)
-    local succ, err = pcall(function()
-        local cmd, ShortName = string.split(message, " ")
-        local name = getuser(ShortName)
-        if cmd == ".ws" then
-            if not table.find(settings["whitelist"],name) then
-                table.insert(settings["whitelist"],name)
-                Notify("Whitelist Notification",name.." has been whitelisted!", 1)
-            else
-                Notify("Already Whitelisted",name.." was already whitelisted...", 1)
-            end
-        elseif cmd == ".unws" then
-            if table.find(settings["whitelist"],name) then
-                table.remove(settings["whitelist"],name)
-                Notify("Un-whitelist Notification",name.." has been un-whitelisted!", 1)
-            else
-                Notify("Person Not Found",name.." was already unwhitelisted!", 1)
-            end
+    local cmd, ShortName, name
+    local words = string.split(message, " ")
+    for i,v in words do if i == 1 then cmd = v end if i == 2 then ShortName = v end end
+    if ShortName ~= nil then
+        name = getuser(ShortName)
+    end
+    if cmd == ".ws" then
+        if not table.find(settings["whitelist"],name) then
+            table.insert(settings["whitelist"],name)
+            Notify("Whitelist Notification",name.." has been whitelisted!", 1)
+        else
+            Notify("Already Whitelisted",name.." was already whitelisted...", 1)
         end
-    end)
-    if succ then print("Done whitelisting ".. succ)
-    elseif err then print("Error occurred:  ".. err) end
+    elseif cmd == ".unws" then
+        if table.find(settings["whitelist"],name) then
+            local i = table.find(settings["whitelist"],name)
+            table.remove(settings["whitelist"],i)
+            Notify("Un-whitelist Notification",name.." has been un-whitelisted!", 1)
+        else
+            Notify("Person Not Found",name.." was already unwhitelisted!", 1)
+        end
+    end
 end)
 
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
@@ -492,20 +508,23 @@ end)
 Main.newButton("Custom Macro View", "Fixes the macro button and makes it third person.", function()
     local LS = game.Players.LocalPlayer.PlayerScripts.Macro
     for i, v in pairs(getsenv(LS)) do
-        for _, cons in next, getconstants(getsenv(LS).inout) do
-            setconstant(getsenv(LS).inout, 1, 7.6)
+        for _, cons in getconstants(getsenv(LS).inout) do
+            setconstant(getsenv(LS).inout, 1, 8)
         end
     end
 end)
 
 --// Misc Stuff:
 Misc.newButton("Lock Button", "Creates a lock button", function()
-    ButtonsModule.lockButton("L")
+    if not game:GetService("CoreGui").ButtonHandler:FindFirstChild("L") then
+        ButtonsModule.lockButton("L")
+    end
+    
     lockbutton = game:GetService("CoreGui").ButtonHandler.L
     
     lockbutton.MouseButton1Click:Connect(function()
         local silentbuttoncheck = game.CoreGui:FindFirstChild("ButtonHandler"):FindFirstChild("S")
-        if game.Players[settings["Target"]] then
+        if game.Players:FindFirstChild(settings["Target"]) then
             if not settings["Camlock"] then
                 settings["Camlock"] = true
                 camlock()
@@ -525,7 +544,10 @@ Misc.newButton("Lock Button", "Creates a lock button", function()
     Notify("Button Notif", "Lock button has been successfully created!", 1)
 end)
 Misc.newButton("Silent Button", "Creates a silent button", function()
-    ButtonsModule.silentButton("S")
+    if not game:GetService("CoreGui").ButtonHandler:FindFirstChild("S") then
+        ButtonsModule.silentButton("S")
+    end
+    
     silentbutton = game:GetService("CoreGui").ButtonHandler.S
     
     silentbutton.MouseButton1Click:Connect(function()
@@ -544,8 +566,12 @@ Misc.newButton("Silent Button", "Creates a silent button", function()
     Notify("Button Notif", "Silent button has been successfully created!", 1)
 end)
 Misc.newButton("Armour Button", "Creates a armour button", function()
-    ButtonsModule.armourButton("A")
+    if not game:GetService("CoreGui").ButtonHandler:FindFirstChild("A") then
+        ButtonsModule.armourButton("A")
+    end
+    
     armourbutton = game:GetService("CoreGui").ButtonHandler.A
+    
     armourbutton.MouseButton1Click:Connect(function()
         if not settings["AutoArmour"] then
             settings["AutoArmour"] = true
