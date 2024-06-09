@@ -486,7 +486,7 @@ end)
 Main.newToggle("Auto Food","Spawns you with food and rebuys when eaten.", true, function(bool)
     settings["AutoFood"] = bool
 end)
-Main.newToggle("Auto Tactical","Auto buys tactical shotgun when not in inventory.", false, function()
+Main.newToggle("Auto Tactical","Auto buys tactical shotgun when not in inventory.", false, function(bool)
     settings["AutoTactical"] = bool
 end)
 Main.newButton("Custom Macro View", "Fixes the macro button and makes it third person.", function()
