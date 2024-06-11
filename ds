@@ -37,7 +37,7 @@ getgenv().settings = {
     ["Target"] = nil, -- Person targeted.
     ["Strafe"] = { -- Target Strafe basically.
         ["Status"] = false,
-        ["Speed"] = .1,
+        ["Speed"] = .4,
         ["Height"] = 20,
         ["Distance"] = 18
     },
