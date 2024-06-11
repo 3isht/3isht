@@ -35,6 +35,12 @@ getgenv().settings = {
     ["Smoothing"] = true, -- Smoothes camlock camera movement.
     ["SmoothingAmount"] = 0.422, -- Smooth amount << Higher = Slower >>
     ["Target"] = nil, -- Person targeted.
+    ["Strafe"] = { -- Target Strafe basically.
+        ["Status"] = false,
+        ["Speed"] = 70,
+        ["Height"] = 20,
+        ["Distance"] = 18
+    },
     ["SilentVictim"] = "", -- Silent CamLock Target.
     ["view"] = false, -- View toggle.
     ["whitelist"] = {}, -- Whitelisted players.
@@ -319,7 +325,7 @@ rs.Heartbeat:Connect(function()
             hrp.AssemblyLinearVelocity = vel
         elseif settings["AntiPosition"] == "Ground" then
             hrp.AssemblyLinearVelocity = Vector3.new(0,-6e6,0)
-            hrp.CFrame = cf * CFrame.Angles(0,math.rad(-0.1),0)
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif settings["AntiPosition"] == "Troll" then
@@ -379,6 +385,12 @@ rs.Heartbeat:Connect(function()
     
     -- Aimlock: Not done scripting...
     -- ...
+end)
+
+rs.Heartbeat:Connect(function()
+    if settings["Strafe"]["Status"] then
+        me.Character.HumanoidRootPart.CFrame = game.Players[settings["Target"]].Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(settings["Strafe"]["Speed"]),0) * CFrame.new(0,settings["Strafe"]["Height"],settings["Strafe"]["Distance"])
+    end
 end)
 
 
@@ -456,9 +468,6 @@ btnGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Target.newInput("Username", "Enter a username to be your target.", function(input)
     settings["Target"] = getuser(input)
 end)
-Target.newToggle("Aimlock", "Aimlocks without having to aim.", false, function(bool)
-    settings["Aimlock"] = bool
-end)
 Target.newToggle("Lock Dot", "Creates dot on the target.", false, function(bool)
     settings["Dot"] = bool
 end)
@@ -475,6 +484,12 @@ Target.newToggle("View", "Views the current target.", false, function(bool)
     else
         cc.CameraSubject = old
     end
+end)
+Target.newToggle("Aimlock", "Aimlocks without having to aim.", false, function(bool)
+    settings["Aimlock"] = bool
+end)
+Target.newToggle("Target Strafe", "Randomly teleports you near the target.", false, function(bool)
+    settings["Strafe"]["Status"] = bool
 end)
 
 --// Main stuff:
