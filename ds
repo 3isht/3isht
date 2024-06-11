@@ -37,9 +37,9 @@ getgenv().settings = {
     ["Target"] = nil, -- Person targeted.
     ["Strafe"] = { -- Target Strafe basically.
         ["Status"] = false,
-        ["Speed"] = 2,
-        ["Height"] = 14,
-        ["Distance"] = 14
+        ["Speed"] = .1,
+        ["Height"] = 20,
+        ["Distance"] = 18
     },
     ["SilentVictim"] = "", -- Silent CamLock Target.
     ["view"] = false, -- View toggle.
@@ -389,6 +389,8 @@ end)
 
 rs.Heartbeat:Connect(function()
     if settings["Strafe"]["Status"] then
+        me.Character.HumanoidRootPart.CFrame = game.Players[settings["Target"]].Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(settings["Strafe"]["Speed"]),0) * CFrame.new(math.random(-settings["Strafe"]["Distance"],settings["Strafe"]["Distance"]),math.random(5,settings["Strafe"]["Height"]),math.random(-settings["Strafe"]["Distance"], settings["Strafe"]["Distance"]))
+        rs.RenderStepped:Wait(settings["Strafe"]["Speed"])
         me.Character.HumanoidRootPart.CFrame = game.Players[settings["Target"]].Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(settings["Strafe"]["Speed"]),0) * CFrame.new(math.random(-settings["Strafe"]["Distance"],settings["Strafe"]["Distance"]),math.random(5,settings["Strafe"]["Height"]),math.random(-settings["Strafe"]["Distance"], settings["Strafe"]["Distance"]))
     end
 end)
