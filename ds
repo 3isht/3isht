@@ -37,9 +37,9 @@ getgenv().settings = {
     ["Target"] = nil, -- Person targeted.
     ["Strafe"] = { -- Target Strafe basically.
         ["Status"] = false,
-        ["Speed"] = 70,
-        ["Height"] = 20,
-        ["Distance"] = 18
+        ["Speed"] = 2,
+        ["Height"] = 14,
+        ["Distance"] = 14
     },
     ["SilentVictim"] = "", -- Silent CamLock Target.
     ["view"] = false, -- View toggle.
