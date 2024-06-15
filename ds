@@ -1,3 +1,11 @@
+repeat task.wait() until game:IsLoaded()
+
+for i,v in next, debug do
+    if not getgenv()[i] then
+        getgenv()[i] = v
+    end
+end
+
 local AntiCheatNamecall
 
 AntiCheatNamecall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
@@ -27,6 +35,7 @@ getgenv().settings = {
     ["AutoStompDelay"] = 0, -- Auto Stomp Delay \\ 0 = no delay // (Seconds).
     ["Camlock"] = false, -- CamLock toggle.
     ["Dot"] = false, -- Creates a dot on "Target".
+    ["GameId"] = game.PlaceId, -- Gets the game's ID
     ["KnockCheck"] = true, -- Checks if the person targeted is knoked or nah.
     ["Prediction"] = 0.267, -- Manual camlock prediction.
     ["Resolver"] = false, -- Anti-Lock Resolver.
@@ -53,7 +62,7 @@ local me = game.Players.LocalPlayer
 local rs = game:GetService("RunService")
 local cc, mt = game.workspace.CurrentCamera, getrawmetatable(game)
 settings.offset = 2.77
-local value, ping, armour, lockbutton, silentbutton, armourbutton, basket, tac, usp, sg
+local value, ping, armour, lockbutton, silentbutton, armourbutton, basket, tac, usp, sg, WSplayers
 
 print("Auto prediction\n0.001812\nSmoothening amount\n0.422")
 print("Auto prediction\n0.001769\nSmoothening amount\n0.422")
@@ -69,8 +78,18 @@ dot.Color = Color3.fromRGB(175,30,0)
 --// ChatSpy \\--
 loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/chatspy"))()
 
+function getplayersfolder()
+    local playersFolder
+    for i,v in game.workspace:GetDescendants() do
+        if v.Name == me.Name then
+            playersFolder = v.Parent
+            return playersFolder
+        end
+    end
+end
+
 function autostomp()
-    while settings["AutoStomp"] do
+    while task.wait() do
         game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
         --if settings["AutoStompDelay"] > 0 then
           --  task.wait(settings["AutoStompDelay"])
@@ -94,8 +113,6 @@ local gettac = function()
             return child end
     end
 end
-armour = getarmour()
-tac = gettac()
 
 -- Returns a table.
 function getfood()
@@ -125,15 +142,13 @@ function getfood()
     return f
 end
 
-basket = getfood()
-
 -- Returns Player Full Form.
 function getnear()
     local max = math.huge
     local distance = nil
     local nearest = nil
     for i, player in game.Players:GetChildren() do
-        if player.Name ~= me.Name and not game.workspace[player.Name]:GetAttribute("Knocked") and not table.find(settings["whitelist"], player.Name) then
+        if player.Name ~= me.Name and (not WSplayers[player.Name]:GetAttribute("Knocked") or not WSplayers[player.Name]:GetAttribute("K.O") or not WSplayers[player.Name].BD["K.O"]) and not table.find(settings["whitelist"], player.Name) then
             distance = (me.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
             if distance < max then
                 max = distance
@@ -163,7 +178,7 @@ function Notify(name,desc,dur)
     })
 end
 function isKnocked(name)
-    local person = game.workspace[name]
+    local person = WSplayers[name]
     local knocked = person:GetAttribute("Knocked") or person:GetAttribute("K.O") or nil
     if knocked == nil then return false end
     if not knocked then return false else return true end
@@ -419,6 +434,12 @@ function silentlock()
         end
     end)
 end
+
+
+basket = getfood()
+armour = getarmour()
+tac = gettac()
+WSplayers = getplayersfolder()
 
 -- Antilock function: Done, Needs to check on it.
 rs.Heartbeat:Connect(function()
