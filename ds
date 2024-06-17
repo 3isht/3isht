@@ -6,19 +6,6 @@ for i,v in next, debug do
     end
 end
 
-local AntiCheatNamecall
-
-AntiCheatNamecall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
-    local Arguments = {...}
-    local AntiCheats = {"BreathingHAMON", "TeleportDetect", "JJARC", "TakePoisonDamage", "CHECKER_1", "CHECKER", "GUI_CHECK", "OneMoreTime", "checkingSPEED", "BANREMOTE", "PERMAIDBAN", "KICKREMOTE", "BR_KICKPC", "FORCEFIELD", "Christmas_Sock", "VirusCough", "Symbiote", "Symbioted", "RequestAFKDisplay"}
-    
-    if table.find(AntiCheats, Arguments[1]) and getnamecallmethod() == "FireServer" then
-        return
-    end
-    
-    return AntiCheatNamecall(Self, ...)
-end))
-
 getgenv().settings = {
     ["Aimlock"] = false, -- Aimlock toggle.
     ["AimlockPrediction"] = 5.3, -- Aimlock prediction
@@ -30,14 +17,14 @@ getgenv().settings = {
     ["AutoArmour"] = false, -- Auto Buys Armour
     ["AutoFood"] = true, -- Auto Buys Food toggle.
     ["AutoPredict"] = true, -- Automatically predicts correctly (HIGHLY RECOMMENDED).
-    ["AutoPrediction"] = 0.001772, -- Automatic camlock prediction based on ping (RECOMMENDED).
+    ["AutoPrediction"] = 0.001788, -- Automatic camlock prediction based on ping (RECOMMENDED).
     ["AutoStomp"] = false, -- Auto Stomps toggle.
     ["AutoStompDelay"] = 0, -- Auto Stomp Delay \\ 0 = no delay // (Seconds).
     ["Camlock"] = false, -- CamLock toggle.
     ["Dot"] = false, -- Creates a dot on "Target".
     ["GameId"] = game.PlaceId, -- Gets the game's ID
     ["KnockCheck"] = true, -- Checks if the person targeted is knoked or nah.
-    ["Prediction"] = 0.267, -- Manual camlock prediction.
+    ["Prediction"] = 0.277, -- Manual camlock prediction.
     ["Resolver"] = false, -- Anti-Lock Resolver.
     ["ResolverType"] = "Recalculate velocity", -- Recalculate velocity|Move Direction|Zero
     ["Scriptable"] = false, -- Maybe a better camlock update? 🗣🔥‼️
@@ -55,12 +42,13 @@ getgenv().settings = {
     ["view"] = false, -- View toggle.
     ["whitelist"] = {}, -- Whitelisted players.
     ["AutoTactical"] = false, -- Auto buys tactical.
-    ["RefreshRate"] = 30 -- Resolver refresh rate.
+    ["RefreshRate"] = 30, -- Resolver refresh rate.
+    ["ResolvedVelocity"] = Vector3.new(0,0,0) -- Kind of a fix to the resolver for no working in the functions.
 }
 local ButtonsModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/ModuleTest.lua"))()
 local me = game.Players.LocalPlayer
 local rs = game:GetService("RunService")
-local cc, mt = game.workspace.CurrentCamera, getrawmetatable(game)
+local cc = game.workspace.CurrentCamera
 settings.offset = 2.77
 local value, ping, armour, lockbutton, silentbutton, armourbutton, basket, tac, usp, sg, WSplayers
 
@@ -89,12 +77,8 @@ function getplayersfolder()
 end
 
 function autostomp()
-    while task.wait() do
+    while task.wait(settings["AutoStompDelay"]) do
         game:GetService("ReplicatedStorage"):WaitForChild("MAINEVENT"):FireServer("STOMP")
-        --if settings["AutoStompDelay"] > 0 then
-          --  task.wait(settings["AutoStompDelay"])
-        --end
-        
         if not settings["AutoStomp"] then break end
     end
 end
@@ -148,7 +132,7 @@ function getnear()
     local distance = nil
     local nearest = nil
     for i, player in game.Players:GetChildren() do
-        if player.Name ~= me.Name and (not WSplayers[player.Name]:GetAttribute("Knocked") or not WSplayers[player.Name]:GetAttribute("K.O") or not WSplayers[player.Name].BD["K.O"]) and not table.find(settings["whitelist"], player.Name) then
+        if player.Name ~= me.Name and (not WSplayers[player.Name]:GetAttribute("Knocked") or not WSplayers[player.Name]:GetAttribute("K.O")) and not table.find(settings["whitelist"], player.Name) then
             distance = (me.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
             if distance < max then
                 max = distance
@@ -185,9 +169,9 @@ function isKnocked(name)
 end
 function resolve(name)
     if settings["ResolverType"] == "Recalculate velocity" then
-        print("Worked here")
         local noob = game.Players[name]
-        local oldPos, oldTick = noob.Character["Aimpart"].Position, tick()
+        local oldPos = noob.Character.HumanoidRootPart.Position
+        local oldTick = tick()
         task.wait()
         local newPos = noob.Character.HumanoidRootPart.Position
         local newTick = tick()
@@ -197,10 +181,9 @@ function resolve(name)
         if tick() - oldTick >= 1 / settings["RefreshRate"] then
             oldTick, oldPos = newTick, newPos
         end
-        print(newVel)
+        
         return newVel
     elseif settings["ResolverType"] == "Zero" then
-        print("Returned 0")
         return Vector3.new(0,0,0)
     end
 end
@@ -225,13 +208,14 @@ function camlock()
                             goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["Target"])
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"]*Vector3.new((mag * (ping * settings["AutoPrediction"])),((mag * (ping * settings["AutoPrediction"]))/settings.offset),(mag * (ping * settings["AutoPrediction"]))))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else 
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["Prediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             end
@@ -248,13 +232,14 @@ function camlock()
                             goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = goal
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["Target"])
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X * (mag * (ping * settings["AutoPrediction"])), settings["ResolvedVelocity"].Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), settings["ResolvedVelocity"].Z * (mag * (ping * settings["AutoPrediction"])))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             else 
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["Prediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             end
@@ -276,13 +261,14 @@ function camlock()
                             goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["Target"])
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X * (mag * (ping * settings["AutoPrediction"])), settings["ResolvedVelocity"].Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), settings["ResolvedVelocity"].Z * (mag * (ping * settings["AutoPrediction"])))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else 
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["Prediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             end
@@ -299,13 +285,14 @@ function camlock()
                             goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = goal
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["Target"])
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X * (mag * (ping * settings["AutoPrediction"])), settings["ResolvedVelocity"].Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), settings["ResolvedVelocity"].Z * (mag * (ping * settings["AutoPrediction"])))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             else 
-                                calculation = Vector3.new(resolve(noob.Name).X * (mag * (ping * settings["Prediction"])), resolve(noob.Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(noob.Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             end
@@ -342,13 +329,14 @@ function silentlock()
                             goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["SilentVictim"].Name)
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X * (mag * (ping * settings["AutoPrediction"])), settings["ResolvedVelocity"].Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), settings["ResolvedVelocity"].Z * (mag * (ping * settings["AutoPrediction"])))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else 
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["Prediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             end
@@ -365,13 +353,14 @@ function silentlock()
                             goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = goal
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["SilentVictim"].Name)
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X * (mag * (ping * settings["AutoPrediction"])), settings["ResolvedVelocity"].Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), settings["ResolvedVelocity"].Z * (mag * (ping * settings["AutoPrediction"])))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             else 
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["Prediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             end
@@ -393,13 +382,14 @@ function silentlock()
                             goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["SilentVictim"].Name)
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X * (mag * (ping * settings["AutoPrediction"])), settings["ResolvedVelocity"].Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), settings["ResolvedVelocity"].Z * (mag * (ping * settings["AutoPrediction"])))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             else 
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["Prediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
                             end
@@ -416,13 +406,14 @@ function silentlock()
                             goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = goal
                         end
-                        if settings["Resolve"] then
+                        if settings["Resolver"] then
+                            settings["ResolvedVelocity"] = resolve(settings["SilentVictim"].Name)
                             if settings["AutoPredict"] then
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["AutoPrediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["AutoPrediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X * (mag * (ping * settings["AutoPrediction"])), settings["ResolvedVelocity"].Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), settings["ResolvedVelocity"].Z * (mag * (ping * settings["AutoPrediction"])))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             else 
-                                calculation = Vector3.new(resolve(settings["SilentVictim"].Name).X * (mag * (ping * settings["Prediction"])), resolve(settings["SilentVictim"].Name).Y * ((mag * (ping * settings["Prediction"]))/settings.offset), resolve(settings["SilentVictim"].Name).Z * (mag * (ping * settings["Prediction"])))
+                                calculation = Vector3.new(settings["ResolvedVelocity"].X *(settings["Prediction"]), settings["ResolvedVelocity"].Y *(settings["Prediction"]/settings.offset), settings["ResolvedVelocity"].Z *(settings["Prediction"]))
                                 goal = CFrame.new(cc.CFrame.p, (settings["SilentVictim"].Character[settings["Aimpart"]].Position + calculation))
                                 cc.CFrame = goal
                             end
@@ -521,36 +512,6 @@ rs.Stepped:Connect(function()
     end
 end)
 
-
-    -- Aimlock: Not done scripting...
-    if settings["Aimlock"] then
-        local calculation, result
-        local victim, old = game.Players[settings["Target"]], mt.__namecall
-        local ALV, mag = victim.Character[settings["Aimpart"]].AssemblyLinearVelocity, victim.Character.Humanoid.MoveDirection.magnitude
-        mt.__namecall = newcclosure(function(Self, ...)
-            local Args = {...}
-            local method = tostring(getnamecallmethod())
-            
-            if method == "FireServer" and Self.Name == "MAINEVENT" then
-                if tostring(Args[1]) == "MOUSE" and victim then
-                    if settings["AutoPredict"] then
-                        calculation = Vector3.new(ALV.X * (mag * (ping * settings["AutoPrediction"])), 0, ALV.Z * (mag * (ping * settings["AutoPrediction"])))
-                    else
-                        calculation = Vector3.new(ALV.X * settings["Prediction"], 0, ALV.Z * settings["Prediction"])
-                    end
-                    
-                    result = Vector3.new(victim.Character[settings["Aimpart"]].Position + calculation)
-                    Args[2] = result
-                else
-                    print("smth went wrong with the aimlock.")
-                    return old(Self, unpack(Args))
-                end
-            end
-            
-            return old(Self, unpack(Args))
-        end)
-    end
-
 --\\--| Whitelist Stuff |--//--
 -- Done and working!
 me.Chatted:Connect(function(message)
@@ -629,6 +590,26 @@ Main.newToggle("Smooth Camlock","Makes the camlock smooth.", true, function(bool
 end)
 Main.newToggle("Resolver","Antilock resolver.", false, function(bool)
     settings["Resolver"] = bool
+    --[[
+    if settinge["Resolver"] then
+        if settings["Camlock"] then
+            local new
+            rs:BindToRenderStepped("CamResolver", 0, function()
+                new = resolve(settings["Target"])
+                if type(new) == "vector" then
+                    settings["ResolvedVelocity"] = new
+                end
+            end)
+            print("Target's resolved velocity is: ")
+            print(new)
+            return settings["ResolvedVelocity"]
+        elseif settings["Silent"] then
+            local new = resolve(settings["SilentVictim"].Name)
+            print("SilentVictim's resolved velocity is: ")
+            print(new)
+        end
+    end
+    ]]
 end)
 Main.newToggle("Knock Check","Disables lock when knocked (legit).", true, function(bool)
     settings["KnockCheck"] = bool
@@ -757,3 +738,40 @@ end)
 Setting.newInput("Auto Stomp Delay", "Adjusts the auto stomp delay.", function(inp)
     settings["AutoStompDelay"] = tonumber(inp)
 end)
+
+
+local mt = getrawmetatable(game)
+local old = mt.__namecall
+local AntiCheatNamecall
+setreadonly(mt, false)
+
+mt.__namecall = newcclosure(function(self, ...)
+    local args = {...}
+    local name = {"MOUSE", "UpdateMousePos", "Mouse"}
+    if self.Name == "MAINEVENT" then
+        if settings["Aimlock"] and tostring(getnamecallmethod()) == "FireServer" and table.find(name, args[1]) then
+            local target = game.Players[settings["Target"]]
+            if target then
+                local pos = target.Character[settings["Aimpart"]].Position
+                local cf = target.Character[settingd["Aimpart"]].CFrame
+                local vel = target.Character[settings["Aimpart"]].AssemblyLinearVelocity
+                
+                local final = pos+(vel*settings["Prediction"])
+                args[2] = final
+            else print("target does not exist.") end
+            return old(self, unpack(args))
+        else print("either getnamecall() or table.find() did not work.") end
+    end
+    return old(self, ...)
+end)
+
+AntiCheatNamecall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
+    local Arguments = {...}
+    local AntiCheats = {"BreathingHAMON", "TeleportDetect", "JJARC", "TakePoisonDamage", "CHECKER_1", "CHECKER", "GUI_CHECK", "OneMoreTime", "checkingSPEED", "BANREMOTE", "PERMAIDBAN", "KICKREMOTE", "BR_KICKPC", "FORCEFIELD", "Christmas_Sock", "VirusCough", "Symbiote", "Symbioted", "RequestAFKDisplay"}
+    
+    if table.find(AntiCheats, Arguments[1]) and getnamecallmethod() == "FireServer" then
+        return
+    end
+    
+    return AntiCheatNamecall(Self, ...)
+end))
