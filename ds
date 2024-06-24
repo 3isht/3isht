@@ -907,6 +907,13 @@ Misc.newButton("Armour Button", "Creates a armour button", function()
     end)
     Notify("Button Notif", "Armour button has been successfully created!", 1)
 end)
+Misc.newButton("DESTROY ALL BUTTONS", "", function()
+    local handler = game:FindFirstChild("CoreGui"):FindFirstChild("ButtonHandler") or game.CoreGui.ButtonHandler
+    for _, button in handler:GetChildren() do
+        button:Destroy()
+    end
+    Notify("DESTROYED BUTTONS", "Destroyed all buttons successfully", 1)
+end)
 
 --// Settings stuff:
 Setting.newDropdown("Anti-lock Position", "Adjusts the position of the anti-lock.", { "Sky", "Ground", "Troll", "Prediction" }, function(picked)
