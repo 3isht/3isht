@@ -9,7 +9,7 @@ end
 getgenv().settings = {
     ["Aimlock"] = false, -- Aimlock toggle.
     ["AimlockPrediction"] = 5.3, -- Aimlock prediction
-    ["Aimpart"] = "UpperTorso",-- Aimpart for lock --\\ Head | UpperTorso | LowerTorso | etc... //-- 
+    ["Aimpart"] = "HumanoidRootPart",-- Aimpart for lock --\\ Head | UpperTorso | LowerTorso | etc... //-- 
     ["Aimparts"] = { "Head", "UpperTorso","LowerTorso", "HumanoidRootPart" },
     ["AntiPosition"] = "Sky", -- Sky|Ground|Prediction
     -- \\ Locates it up in the Sky | Underground | Trolls The Locker | Disables the locker's prediction //
@@ -22,11 +22,13 @@ getgenv().settings = {
     ["AutoStompDelay"] = 0, -- Auto Stomp Delay \\ 0 = no delay // (Seconds).
     ["Camlock"] = false, -- CamLock toggle.
     ["Dot"] = false, -- Creates a dot on "Target".
+    ["Fling"] = false, -- Boolean that locates whether the exploit user is flinging someone or not.
+    ["FlingTargets"] = {}, -- Add whoever you want here for them to get flung.
     ["GameId"] = game.PlaceId, -- Gets the game's ID
     ["KnockCheck"] = true, -- Checks if the person targeted is knoked or nah.
-    ["Prediction"] = 0.277, -- Manual camlock prediction.
+    ["Prediction"] = 0.2805, -- Manual camlock prediction.
     ["Resolver"] = false, -- Anti-Lock Resolver.
-    ["ResolverType"] = "Recalculate velocity", -- Recalculate velocity|Move Direction|Zero
+    ["ResolverType"] = "Recalculate velocity", -- Recalculate velocity|Move Direction|Zero|Horizontal
     ["Scriptable"] = false, -- Maybe a better camlock update? 🗣🔥‼️
     ["Silent"] = false, -- Silent CamLock toggle.
     ["Smoothing"] = true, -- Smoothes camlock camera movement.
@@ -34,15 +36,15 @@ getgenv().settings = {
     ["Target"] = nil, -- Person targeted.
     ["Strafe"] = { -- Target Strafe basically.
         ["Status"] = false,
-        ["Speed"] = .4,
-        ["Height"] = 20,
-        ["Distance"] = 18
+        ["Speed"] = .2,
+        ["Height"] = 5,
+        ["Distance"] = 20
     },
     ["SilentVictim"] = "", -- Silent CamLock Target.
     ["view"] = false, -- View toggle.
     ["whitelist"] = {}, -- Whitelisted players.
     ["AutoTactical"] = false, -- Auto buys tactical.
-    ["RefreshRate"] = 30, -- Resolver refresh rate.
+    ["RefreshRate"] = 43, -- Resolver refresh rate.
     ["ResolvedVelocity"] = Vector3.new(0,0,0) -- Kind of a fix to the resolver for no working in the functions.
 }
 local ButtonsModule = loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/ModuleTest.lua"))()
@@ -50,7 +52,7 @@ local me = game.Players.LocalPlayer
 local rs = game:GetService("RunService")
 local cc = game.workspace.CurrentCamera
 settings.offset = 2.77
-local value, ping, armour, lockbutton, silentbutton, armourbutton, basket, tac, usp, sg, WSplayers
+local value, ping, armour, lockbutton, silentbutton, armourbutton, basket, tac, usp, sg, WSplayers, oldPos, oldTick
 
 print("Auto prediction\n0.001812\nSmoothening amount\n0.422")
 print("Auto prediction\n0.001769\nSmoothening amount\n0.422")
@@ -61,10 +63,10 @@ dot.Visible = false
 dot.Filled = true
 dot.Thickness = 1
 dot.Radius = 3
-dot.Color = Color3.fromRGB(175,30,0)
+dot.Color = Color3.fromRGB(175,30,175)
 
 --// ChatSpy \\--
-loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/chatspy"))()
+--loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/chatspy"))()
 
 function getplayersfolder()
     local playersFolder
@@ -132,7 +134,7 @@ function getnear()
     local distance = nil
     local nearest = nil
     for i, player in game.Players:GetChildren() do
-        if player.Name ~= me.Name and (not WSplayers[player.Name]:GetAttribute("Knocked") or not WSplayers[player.Name]:GetAttribute("K.O")) and not table.find(settings["whitelist"], player.Name) then
+        if player.Name ~= me.Name and not WSplayers[player.Name]:GetAttribute("Knocked") and not table.find(settings["whitelist"], player.Name) then
             distance = (me.Character.HumanoidRootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
             if distance < max then
                 max = distance
@@ -154,6 +156,29 @@ function getuser(inp)
     end
 end
 
+function strafe(name)
+    local target = game.Players[name]
+    local hum = me.Character.HumanoidRootPart
+    local angle = math.pi / settings["Strafe"]["Speed"]
+    
+    coroutine.wrap(function()
+        while task.wait() do
+            if settings["Strafe"]["Status"] == false then
+                break end
+            
+            local ang = tick() * angle
+            local center = target.Character.HumanoidRootPart.Position
+            local x,y,z
+            x = center.X + settings["Strafe"]["Distance"] * math.cos(ang)
+            y = center.Y + settings["Strafe"]["Height"]
+            z = center.Z + settings["Strafe"]["Distance"] * math.sin(ang)
+            
+            hum.CFrame = CFrame.new(Vector3.new(x,y,z))
+            hum.CFrame = CFrame.new(hum.Position, center)
+        end
+    end)()
+end
+
 function Notify(name,desc,dur)
     game.StarterGui:SetCore("SendNotification", {
         Title = name,
@@ -168,23 +193,191 @@ function isKnocked(name)
     if not knocked then return false else return true end
 end
 function resolve(name)
+    local noob = game.Players[name]
     if settings["ResolverType"] == "Recalculate velocity" then
-        local noob = game.Players[name]
-        local oldPos = noob.Character.HumanoidRootPart.Position
-        local oldTick = tick()
+        oldPos = noob.Character.HumanoidRootPart.Position
+        oldTick = tick()
         task.wait()
         local newPos = noob.Character.HumanoidRootPart.Position
         local newTick = tick()
         local Time = newTick - oldTick
         local newVel = (newPos - oldPos) / Time
-        
+        print(tick()-oldTick.. " || Refresh rate: ".. 1/settings["RefreshRate"])
         if tick() - oldTick >= 1 / settings["RefreshRate"] then
             oldTick, oldPos = newTick, newPos
         end
-        
+        return newVel
+    elseif settings["ResolverType"] == "Horizontal" then
+        local oldVel = noob.Character.HumanoidRootPart.AssemblyLinearVelocity
+        local newVel = Vector3.new(oldVel.X,0,oldVel.Z)
         return newVel
     elseif settings["ResolverType"] == "Zero" then
         return Vector3.new(0,0,0)
+    end
+end
+
+local fling = function(TargetName)
+    local TargetPlayer = game.Players[TargetName]
+    local Character = me.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+    local RootPart = Humanoid and Humanoid.RootPart
+    
+    local TCharacter = TargetPlayer.Character
+    local THumanoid
+    local TRootPart
+    local THead
+    local Accessory
+    local Handle
+    
+    if TCharacter:FindFirstChildOfClass("Humanoid") then
+        THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
+    end
+    if THumanoid and THumanoid.RootPart then
+        TRootPart = THumanoid.RootPart
+    end
+    if TCharacter:FindFirstChild("Head") then
+        THead = TCharacter.Head
+    end
+    if TCharacter:FindFirstChildOfClass("Accessory") then
+        Accessory = TCharacter:FindFirstChildOfClass("Accessory")
+    end
+    if Accessory and Accessory:FindFirstChild("Handle") then
+        Handle = Accessory.Handle
+    end
+    
+    if Character and Humanoid and RootPart then
+        if RootPart.Velocity.Magnitude < 50 then
+            getgenv().POS = RootPart.CFrame
+        end
+        if THumanoid and THumanoid.Sit then
+            return Notify("Error Occurred", "Target is sitting", 1) -- u can remove dis part if u want lol
+        end
+        if THead then
+            workspace.CurrentCamera.CameraSubject = THead
+        elseif not THead and Handle then
+            workspace.CurrentCamera.CameraSubject = Handle
+        elseif THumanoid and TRootPart then
+            workspace.CurrentCamera.CameraSubject = THumanoid
+        end
+        if not TCharacter:FindFirstChildWhichIsA("BasePart") then
+            return
+        end
+        
+        local FPos = function(BasePart, Pos, Ang)
+            RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+            Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+            RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+            RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+        end
+        
+        local SFBasePart = function(BasePart)
+            local TimeToWait = 3
+            local Time = tick()
+            local Angle = 0
+            
+            repeat
+                if RootPart and THumanoid then
+                    if BasePart.Velocity.Magnitude < 50 then
+                        Angle = Angle + 100
+                        
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                    else
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+                        task.wait()
+            
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+                                    
+                        FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+            
+                        FPos(BasePart, CFrame.new(0, -1.5, -TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(0, 0, 0))
+                        task.wait()
+            
+                        FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+            
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+            
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                        task.wait()
+            
+                        FPos(BasePart, CFrame.new(0, -1.5 ,0), CFrame.Angles(math.rad(-90), 0, 0))
+                        task.wait()
+            
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                        task.wait()
+                    end
+                else
+                    break
+                end
+            until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+        end
+        
+        workspace.FallenPartsDestroyHeight = 0/0
+        
+        local BV = Instance.new("BodyVelocity")
+        BV.Name = "spox's vel"
+        BV.Parent = RootPart
+        BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
+        BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
+        
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+        
+        if TRootPart and THead then
+            if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+                SFBasePart(THead)
+            else
+                SFBasePart(TRootPart)
+            end
+        elseif TRootPart and not THead then
+            SFBasePart(TRootPart)
+        elseif not TRootPart and THead then
+            SFBasePart(THead)
+        elseif not TRootPart and not THead and Accessory and Handle then
+            SFBasePart(Handle)
+        else
+            return Notify("Error Occurred", "Target is missing everything", 1)
+        end
+            
+        BV:Destroy()
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+        workspace.CurrentCamera.CameraSubject = Humanoid
+        
+        repeat
+            RootPart.CFrame = getgenv().POS * CFrame.new(0, .5, 0)
+            Character:SetPrimaryPartCFrame(getgenv().POS * CFrame.new(0, .5, 0))
+            Humanoid:ChangeState("GettingUp")
+            table.foreach(Character:GetChildren(), function(_, x)
+                if x:IsA("BasePart") then
+                    x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+                end
+            end)
+            task.wait()
+        until (RootPart.Position - getgenv().POS.p).Magnitude < 25
+        workspace.FallenPartsDestroyHeight = getgenv().FPDH
+    else
+        return Notify("Error Occurred", "Random error", 1)
     end
 end
 
@@ -252,7 +445,7 @@ function camlock()
                     if settings["Smoothing"] then
                         if settings["AutoPredict"] then
                             mag = (noob.Character.Humanoid.MoveDirection).magnitude
-                                
+                            
                             calculation = Vector3.new(ALV.X * (mag * (ping * settings["AutoPrediction"])), noob.Character["RightFoot"].AssemblyLinearVelocity.Y * ((mag * (ping * settings["AutoPrediction"]))/settings.offset), ALV.Z * (mag * (ping * settings["AutoPrediction"])))
                             goal = CFrame.new(cc.CFrame.p, (noob.Character[settings["Aimpart"]].Position + calculation))
                             cc.CFrame = cc.CFrame:Lerp(goal, settings["SmoothingAmount"], Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
@@ -437,6 +630,8 @@ rs.Heartbeat:Connect(function()
     if settings["Antilock"] then
         local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
         local vel, cf = hrp.AssemblyLinearVelocity, hrp.CFrame
+        
+        
         if settings["AntiPosition"] == "Sky" then
             hrp.AssemblyLinearVelocity = Vector3.new(0,6e6,0)
             hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
@@ -448,13 +643,7 @@ rs.Heartbeat:Connect(function()
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif settings["AntiPosition"] == "Troll" then
-            hrp.AssemblyLinearVelocity = Vector3.new(0,0,math.random(-666,666))
-            hrp.CFrame = cf * CFrame.Angles(0,0,math.rad(0.1))
-            rs.RenderStepped:Wait()
-            hrp.AssemblyLinearVelocity = vel
-            rs.RenderStepped:Wait()
-            hrp.AssemblyLinearVelocity = Vector3.new(math.random(-666,666),0,0)
-            hrp.CFrame = cf * CFrame.Angles(math.rad(0.1),0,0)
+            hrp.AssemblyLinearVelocity = Vector3.new(math.random(-800,800), math.random(-250,250), math.random(-800,800))
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif settings["AntiPosition"] == "Prediction" then
@@ -488,9 +677,9 @@ rs.Heartbeat:Connect(function()
         fireclickdetector(tac.ClickDetector)
     end
     -- Update Dot: Still Fixing.
-    if settings["Dot"] then
+    if settings["Dot"] and game.Players[settings["Target"]] then
         local pos, onscreen = cc:WorldToViewportPoint(game.Players[settings["Target"]].Character[settings["Aimpart"]].Position)
-        if onscreen and game.Players:FindFirstChild(settings["Target"]) then
+        if onscreen then
             dot.Visible = true
             dot.Position = Vector2.new(pos.X, pos.Y)
         else
@@ -499,28 +688,22 @@ rs.Heartbeat:Connect(function()
     else
         dot.Visible = false
     end
-    
-    
-    
-    -- Aimlock: Not done scripting...
-    -- ...
-end)
-
-rs.Stepped:Connect(function()
-    if settings["Strafe"]["Status"] then
-        me.Character.HumanoidRootPart.CFrame = game.Players[settings["Target"]].Character.HumanoidRootPart.CFrame * CFrame.Angles(0,math.rad(settings["Strafe"]["Speed"]),0) * CFrame.new(math.random(-settings["Strafe"]["Distance"],settings["Strafe"]["Distance"]),math.random(5,settings["Strafe"]["Height"]),math.random(-settings["Strafe"]["Distance"], settings["Strafe"]["Distance"]))
-    end
 end)
 
 --\\--| Whitelist Stuff |--//--
 -- Done and working!
 me.Chatted:Connect(function(message)
+    if not message then return end
+    
     local cmd, ShortName, name
     local words = string.split(message, " ")
+    
     for i,v in words do if i == 1 then cmd = v end if i == 2 then ShortName = v end end
+    
     if ShortName ~= nil then
         name = getuser(ShortName)
     end
+    
     if cmd == ".ws" then
         if not table.find(settings["whitelist"],name) then
             table.insert(settings["whitelist"],name)
@@ -535,6 +718,26 @@ me.Chatted:Connect(function(message)
             Notify("Un-whitelist Notification",name.." has been un-whitelisted!", 1)
         else
             Notify("Person Not Found",name.." was already unwhitelisted!", 1)
+        end
+    elseif cmd == ".fadd" then
+        if not table.find(settings["FlingTargets"],name) then
+            table.insert(settings["FlingTargets"],name)
+            Notify("Fling Notif", name.." has been added to fling targets.", 1)
+        else Notify("Fling Notif", name.." was already in fling targets.", 1) end
+    elseif cmd == ".fremove" then
+        if table.find(settings["FlingTargets"],name) then
+            local i = table.find(settings["FlingTargets"],name)
+            table.remove(settings["FlingTargets"],i)
+            Notify("Fling Notif", name.." has been removed from fling targets.", 1)
+        else Notify("Fling Notif", name.." was not in the fling targets.", 1) end
+    elseif cmd == ".fling" then
+        --[[
+        table.insert(settings["FlingTargets"],name)
+        local i = table.find(settings["FlingTargets"],name)
+        table.remove(settings["FlingTargets"],i)
+        ]]
+        for _, v in settings["FlingTargets"] do
+            fling(v)
         end
     end
 end)
@@ -579,6 +782,18 @@ Target.newToggle("Aimlock", "Aimlocks without having to aim.", false, function(b
 end)
 Target.newToggle("Target Strafe", "Randomly teleports you near the target.", false, function(bool)
     settings["Strafe"]["Status"] = bool
+    if settings["Strafe"]["Status"] then
+        strafe(settings["Target"])
+    end
+end)
+Target.newInput("Strafe Speed", "Target strafe's speed", function(inp)
+    settings["Strafe"]["Speed"] = tonumber(inp)
+end)
+Target.newInput("Strafe Height", "Target strafe's height", function(inp)
+    settings["Strafe"]["Height"] = tonumber(inp)
+end)
+Target.newInput("Strafe Distance", "Target strafe's distance", function(inp)
+    settings["Strafe"]["Distance"] = tonumber(inp)
 end)
 
 --// Main stuff:
@@ -590,26 +805,6 @@ Main.newToggle("Smooth Camlock","Makes the camlock smooth.", true, function(bool
 end)
 Main.newToggle("Resolver","Antilock resolver.", false, function(bool)
     settings["Resolver"] = bool
-    --[[
-    if settinge["Resolver"] then
-        if settings["Camlock"] then
-            local new
-            rs:BindToRenderStepped("CamResolver", 0, function()
-                new = resolve(settings["Target"])
-                if type(new) == "vector" then
-                    settings["ResolvedVelocity"] = new
-                end
-            end)
-            print("Target's resolved velocity is: ")
-            print(new)
-            return settings["ResolvedVelocity"]
-        elseif settings["Silent"] then
-            local new = resolve(settings["SilentVictim"].Name)
-            print("SilentVictim's resolved velocity is: ")
-            print(new)
-        end
-    end
-    ]]
 end)
 Main.newToggle("Knock Check","Disables lock when knocked (legit).", true, function(bool)
     settings["KnockCheck"] = bool
@@ -720,7 +915,7 @@ end)
 Setting.newDropdown("Aimpart", "Adjusts the part of the camlock.", settings["Aimparts"], function(picked)
     settings["Aimpart"] = picked
 end)
-Setting.newDropdown("Resolve Type", "Adjusts the anti-lock resolver type.", { "Recalculate velocity", "Zero" }, function(picked)
+Setting.newDropdown("Resolve Type", "Adjusts the anti-lock resolver type.", { "Recalculate velocity", "Horizontal", "Zero" }, function(picked)
     settings["ResolverType"] = picked
 end)
 Setting.newInput("Aimlock Prediction Amount", "Adjusts the aimlock prediction.", function(inp)
@@ -754,13 +949,13 @@ mt.__namecall = newcclosure(function(self, ...)
             if target then
                 local pos = target.Character[settings["Aimpart"]].Position
                 local cf = target.Character[settingd["Aimpart"]].CFrame
-                local vel = target.Character[settings["Aimpart"]].AssemblyLinearVelocity
+                local vel = target.Character[settings["Aimpart"]].Velocity
                 
                 local final = pos+(vel*settings["Prediction"])
                 args[2] = final
             else print("target does not exist.") end
-            return old(self, unpack(args))
-        else print("either getnamecall() or table.find() did not work.") end
+            --return old(self, unpack(args))
+        end
     end
     return old(self, ...)
 end)
