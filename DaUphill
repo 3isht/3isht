@@ -12,6 +12,10 @@ getgenv().sets = {
         oldTick = tick(),
         updateRate = 120
     },
+    aimlock = {
+        enabled = false,
+        target = nil
+    },
     lock = false,
     smooth = true,
     dot = true,
@@ -23,6 +27,7 @@ getgenv().sets = {
     antilock = false,
     antilockpos = "Troll", -- Sky / Ground / Troll / Prediction
     antikey = Enum.KeyCode.T,
+    aimlockkey = Enum.KeyCode.X,
     lockkey = Enum.KeyCode.C,
     strafekey = Enum.KeyCode.F,
     resolverkey = Enum.KeyCode.Z,
@@ -184,7 +189,7 @@ function lock(name)
             TARGET = target
             local aimpart = target.Character[sets.aimpart]
             local pos = aimpart.Position
-            local vel = target.Character[sets.aimpart].AssemblyLinearVelocity
+            local vel = aimpart.AssemblyLinearVelocity
             local calc, goal
             local mag = target.Character.Humanoid.MoveDirection.magnitude
             local isSmoothing = nil
@@ -253,6 +258,12 @@ uis.InputBegan:Connect(function(k, gpe)
     elseif k.KeyCode == sets.resolverkey then
         sets.resolver.enabled = not sets.resolver.enabled
         Notif("RESOLVER: ".. tostring(sets.resolver.enabled), "Resolver keybind pressed!", 3)
+    elseif k.KeyCode == sets.aimlockkey then
+        sets.aimlock.enabled = not sets.aimlock.enabled
+        if sets.aimlock.enabled then
+            sets.aimlock.target = getclosest()
+        end
+        Notif("AIMLOCK: ".. tostring(sets.aimlock.enabled), "", 3)
     elseif k.KeyCode == sets.safekey then
         sets.safeplay = not sets.safeplay
         if sets.safeplay then
@@ -350,7 +361,35 @@ me.Chatted:Connect(function(msg)
     end
 end)
 
-
+-- aimlock stuff hope it works
+local aimlockhook
+aimlockhook = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+    local arguments = {...}
+    local method = tostring(getnamecallmethod())
+    if self:lower() == "mainevent" and sets.aimlock.enabled and method == "FireServer" then
+        local target = sets.aimlock.target
+        local aimpart = target.Character[sets.aimpart]
+        local pos = aimpart.Position
+        local vel
+        if target.Character then
+            local calculation
+            if sets.resolver.enabled then
+                vel = resolve(target.Name)
+            end
+            
+            if sets.autoprediction then
+                calculation = Vector3.new(pos.X + (vel.X * (mag*(ping*sets.autopredictamount))), pos.Y + (vel.Y * ((mag*(ping*sets.autopredictamount))/sets.airoffset)), pos.Z + (vel.Z * (mag*(ping*sets.autopredictamount))))
+            else
+                calculation = Vector3.new(pos.X + (vel.X * sets.prediction), pos.Y + ((vel.Y * sets.prediction)/sets.airoffset), pos.Z + (vel.Z * sets.prediction))
+            end
+            
+            arguments[2] = calculation
+            
+            return aimlockhook(self, unpack(arguments))
+        end
+    end
+    return aimlockhook(self,...)
+end))
 
 
 
