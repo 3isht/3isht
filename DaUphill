@@ -27,7 +27,7 @@ getgenv().sets = {
     antilock = false,
     antilockpos = "Troll", -- Sky / Ground / Troll / Prediction
     antikey = Enum.KeyCode.T,
-    aimlockkey = Enum.KeyCode.X,
+    aimlockkey = Enum.KeyCode.G,
     lockkey = Enum.KeyCode.C,
     strafekey = Enum.KeyCode.F,
     resolverkey = Enum.KeyCode.Z,
@@ -262,6 +262,7 @@ uis.InputBegan:Connect(function(k, gpe)
         sets.aimlock.enabled = not sets.aimlock.enabled
         if sets.aimlock.enabled then
             sets.aimlock.target = getclosest()
+            Notif("AIMLOCK: ".. tostring(sets.aimlock.enabled), "Locked on: "..sets.aimlock.target.Name, 3)
         end
         Notif("AIMLOCK: ".. tostring(sets.aimlock.enabled), "", 3)
     elseif k.KeyCode == sets.safekey then
@@ -312,7 +313,7 @@ rs.Heartbeat:Connect(function()
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif sets.antilockpos == "Troll" then
-            hrp.AssemblyLinearVelocity = Vector3.new(math.random(-800,800), math.random(-250,250), math.random(-800,800))
+            hrp.AssemblyLinearVelocity = Vector3.new(math.random(-66666), math.random(666), math.random(66666))
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif sets.antilockpos == "Prediction" then
@@ -362,11 +363,12 @@ me.Chatted:Connect(function(msg)
 end)
 
 -- aimlock stuff hope it works
+--[[
 local aimlockhook
-aimlockhook = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+aimlockhook = hookmetamethod(game, "__namecall", function(self, ...)
     local arguments = {...}
     local method = tostring(getnamecallmethod())
-    if self:lower() == "mainevent" and sets.aimlock.enabled and method == "FireServer" then
+    if self.Name:upper() == "MAINEVENT" and sets.aimlock.enabled and method == "FireServer" then
         local target = sets.aimlock.target
         local aimpart = target.Character[sets.aimpart]
         local pos = aimpart.Position
@@ -388,9 +390,36 @@ aimlockhook = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
             return aimlockhook(self, unpack(arguments))
         end
     end
-    return aimlockhook(self,...)
-end))
+    return aimlockhook(self, unpack(arguments))
+end)
+]]
+me.Character.ChildAdded:Connect(function(tool)
+    if tool:IsA("Tool") then
+        local target = sets.aimlock.target
+        local aimpart = target.Character[sets.aimpart]
+        local pos = aimpart.Position
+        local vel, calculation
+        if target.Character then
+            if sets.resolver.enabled then
+                vel = resolve(target.Name)
+            end
+            
+            if sets.autoprediction then
+                calculation = Vector3.new(pos.X + (vel.X * (mag*(ping*sets.autopredictamount))), pos.Y + (vel.Y * ((mag*(ping*sets.autopredictamount))/sets.airoffset)), pos.Z + (vel.Z * (mag*(ping*sets.autopredictamount))))
+            else
+                calculation = Vector3.new(pos.X + (vel.X * sets.prediction), pos.Y + ((vel.Y * sets.prediction)/sets.airoffset), pos.Z + (vel.Z * sets.prediction))
+            end
+        end
 
+        tool.Activated:Connect(function()
+            for _,remote in game:GetService("RepicatedStorage"):GetDescendants() do
+                if remote.Name:lower() == "mainevent" then
+                    remote:FireServer(remote.Name, calculation)
+                end
+            end
+        end)
+    end
+end)
 
 
 
