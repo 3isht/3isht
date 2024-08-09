@@ -10,7 +10,7 @@ getgenv().SilentAim = {
 		Size = 1000,
 		Filled = false,
 		Thickness = 0.34,
-		Transparency = 0.4,
+		Transparency = 0.7,
 		Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
 	}
 }
@@ -25,7 +25,7 @@ local Utility = {
     Invite = "camlock",
     BackupInvite = "VfKf5dvSYX",
     Version = "1.0.0a",
-    Method = "MOUSE",
+    Method = "UpdateMousePos",
     AllowedPlaceIDs = {
     	   15186202290, -- Da Strike
         2788229376, -- Da Hood
@@ -139,7 +139,7 @@ function getClosestPlayerToCursor()
 	closestPlr = nil;
 	for i, v in next, plrService:GetPlayers() do
 		pcall(function()
-			local notKO = v.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true;
+			local notKO = v.Character:GetAttribute("Knocked") ~= true;
 			local notGrabbed = v.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
 			if v ~= localPlr and v.Character and v.Character.Humanoid.Health > 0 and notKO and notGrabbed then
 				local screenPos, cameraVisible = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
