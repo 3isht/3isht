@@ -363,7 +363,6 @@ me.Chatted:Connect(function(msg)
 end)
 
 -- aimlock stuff hope it works
---[[
 local aimlockhook
 aimlockhook = hookmetamethod(game, "__namecall", function(self, ...)
     local arguments = {...}
@@ -392,7 +391,7 @@ aimlockhook = hookmetamethod(game, "__namecall", function(self, ...)
     end
     return aimlockhook(self, unpack(arguments))
 end)
-]]
+--[[
 me.Character.ChildAdded:Connect(function(tool)
     if tool:IsA("Tool") then
         local target = sets.aimlock.target
@@ -420,6 +419,7 @@ me.Character.ChildAdded:Connect(function(tool)
         end)
     end
 end)
+]]
 
 
 
