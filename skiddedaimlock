@@ -140,8 +140,7 @@ function getClosestPlayerToCursor()
 	for i, v in next, plrService:GetPlayers() do
 		pcall(function()
 			local notKO = v.Character:GetAttribute("Knocked") ~= true;
-			local notGrabbed = v.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
-			if v ~= localPlr and v.Character and v.Character.Humanoid.Health > 0 and notKO and notGrabbed then
+			if v ~= localPlr and v.Character and v.Character.Humanoid.Health > 0 and notKO then
 				local screenPos, cameraVisible = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
 				if cameraVisible then
 					local distToMouse = (Vector2.new(mouseLocal.X, mouseLocal.Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
