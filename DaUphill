@@ -123,7 +123,7 @@ end
 function isKnocked(name)
     local person = WSplayers[name]
     local knocked
-    if table.find(supportedknocks, game.Id) then
+    if table.find(supportedknocks, game.PlaceId) then
         knocked = person:GetAttribute("Knocked")
     else
         return false
@@ -362,7 +362,20 @@ me.Chatted:Connect(function(msg)
     end
 end)
 
+game:GetService("Players").PlayerAdded:Connect(function(plr)
+    if plr:GetAttribute("group") == me:GetAttribute("group") and plr:GetAttribute("group") ~= 0 then
+        table.insert(sets.whitelist, player.Name)
+    end
+end)
+
+for i, player in game.Players:GetPlayers() do
+    if player:GetAttribute("group") == me:GetAttribute("group") and player:GetAttribute("group") ~= 0 then
+        table.insert(sets.whitelist, player.Name)
+    end
+end
+
 -- aimlock stuff hope it works
+--[[
 local aimlockhook
 aimlockhook = hookmetamethod(game, "__namecall", function(self, ...)
     local arguments = {...}
@@ -391,7 +404,7 @@ aimlockhook = hookmetamethod(game, "__namecall", function(self, ...)
     end
     return aimlockhook(self, unpack(arguments))
 end)
---[[
+
 me.Character.ChildAdded:Connect(function(tool)
     if tool:IsA("Tool") then
         local target = sets.aimlock.target
