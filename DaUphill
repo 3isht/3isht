@@ -109,10 +109,12 @@ function getclosest()
             local hit, p = workspace:FindPartOnRay(ray, me.Character)
 
             if not hit or hit:IsDescendantOf(player.Character) then
-                dis = (mousePos - v2).magnitude
-                if dis < max then
-                    closest = player
-                    max = dis
+                if sets.knockCheck and isKnocked(player.Name) then
+                    dis = (mousePos - v2).magnitude
+                    if dis < max then
+                        closest = player
+                        max = dis
+                    end
                 end
             end
         end
