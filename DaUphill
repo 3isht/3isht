@@ -32,7 +32,7 @@ getgenv().sets = {
     strafekey = Enum.KeyCode.F,
     resolverkey = Enum.KeyCode.Z,
     safekey = Enum.KeyCode.Q,
-    knockCheck = false,
+    knockCheck = true,
     strafe = {
         status = false,
         height = 3,
@@ -97,11 +97,17 @@ function getclosest()
     local max = math.huge
     local dis = nil
     local mousePos = Vector2.new(mouse.X, mouse.Y)
+    local alive = {}
     for _, player in game.Players:GetPlayers() do
+        if not table.find(sets.whitelist, player.Name) and player ~= me and sets.knockCheck and isKnocked(player.Name) == false then
+            table.insert(alive, player)
+        end
+    end
+    for _, player in alive do
         local v3, ons = cam:WorldToViewportPoint(player.Character[sets.aimpart].Position)
         local v2 = Vector2.new(v3.X, v3.Y)
 
-        if ons and not table.find(sets.whitelist, player.Name) and player ~= me then
+        if ons then
             -- Wall check
             local origin = cam.CFrame.Position
             local direction = (player.Character[sets.aimpart].Position - origin).unit * (player.Character[sets.aimpart].Position - origin).magnitude
@@ -109,12 +115,10 @@ function getclosest()
             local hit, p = workspace:FindPartOnRay(ray, me.Character)
 
             if not hit or hit:IsDescendantOf(player.Character) then
-                if sets.knockCheck and isKnocked(player.Name) then
-                    dis = (mousePos - v2).magnitude
-                    if dis < max then
-                        closest = player
-                        max = dis
-                    end
+                dis = (mousePos - v2).magnitude
+                if dis < max then
+                    closest = player
+                    max = dis
                 end
             end
         end
