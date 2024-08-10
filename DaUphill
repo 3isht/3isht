@@ -313,7 +313,7 @@ rs.Heartbeat:Connect(function()
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif sets.antilockpos == "Troll" then
-            hrp.AssemblyLinearVelocity = Vector3.new(math.random(-66666), math.random(666), math.random(66666))
+            hrp.AssemblyLinearVelocity = Vector3.new(-66666, 666, 66666)
             rs.RenderStepped:Wait()
             hrp.AssemblyLinearVelocity = vel
         elseif sets.antilockpos == "Prediction" then
