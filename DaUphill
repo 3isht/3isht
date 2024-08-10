@@ -41,6 +41,11 @@ getgenv().sets = {
     },
     whitelist = {}
 }
+getgenv().supportedknocks = {
+    15186202290, -- Da Strike
+    17403265390, -- Da Downhill
+    18111448661 -- Da Uphill
+}
 
 local me = game.Players.LocalPlayer
 local cam = game.workspace.CurrentCamera
@@ -117,16 +122,9 @@ end
 
 function isKnocked(name)
     local person = WSplayers[name]
-    local knocked = person:GetAttribute("Knocked") or person:GetAttribute("K.O")
-    if knocked == nil then
-        local getKO = function()
-            for _,v in person:GetDescendants() do
-                if v.Name:lower() == "knocked" or v.Name:lower() == "k.o" then
-                    return v
-                end
-            end
-        end
-        knocked = getKO()
+    local knocked
+    if table.find(supportedknocks, game.Id) then
+        knocked = person:GetAttribute("Knocked")
     end
     return knocked
 end
