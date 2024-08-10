@@ -41,7 +41,7 @@ getgenv().sets = {
     },
     whitelist = {}
 }
-getgenv().supportedknocks = {
+local supportedknocks = {
     15186202290, -- Da Strike
     17403265390, -- Da Downhill
     18111448661 -- Da Uphill
@@ -125,6 +125,8 @@ function isKnocked(name)
     local knocked
     if table.find(supportedknocks, game.Id) then
         knocked = person:GetAttribute("Knocked")
+    else
+        return false
     end
     return knocked
 end
