@@ -1,0 +1,3 @@
+if game.PlaceId == 920587237 then
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/ReQiuYTPL/hub/main/ReQiuYTPLHub.lua'),true))()
+end
