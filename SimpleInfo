@@ -1,0 +1,195 @@
+--[[
+      SIMPLE INFO GUI FOR MY OWN SCRIPT!
+]]
+
+local Custom = {};
+
+-- StarterGui.SimpleInfo
+Custom["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+Custom["1"]["IgnoreGuiInset"] = true;
+Custom["1"]["ScreenInsets"] = Enum.ScreenInsets.DeviceSafeInsets;
+Custom["1"]["Name"] = [[SimpleInfo]];
+Custom["1"]["ZIndexBehavior"] = Enum.ZIndexBehavior.Sibling;
+Custom["1"]["ResetOnSpawn"] = false;
+
+-- StarterGui.SimpleInfo.Main
+Custom["2"] = Instance.new("Frame", Custom["1"]);
+Custom["2"]["Active"] = true;
+Custom["2"]["BorderSizePixel"] = 0;
+Custom["2"]["BackgroundColor3"] = Color3.fromRGB(41, 39, 39);
+Custom["2"]["Selectable"] = true;
+Custom["2"]["Size"] = UDim2.new(0, 150, 0, 250);
+Custom["2"]["Position"] = UDim2.new(0.2222, 0, 0.09764, 0);
+Custom["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["2"]["Name"] = [[Main]];
+
+-- StarterGui.SimpleInfo.Main.UICorner
+Custom["3"] = Instance.new("UICorner", Custom["2"]);
+Custom["3"]["CornerRadius"] = UDim.new(0, 4);
+
+-- StarterGui.SimpleInfo.Main.ScrollingFrame
+Custom["4"] = Instance.new("ScrollingFrame", Custom["2"]);
+Custom["4"]["Active"] = true;
+Custom["4"]["BorderSizePixel"] = 0;
+Custom["4"]["CanvasSize"] = UDim2.new(0, 0, 1, 0);
+Custom["4"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["4"]["ScrollBarImageTransparency"] = 1;
+Custom["4"]["Size"] = UDim2.new(0.9, 0, 0.8, 0);
+Custom["4"]["ScrollBarImageColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["4"]["Position"] = UDim2.new(0.05, 0, 0.17, 0);
+Custom["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+
+-- StarterGui.SimpleInfo.Main.TextLabel
+Custom["5"] = Instance.new("TextLabel", Custom["2"]);
+Custom["5"]["TextWrapped"] = true;
+Custom["5"]["BorderSizePixel"] = 0;
+Custom["5"]["TextStrokeColor3"] = Color3.fromRGB(85, 85, 85);
+Custom["5"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+Custom["5"]["TextSize"] = 24;
+Custom["5"]["FontFace"] = Font.new([[rbxasset://fonts/families/Ubuntu.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+Custom["5"]["TextColor3"] = Color3.fromRGB(223, 223, 223);
+Custom["5"]["BackgroundTransparency"] = 1;
+Custom["5"]["Size"] = UDim2.new(0.9, 0, 0.13, 0);
+Custom["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["5"]["Text"] = [[Simple Info]];
+Custom["5"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame
+Custom["6"] = Instance.new("Frame", Custom["2"]);
+Custom["6"]["BorderSizePixel"] = 0;
+Custom["6"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["6"]["Size"] = UDim2.new(0.9, 0, 0.8, 0);
+Custom["6"]["Position"] = UDim2.new(0.05, 0, 0.17, 0);
+Custom["6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame.Safeplay
+Custom["7"] = Instance.new("TextLabel", Custom["6"]);
+Custom["7"]["BorderSizePixel"] = 0;
+Custom["7"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+Custom["7"]["TextSize"] = 25;
+Custom["7"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+Custom["7"]["TextColor3"] = Color3.fromRGB(255, 0, 0);
+Custom["7"]["BackgroundTransparency"] = 1;
+Custom["7"]["Size"] = UDim2.new(0.9, 0, 0.15, 0);
+Custom["7"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["7"]["Text"] = [[Safe Play : OFF]];
+Custom["7"]["Name"] = [[Safeplay]];
+Custom["7"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame.Safeplay.UIPadding
+Custom["8"] = Instance.new("UIPadding", Custom["7"]);
+Custom["8"]["PaddingLeft"] = UDim.new(0, 10);
+
+-- StarterGui.SimpleInfo.Main.Frame.UIListLayout
+Custom["9"] = Instance.new("UIListLayout", Custom["6"]);
+Custom["9"]["Padding"] = UDim.new(0, 3);
+Custom["9"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+-- StarterGui.SimpleInfo.Main.Frame.Antilock
+Custom["a"] = Instance.new("TextLabel", Custom["6"]);
+Custom["a"]["BorderSizePixel"] = 0;
+Custom["a"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+Custom["a"]["TextSize"] = 25;
+Custom["a"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+Custom["a"]["TextColor3"] = Color3.fromRGB(255, 0, 0);
+Custom["a"]["BackgroundTransparency"] = 1;
+Custom["a"]["Size"] = UDim2.new(0.9, 0, 0.15, 0);
+Custom["a"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["a"]["Text"] = [[Antilock : OFF]];
+Custom["a"]["Name"] = [[Antilock]];
+Custom["a"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame.Antilock.UIPadding
+Custom["b"] = Instance.new("UIPadding", Custom["a"]);
+Custom["b"]["PaddingLeft"] = UDim.new(0, 10);
+
+-- StarterGui.SimpleInfo.Main.Frame.Strafe
+Custom["c"] = Instance.new("TextLabel", Custom["6"]);
+Custom["c"]["BorderSizePixel"] = 0;
+Custom["c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+Custom["c"]["TextSize"] = 25;
+Custom["c"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+Custom["c"]["TextColor3"] = Color3.fromRGB(255, 0, 0);
+Custom["c"]["BackgroundTransparency"] = 1;
+Custom["c"]["Size"] = UDim2.new(0.9, 0, 0.15, 0);
+Custom["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["c"]["Text"] = [[Strafe : OFF]];
+Custom["c"]["Name"] = [[Strafe]];
+Custom["c"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame.Strafe.UIPadding
+Custom["d"] = Instance.new("UIPadding", Custom["c"]);
+Custom["d"]["PaddingLeft"] = UDim.new(0, 10);
+
+-- StarterGui.SimpleInfo.Main.Frame.Resolver
+Custom["e"] = Instance.new("TextLabel", Custom["6"]);
+Custom["e"]["BorderSizePixel"] = 0;
+Custom["e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+Custom["e"]["TextSize"] = 25;
+Custom["e"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+Custom["e"]["TextColor3"] = Color3.fromRGB(255, 0, 0);
+Custom["e"]["BackgroundTransparency"] = 1;
+Custom["e"]["Size"] = UDim2.new(0.9, 0, 0.15, 0);
+Custom["e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["e"]["Text"] = [[Resolver : OFF]];
+Custom["e"]["Name"] = [[Resolver]];
+Custom["e"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame.Resolver.UIPadding
+Custom["f"] = Instance.new("UIPadding", Custom["e"]);
+Custom["f"]["PaddingLeft"] = UDim.new(0, 10);
+
+-- StarterGui.SimpleInfo.Main.Frame.Aimlock
+Custom["10"] = Instance.new("TextLabel", Custom["6"]);
+Custom["10"]["BorderSizePixel"] = 0;
+Custom["10"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+Custom["10"]["TextSize"] = 25;
+Custom["10"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+Custom["10"]["TextColor3"] = Color3.fromRGB(255, 0, 0);
+Custom["10"]["BackgroundTransparency"] = 1;
+Custom["10"]["Size"] = UDim2.new(0.9, 0, 0.15, 0);
+Custom["10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["10"]["Text"] = [[Aimlock : OFF]];
+Custom["10"]["Name"] = [[Aimlock]];
+Custom["10"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame.Aimlock.UIPadding
+Custom["11"] = Instance.new("UIPadding", Custom["10"]);
+Custom["11"]["PaddingLeft"] = UDim.new(0, 10);
+
+-- StarterGui.SimpleInfo.Main.Frame.Username
+Custom["12"] = Instance.new("TextLabel", Custom["6"]);
+Custom["12"]["TextWrapped"] = true;
+Custom["12"]["BorderSizePixel"] = 0;
+Custom["12"]["TextScaled"] = true;
+Custom["12"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+Custom["12"]["TextSize"] = 25;
+Custom["12"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+Custom["12"]["TextColor3"] = Color3.fromRGB(226, 226, 226);
+Custom["12"]["BackgroundTransparency"] = 1;
+Custom["12"]["Size"] = UDim2.new(0.9, 0, 0.15, 0);
+Custom["12"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+Custom["12"]["Text"] = [[USERNAME]];
+Custom["12"]["Name"] = [[Username]];
+Custom["12"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
+
+-- StarterGui.SimpleInfo.Main.Frame.Username.UIPadding
+Custom["13"] = Instance.new("UIPadding", Custom["12"]);
+Custom["13"]["PaddingLeft"] = UDim.new(0, 10);
+
+-- StarterGui.SimpleInfo.Main.LocalScript
+Custom["14"] = Instance.new("LocalScript", Custom["2"]);
+
+
+-- StarterGui.SimpleInfo.Main.LocalScript
+local function C_14()
+local script = Custom["14"];
+	local player = game.Players.LocalPlayer
+	local mouse = player:GetMouse()
+	local dragger = player.PlayerGui.SimpleInfo.Main
+	dragger.Active = true
+	dragger.Draggable = true
+end;
+task.spawn(C_14);
+
+return Custom["1"], require;
