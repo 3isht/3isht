@@ -166,7 +166,4 @@ Custom["Username"]["Position"] = UDim2.new(0.05, 0, 0.02, 0);
 Custom["12"] = Instance.new("UIPadding", Custom["Username"]);
 Custom["12"]["PaddingLeft"] = UDim.new(0, 10);
 
--- StarterGui.SimpleInfo.Main.LocalScript
-Custom["13"] = Instance.new("LocalScript", Custom["2"]);
-
 return Custom["1"], require;
