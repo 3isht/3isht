@@ -1,0 +1,499 @@
+local SimpleInfo = loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/refs/heads/master/SimpleInfo"))();
+local me = game.Players.LocalPlayer
+local cam = game.workspace.CurrentCamera
+local rs = game:GetService("RunService")
+local uis = game:GetService("UserInputService")
+local ping, val
+local TARGET
+local targetname
+local mouse = me:GetMouse()
+local WSplayers = nil
+
+local supportedknocks = {
+    15186202290, -- Da Strike
+    125825216602676, -- Da Downhill
+    122094140167766, -- Da Uphill,
+}
+local Faints = {
+    18126537775, -- Da Hills
+    18128226573, -- Da Military
+    18128296193 -- Da Center
+}
+
+local UpdateMousePosGames = {
+    2788229376, -- Da Hood .
+    7213786345, -- Da Hood VC .
+    7242996350, -- Da Hood Aim Trainer .
+    12884917481, -- Da Hood Aim Trainer VC .
+    11867820563, -- Dae Hood .
+    12618586930, -- Dat Hood .
+    12867571492, -- KatanaHood .
+    12927359803 -- Dah Aim Trainer .
+}
+
+if table.find(UpdateMousePosGames, game.PlaceId) then
+    sets.aimlock.remote = game:GetService("ReplicatedStorage").MainEvent
+    sets.aimlock.method = "UpdateMousePos"
+elseif game.PlaceId == 18128296193 or game.PlaceId == 18128226573 or game.PlaceId == 18126537775 then -- Da Center / Da Military / Da Hills
+    sets.aimlock.remote = game:GetService("ReplicatedStorage").assets.dh.MainEvent
+    sets.aimlock.method = "UpdateMousePos"
+elseif game.PlaceId == 5602055394 or game.PlaceId == 7951883376 then -- Hood Modded / Hood Modded VC
+    sets.aimlock.remote = game:GetService("ReplicatedStorage").Bullets
+    sets.aimlock.method = "MousePos"
+elseif game.PlaceId == 15186202290 or game.PlaceId == 125825216602676 or game.PlaceId == 122094140167766 then -- Da Strike / Da Downhill / Da Uphill
+    sets.aimlock.remote = game:GetService("ReplicatedStorage").MAINEVENT
+    sets.aimlock.method = "MOUSE"
+elseif game.PlaceId == 98315832518680 then -- Da Customs\
+    sets.aimlock.remote = game:GetService("ReplicatedStorage").MainEvent
+    sets.aimlock.method = "MousePos"
+end
+
+do
+    for _, v in workspace:GetDescendants() do
+        if v.Name == me.Name then
+            WSplayers = v.Parent
+        end
+    end
+end
+
+-- dot stuff
+local dot = Drawing.new('Circle')
+dot.Visible = false
+dot.Filled = true
+dot.Radius = 3
+dot.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+
+function Notif(title, yap, dur)
+    game.StarterGui:SetCore("SendNotification", {
+        Title = title,
+        Text = yap,
+        Duration = dur
+    })
+end
+
+-- Returns a string (Player's Name)
+function getuser(inp)
+    if inp == " " or inp == "" then return end
+    local low = inp:lower()
+    for _,v in next, game.Players:GetChildren() do
+        if string.sub(v.Name:lower(),1,#low) == low or string.sub(v.DisplayName:lower(),1,#low) == low and v.Name ~= me.Name then
+            return v.Name
+        end
+    end
+end
+
+function isKnocked(name)
+    if sets.knockCheck then
+        local person = WSplayers[name]
+        local knocked
+
+        knocked = (person:FindFirstChild("BodyEffects") and person.BodyEffects["K.O"].Value) or person:GetAttribute("Knocked") or false
+        
+        return knocked
+    end
+
+    return false
+end
+
+-- Returns Instance (Player)
+function getclosest()
+    local closest
+    local max = math.huge
+    local dis = nil
+    local mousePos = Vector2.new(mouse.X, mouse.Y)
+    local alive = {}
+    local knockedplayers = {}
+    for _, player in game.Players:GetPlayers() do
+        if not table.find(sets.whitelist, player.Name) and player ~= me and isKnocked(player.Name) == false then
+            table.insert(alive, player)
+        end
+    end
+    for _, player in alive do
+        local v3, ons = cam:WorldToViewportPoint(player.Character[sets.aimpart].Position)
+        local v2 = Vector2.new(v3.X, v3.Y)
+
+        if ons then
+            -- Wall check
+            local origin = cam.CFrame.Position
+            local direction = (player.Character[sets.aimpart].Position - origin).unit * (player.Character[sets.aimpart].Position - origin).magnitude
+            local ray = Ray.new(origin, direction)
+            local hit, p = workspace:FindPartOnRay(ray, me.Character)
+
+            if not hit or hit:IsDescendantOf(player.Character) then
+                dis = (mousePos - v2).magnitude
+                if dis < max then
+                    closest = player
+                    max = dis
+                end
+            end
+        end
+    end
+    return closest
+end
+
+function strafe(name)
+    local target = game.Players[name]
+    local hum = me.Character.HumanoidRootPart
+    local angle = math.pi / sets.strafe.speed
+
+    coroutine.wrap(function()
+        while task.wait() do
+            if sets.strafe.status == false then
+                break end
+
+            local ang = tick() * angle
+            local center = target.Character.HumanoidRootPart.Position
+            local x,y,z
+            x = center.X + sets.strafe.distance * math.cos(ang)
+            y = center.Y + sets.strafe.height
+            z = center.Z + sets.strafe.distance * math.sin(ang)
+
+            hum.CFrame = CFrame.new(Vector3.new(x,y,z))
+            hum.CFrame = CFrame.new(hum.Position, center)
+        end
+    end)()
+end
+
+function resolve(name)
+    if sets.resolveType == "Y" then
+        local plr = game.Players[name]
+        local vel = plr.Character[sets.aimpart].AssemblyLinearVelocity
+
+        vel = Vector3.new(vel.X, 0, vel.Z)
+
+        return vel
+    elseif sets.resolveType == "Hard" then
+        local plr = game.Players[name]
+        local aimpart = plr.Character["HumanoidRootPart"]
+        sets.resolver.oldPos = aimpart.Position
+        sets.resolver.oldTick = tick()
+        task.wait()
+        local newPos = aimpart.Position
+        local newTick = tick()
+        local calcTime = newTick - sets.resolver.oldTick
+        local vel = (newPos - sets.resolver.oldPos) / calcTime
+        if tick() - sets.resolver.oldTick >= 1/sets.resolver.updateRate then
+            sets.resolver.oldPos = newPos
+            sets.resolver.oldTick = newTick
+        end
+        return vel
+    end
+end
+
+function lock(name)
+    local co = coroutine.wrap(function()
+        while task.wait() do
+            if not sets.lock then break end
+
+            local target = game.Players[name]
+            TARGET = target
+            
+            local aimpart = target.Character:WaitForChild(sets.aimpart)
+            local pos = aimpart.Position
+            local vel = aimpart.AssemblyLinearVelocity
+            local calc, goal
+            local mag = target.Character.Humanoid.MoveDirection.magnitude
+            local knocked = false
+
+            if sets.resolver.enabled then
+                vel = resolve(name)
+            end
+
+            if sets.knockCheck and isKnocked(name) then knocked = true end
+
+            if target and not knocked then
+                if not sets.autopredict then
+                    -- normal prediction
+                    calc = Vector3.new(pos.X + (vel.X * sets.prediction), pos.Y + ((vel.Y * sets.prediction) / sets.airoffset), pos.Z + (vel.Z * sets.prediction))
+                    goal = CFrame.new(cam.CFrame.p, calc)
+
+                    if not sets.smooth then
+                        -- not smooth
+                        cam.CFrame = goal
+                    else
+                        -- smooth
+                        cam.CFrame = cam.CFrame:lerp(goal, sets.smoothing, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                    end
+                else
+                    -- auto prediction
+                    calc = Vector3.new(pos.X + (vel.X * (mag * (ping * sets.autopredictamount))), pos.Y + (vel.Y * ((mag * (ping * sets.autopredictamount)) / sets.airoffset)), pos.Z + (vel.Z * (mag * (ping * sets.autopredictamount))))
+                    goal = CFrame.new(cam.CFrame.p, calc)
+
+                    if not sets.smooth then
+                        -- not smooth
+                        cam.CFrame = goal
+                    else
+                        -- smooth
+                        cam.CFrame = cam.CFrame:lerp(goal, sets.smoothing, Enum.EasingStyle.Elastic, Enum.EasingDirection.InOut)
+                    end
+                end
+            end
+        end
+    end)()
+end
+
+
+-- BUTTON EVENTS
+uis.InputBegan:Connect(function(k, gpe)
+    if gpe then return end
+
+    if k.KeyCode == sets.lockkey then
+        sets.lock = not sets.lock
+        targetname = getuser(getclosest().Name)
+        if sets.lock then
+            Notif("LOCK NOTIFICATION", "Currently locked on: ".. targetname, 2)
+        end
+        lock(targetname)
+    elseif k.KeyCode == sets.strafekey and not sets.safeplay then
+        sets.strafe.status = not sets.strafe.status
+        if sets.strafe.status then sets.smoothing = 0.766 elseif not sets.strafe.status then sets.smoothing = .366 end
+        if targetname ~= nil then strafe(targetname); Notif("STRAFE: ".. tostring(sets.strafe.status), "STRAFE STATUS: ".. tostring(sets.strafe.status), 2) end
+    elseif k.KeyCode == sets.antikey and not sets.safeplay then
+        sets.antilock = not sets.antilock
+        Notif("ANTILOCK: ".. tostring(sets.antilock), "Anti lock status: ".. tostring(sets.antilock), 2)
+    elseif k.KeyCode == sets.resolverkey then
+        sets.resolver.enabled = not sets.resolver.enabled
+        Notif("RESOLVER: ".. tostring(sets.resolver.enabled), "Resolver keybind pressed!", 3)
+    elseif k.KeyCode == sets.aimlockkey then
+        sets.aimlock.enabled = not sets.aimlock.enabled
+        if sets.aimlock.enabled then
+            sets.aimlock.target = getclosest()
+            local highlight = Instance.new("Highlight")
+            highlight.Name = "aim"
+            highlight.Parent = sets.aimlock.target.Character
+            highlight.FillColor = Color3.fromRGB(241, 255, 116)
+            highlight.OutlineColor = Color3.fromRGB(206, 206, 206)
+            Notif("AIMLOCK: ".. tostring(sets.aimlock.enabled), "Locked on: "..sets.aimlock.target.Name, 3)
+        else
+            if sets.aimlock.target and game.Players:FindFirstChild(sets.aimlock.target.Name) then
+                for _, v in sets.aimlock.target.Character:GetChildren() do
+                    if v.Name == "aim" then
+                        v:Destroy()
+                    end
+                end
+            end
+            Notif("AIMLOCK: ".. tostring(sets.aimlock.enabled), "", 3)
+        end
+    elseif k.KeyCode == sets.safekey then
+        sets.safeplay = not sets.safeplay
+        if sets.safeplay then
+            sets.antilock = false
+            sets.strafe.status = false
+        end
+        Notif("SAFEPLAY: ".. tostring(sets.safeplay), "ALL SETTINGS ARE OFF NOW!", 3)
+    end
+end)
+
+-- Getting ping for auto prediction:
+rs.Heartbeat:Connect(function()
+    val = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+    ping = tonumber(string.split(val, '(')[1])
+end)
+
+-- Managing the dot on closest player
+rs.Heartbeat:Connect(function()
+    if sets.lock then
+        local pos, ons = cam:WorldToViewportPoint(TARGET.Character[sets.aimpart].Position)
+        if pos and ons then
+            dot.Position = Vector2.new(pos.X, pos.Y)
+            dot.Visible = true
+            dot.Color = Color3.fromHSV(tick() % 5 / 5, 1, 1)
+        else
+            dot.Visible = false
+        end
+    else
+        dot.Visible = false
+    end
+end)
+
+-- Anti lock shit
+rs.Heartbeat:Connect(function()
+    if sets.antilock then
+        local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+        local vel, cf = hrp.AssemblyLinearVelocity, hrp.CFrame
+
+        if sets.antilockpos == "Sky" then
+            hrp.AssemblyLinearVelocity = Vector3.new(0,6e6,0)
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+        elseif sets.antilockpos == "Ground" then
+            hrp.AssemblyLinearVelocity = Vector3.new(0,-6e6,0)
+            hrp.CFrame = cf * CFrame.Angles(0,math.rad(0.1),0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+        elseif sets.antilockpos == "Troll" then
+            hrp.AssemblyLinearVelocity = Vector3.new(math.random(-666, 666), math.random(-666, 666), math.random(-666, 666))
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+        elseif sets.antilockpos == "Prediction" then
+            hrp.AssemblyLinearVelocity = Vector3.new(0,0,0)
+            rs.RenderStepped:Wait()
+            hrp.AssemblyLinearVelocity = vel
+        end
+    end
+end)
+
+me.Chatted:Connect(function(msg)
+    if not msg then return end
+
+    local words = string.split(msg, " ")
+    local checker, cmd, third
+
+    if #words == 3 then
+        if words[1] == "/e" then
+            checker = true
+        else
+            checker = false
+        end
+        cmd = words[2]
+        third = getuser(words[3])
+    end
+
+    if cmd == "ws" and checker then
+        table.insert(sets.whitelist, third)
+        Notif("WHITELISTED", "Whitelisted player: ".. third, 3)
+    elseif cmd == "unws" and checker then
+        local i = table.find(sets.whitelist, third)
+        table.remove(sets.whitelist, i)
+        Notif("UNWHITELISTED", "Player is no more whitelisted: ".. third, 3)
+    end
+end)
+
+game:GetService("Players").PlayerAdded:Connect(function(plr)
+    if plr:GetAttribute("group") == me:GetAttribute("group") and plr:GetAttribute("group") ~= 0 and table.find(supportedknocks, game.PlaceId) then
+        table.insert(sets.whitelist, player.Name)
+    end
+end)
+
+for i, player in game.Players:GetPlayers() do
+    if player:GetAttribute("group") == me:GetAttribute("group") and player:GetAttribute("group") ~= 0 then
+        table.insert(sets.whitelist, player.Name)
+    end
+end
+
+-- Aimlock
+me.CharacterAdded:Connect(function(character)
+    character.ChildAdded:Connect(function(tool)
+        if tool:IsA("Tool") then
+            tool.Activated:Connect(function()
+                if sets.aimlock.enabled then
+                    local target = sets.aimlock.target
+                    local aimpart = target.Character[sets.aimpart]
+                    local pos = aimpart.Position
+                    local vel = target.Character[sets.aimpart].AssemblyLinearVelocity
+                    local calculation
+
+                    if target.Character then
+                        if sets.resolver.enabled then
+                            vel = resolve(target.Name)
+                        end
+                        
+                        if sets.autoprediction then
+                            calculation = Vector3.new(pos.X + (vel.X * (mag*(ping*sets.autopredictamount))), pos.Y, pos.Z + (vel.Z * (mag*(ping*sets.autopredictamount))))
+                        else
+                            calculation = Vector3.new(pos.X + (vel.X * sets.prediction), pos.Y, pos.Z + (vel.Z * sets.prediction))
+                        end
+                    end
+                    
+                    if not table.find(Faints, game.PlaceId) then
+                        sets.aimlock.remote:FireServer(sets.aimlock.method, calculation)
+                    else
+                        sets.aimlock.remote:FireServer(sets.aimlock.method, {calculation, CFrame.new(calculation)})
+                    end
+                end
+            end)
+        end
+    end)
+end)
+me.Character.ChildAdded:Connect(function(tool)
+    if tool:IsA("Tool") then
+        tool.Activated:Connect(function()
+            if sets.aimlock.enabled then
+                local target = sets.aimlock.target
+                local aimpart = target.Character[sets.aimpart]
+                local pos = aimpart.Position
+                local vel = target.Character[sets.aimpart].AssemblyLinearVelocity
+                local calculation
+
+                if target.Character then
+                    if sets.resolver.enabled then
+                        vel = resolve(target.Name)
+                    end
+                    
+                    if sets.autoprediction then
+                        calculation = Vector3.new(pos.X + (vel.X * (mag*(ping*sets.autopredictamount))), pos.Y, pos.Z + (vel.Z * (mag*(ping*sets.autopredictamount))))
+                    else
+                        calculation = Vector3.new(pos.X + (vel.X * sets.prediction), pos.Y, pos.Z + (vel.Z * sets.prediction))
+                    end
+                end
+                
+                if not table.find(Faints, game.PlaceId) then
+                    sets.aimlock.remote:FireServer(sets.aimlock.method, calculation)
+                else
+                    sets.aimlock.remote:FireServer(sets.aimlock.method, {calculation, CFrame.new(calculation)})
+                end
+            end
+        end)
+    end
+end)
+
+rs.Heartbeat:Connect(function()
+    if sets.aimlock.enabled then
+        SimpleInfo.Aimlock.Text = "Aimlock : ON"
+        SimpleInfo.Aimlock.TextColor3 = Color3.fromRGB(0,255,0)
+    else
+        SimpleInfo.Aimlock.Text = "Aimlock : OFF"
+        SimpleInfo.Aimlock.TextColor3 = Color3.fromRGB(255,0,0)
+    end
+
+    if sets.antilock then
+        SimpleInfo.Antilock.Text = "Antilock : ON"
+        SimpleInfo.Antilock.TextColor3 = Color3.fromRGB(0,255,0)
+    else
+        SimpleInfo.Antilock.Text = "Antilockw : OFF"
+        SimpleInfo.Antilock.TextColor3 = Color3.fromRGB(255,0,0)
+    end
+
+    if sets.safeplay then
+        SimpleInfo.Safeplay.Text = "Safeplay : ON"
+        SimpleInfo.Safeplay.TextColor3 = Color3.fromRGB(0,255,0)
+    else
+        SimpleInfo.Safeplay.Text = "Safeplay : OFF"
+        SimpleInfo.Safeplay.TextColor3 = Color3.fromRGB(255, 0, 0)
+    end
+
+    if sets.resolver.enabled then
+        SimpleInfo.Resolver.Text = "Resolver : ON"
+        SimpleInfo.Resolver.TextColor3 = Color3.fromRGB(0,255,0)
+    else
+        SimpleInfo.Resolver.Text = "Resolver : OFF"
+        SimpleInfo.Resolver.TextColor3 = Color3.fromRGB(255, 0, 0)
+    end
+
+    if sets.strafe.status then
+        SimpleInfo.Strafe.Text = "Strafe : ON"
+        SimpleInfo.Strafe.TextColor3 = Color3.fromRGB(0,255,0)
+    else
+        SimpleInfo.Strafe.Text = "Strafe : OFF"
+        SimpleInfo.Strafe.TextColor3 = Color3.fromRGB(255, 0, 0)
+    end
+end)
+SimpleInfo.Username.Text = me.Name
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- Chat spy
+loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/chatspy"))()
+
+Notif("Script is working!", "EVERYTHING WORKS CREDITS TO \"b.bg\" ON DISCORD", 5)
