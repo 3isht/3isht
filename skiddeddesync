@@ -1,0 +1,41 @@
+-- // made by sunnd4y ,  leaked by sunnd4y , skidded by sunnd4y
+
+print("atlanta.yns network desync loaded !")
+
+local clone_ref = cloneref or function(...)
+    return ...
+end
+
+
+local players = clone_ref(game:GetService("Players"))
+local runService = clone_ref(game:GetService("RunService"))
+local local_player = players.LocalPlayer
+local character = local_player.Character or local_player.CharacterAdded:Wait()
+local root = character and character.HumanoidRootPart
+local sleeping = false
+
+
+local network_sleep_tick = tick()
+local network_sleep_amount = 7.5
+local millisecond = 1000
+
+runService.PostSimulation:Connect(function()
+    if (tick() - network_sleep_tick) >= (network_sleep_amount / millisecond) then
+        sleeping = not sleeping
+        sethiddenproperty(root, "NetworkIsSleeping", sleeping)
+        setfflag("S2PhysicsSenderRate", 1)
+        network_sleep_tick = tick()
+    end
+end)
+
+
+
+
+--[[
+local remote = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
+local c = "\"..string.byte(C)
+local u = "\"..string.byte(u)
+local m = "\"..string.byte(m)
+getgenv().wrd = c..u..m
+remote:FireServer(wrd, "All") 
+]]
