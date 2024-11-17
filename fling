@@ -5,7 +5,7 @@ local Offset = Vector3.new(0,-7.5,0)
 local AuraSize = 15
 local Whitelist = {}
 
---[[
+local commands = [[
 COMMANDS
 .fix fixes it flinging moeny is bugged
 .stop stops flinging people
@@ -18,8 +18,8 @@ and Target flings a target ex .fling <DisplayName/Username> and aura makes part 
 .offset X Y Z changes part offset when stopped
 .flingpower/fp <number>
 .aurasize/asize <number)
---]]
-
+]]
+print(commands)
 
 local PartPosition = Vector3.new(0,50,0)
 local function GetUnAnchored()
