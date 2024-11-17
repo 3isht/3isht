@@ -359,7 +359,7 @@ local main = {
 }
 
 function findPath(PATH : string) : Instance
-    local splitPath = string.split(PATH:gsub("FindFirstChild", " "):gsub("GetService", " "):gsub("require", " "):gsub("getsenv", " "):gsub("%(", " "):gsub("%)", " "):gsub("%.", " "), " ")
+    local splitPath = string.split(PATH:gsub("FindFirstChild", " "):gsub("GetService", " "):gsub("require", " "):gsub("getsenv", " "):gsub("\"", " "):gsub(":", " "):gsub("%(", " "):gsub("%)", " "):gsub("%.", " "), " ")
     local path = game
     
     for i = 1, #splitPath do
