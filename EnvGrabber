@@ -1,0 +1,533 @@
+local EnvGrabber = {};
+
+-- StarterGui.PathToValues
+EnvGrabber["1"] = Instance.new("ScreenGui", game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"));
+EnvGrabber["1"]["IgnoreGuiInset"] = true;
+EnvGrabber["1"]["ScreenInsets"] = Enum.ScreenInsets.DeviceSafeInsets;
+EnvGrabber["1"]["Name"] = [[PathToValues]];
+
+
+-- StarterGui.PathToValues.Main
+EnvGrabber["2"] = Instance.new("Frame", EnvGrabber["1"]);
+EnvGrabber["2"]["Active"] = true;
+EnvGrabber["2"]["BorderSizePixel"] = 0;
+EnvGrabber["2"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["2"]["ClipsDescendants"] = true;
+EnvGrabber["2"]["Size"] = UDim2.new(0, 287, 0, 421);
+EnvGrabber["2"]["Position"] = UDim2.new(0.40286, 0, 0.23756, 0);
+EnvGrabber["2"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["2"]["Name"] = [[Main]];
+EnvGrabber["2"]["BackgroundTransparency"] = 0.1;
+EnvGrabber["2"]["Draggable"] = true;
+
+
+-- StarterGui.PathToValues.Main.Line
+EnvGrabber["3"] = Instance.new("Frame", EnvGrabber["2"]);
+EnvGrabber["3"]["BorderSizePixel"] = 0;
+EnvGrabber["3"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["3"]["Size"] = UDim2.new(0, 287, 0, 1);
+EnvGrabber["3"]["Position"] = UDim2.new(0, 0, 0.07126, 0);
+EnvGrabber["3"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["3"]["Name"] = [[Line]];
+
+
+-- StarterGui.PathToValues.Main.Name
+EnvGrabber["4"] = Instance.new("TextLabel", EnvGrabber["2"]);
+EnvGrabber["4"]["BorderSizePixel"] = 0;
+EnvGrabber["4"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["4"]["TextSize"] = 22;
+EnvGrabber["4"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["4"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["4"]["BackgroundTransparency"] = 1;
+EnvGrabber["4"]["Size"] = UDim2.new(0, 287, 0, 31);
+EnvGrabber["4"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["4"]["Text"] = [[{Funcs - Upvals - Cons} GRABBER]];
+EnvGrabber["4"]["Name"] = [[Name]];
+EnvGrabber["4"]["Position"] = UDim2.new(-0.00105, 0, -0.00214, 0);
+
+
+-- StarterGui.PathToValues.Main.ScriptPathInput
+EnvGrabber["5"] = Instance.new("TextBox", EnvGrabber["2"]);
+EnvGrabber["5"]["CursorPosition"] = -1;
+EnvGrabber["5"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["5"]["BorderSizePixel"] = 0;
+EnvGrabber["5"]["TextWrapped"] = true;
+EnvGrabber["5"]["TextSize"] = 19;
+EnvGrabber["5"]["Name"] = [[ScriptPathInput]];
+EnvGrabber["5"]["BackgroundColor3"] = Color3.fromRGB(30, 30, 30);
+EnvGrabber["5"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["5"]["ClipsDescendants"] = true;
+EnvGrabber["5"]["Size"] = UDim2.new(1.001, 0, 0.07862, 0);
+EnvGrabber["5"]["Position"] = UDim2.new(-0.00449, 0, 0.13338, 1);
+EnvGrabber["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["5"]["Text"] = [[Enter Here!]];
+EnvGrabber["5"]["BackgroundTransparency"] = 0.3;
+
+
+-- StarterGui.PathToValues.Main.StuffScroll
+EnvGrabber["6"] = Instance.new("ScrollingFrame", EnvGrabber["2"]);
+EnvGrabber["6"]["Active"] = true;
+EnvGrabber["6"]["BorderSizePixel"] = 0;
+EnvGrabber["6"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["6"]["Name"] = [[StuffScroll]];
+EnvGrabber["6"]["Size"] = UDim2.new(1, 0, 0.59382, 0);
+EnvGrabber["6"]["ScrollBarImageColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["6"]["Position"] = UDim2.new(-0, 0, 0.40618, 0);
+EnvGrabber["6"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["6"]["ScrollBarThickness"] = 4;
+EnvGrabber["6"]["BackgroundTransparency"] = 0.4;
+
+
+-- StarterGui.PathToValues.Main.StuffScroll.UIListLayout
+EnvGrabber["7"] = Instance.new("UIListLayout", EnvGrabber["6"]);
+EnvGrabber["7"]["Padding"] = UDim.new(0, 6);
+EnvGrabber["7"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+-- StarterGui.PathToValues.Main.StuffScroll.UIPadding
+EnvGrabber["a"] = Instance.new("UIPadding", EnvGrabber["6"]);
+EnvGrabber["a"]["PaddingTop"] = UDim.new(0, 6);
+EnvGrabber["a"]["PaddingLeft"] = UDim.new(0, 6);
+
+
+-- StarterGui.PathToValues.Main.Dropdown
+EnvGrabber["b"] = Instance.new("Frame", EnvGrabber["2"]);
+EnvGrabber["b"]["BorderSizePixel"] = 0;
+EnvGrabber["b"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["b"]["Size"] = UDim2.new(1, 0, 0.09441, 0);
+EnvGrabber["b"]["Position"] = UDim2.new(0, 0, 0.21438, 0);
+EnvGrabber["b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["b"]["Name"] = [[Dropdown]];
+
+
+-- StarterGui.PathToValues.Main.Dropdown.DropName
+EnvGrabber["c"] = Instance.new("TextLabel", EnvGrabber["b"]);
+EnvGrabber["c"]["BorderSizePixel"] = 0;
+EnvGrabber["c"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["c"]["TextSize"] = 24;
+EnvGrabber["c"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["c"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["c"]["BackgroundTransparency"] = 1;
+EnvGrabber["c"]["Size"] = UDim2.new(1, 0, 1, 0);
+EnvGrabber["c"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["c"]["Text"] = [[Currently viewing: Functions]];
+EnvGrabber["c"]["Name"] = [[DropName]];
+
+
+-- StarterGui.PathToValues.Main.Dropdown.DropName.UIPadding
+EnvGrabber["d"] = Instance.new("UIPadding", EnvGrabber["c"]);
+EnvGrabber["d"]["PaddingRight"] = UDim.new(0, 26);
+EnvGrabber["d"]["PaddingBottom"] = UDim.new(0, 4);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Enabled
+EnvGrabber["e"] = Instance.new("ImageLabel", EnvGrabber["b"]);
+EnvGrabber["e"]["BorderSizePixel"] = 0;
+EnvGrabber["e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["e"]["Image"] = [[http://www.roblox.com/asset/?id=90782335450898]];
+EnvGrabber["e"]["Size"] = UDim2.new(0.068, 0, 0.667, 0);
+EnvGrabber["e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["e"]["BackgroundTransparency"] = 1;
+EnvGrabber["e"]["Name"] = [[Enabled]];
+EnvGrabber["e"]["Position"] = UDim2.new(0.914, 0, 0.252, 0);
+-- Attributes
+EnvGrabber["e"]:SetAttribute([[redX]], 83805422072683);
+EnvGrabber["e"]:SetAttribute([[greenX]], 90782335450898);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Enabled.UIAspectRatioConstraint
+EnvGrabber["f"] = Instance.new("UIAspectRatioConstraint", EnvGrabber["e"]);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices
+EnvGrabber["10"] = Instance.new("ScrollingFrame", EnvGrabber["b"]);
+EnvGrabber["10"]["Active"] = true;
+EnvGrabber["10"]["BorderSizePixel"] = 0;
+EnvGrabber["10"]["BackgroundColor3"] = Color3.fromRGB(21, 21, 21);
+EnvGrabber["10"]["Name"] = [[Choices]];
+EnvGrabber["10"]["ScrollBarImageTransparency"] = 1;
+EnvGrabber["10"]["Size"] = UDim2.new(0.99303, 0, 0.01877, 0);
+EnvGrabber["10"]["ScrollBarImageColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["10"]["Position"] = UDim2.new(0, 0, 0.98123, 0);
+EnvGrabber["10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["10"]["ScrollBarThickness"] = 3;
+-- Attributes
+EnvGrabber["10"]:SetAttribute([[MainSize]], UDim2.new(0.993, 0, 3.239, 0));
+EnvGrabber["10"]:SetAttribute([[SmallSize]], UDim2.new(0.993, 0, 0, 0));
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.UIListLayout
+EnvGrabber["11"] = Instance.new("UIListLayout", EnvGrabber["10"]);
+EnvGrabber["11"]["Padding"] = UDim.new(0, 8);
+EnvGrabber["11"]["SortOrder"] = Enum.SortOrder.LayoutOrder;
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.UIPadding
+EnvGrabber["12"] = Instance.new("UIPadding", EnvGrabber["10"]);
+EnvGrabber["12"]["PaddingTop"] = UDim.new(0, 4);
+EnvGrabber["12"]["PaddingLeft"] = UDim.new(0, 8);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Functions
+EnvGrabber["13"] = Instance.new("TextLabel", EnvGrabber["10"]);
+EnvGrabber["13"]["BorderSizePixel"] = 0;
+EnvGrabber["13"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["13"]["TextSize"] = 26;
+EnvGrabber["13"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["13"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["13"]["Size"] = UDim2.new(0.83332, 0, 0.25685, 0);
+EnvGrabber["13"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["13"]["Text"] = [[Functions]];
+EnvGrabber["13"]["Name"] = [[Functions]];
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Functions.UIPadding
+EnvGrabber["14"] = Instance.new("UIPadding", EnvGrabber["13"]);
+EnvGrabber["14"]["PaddingRight"] = UDim.new(0, 14);
+EnvGrabber["14"]["PaddingBottom"] = UDim.new(0, 2);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Functions.Frame
+EnvGrabber["15"] = Instance.new("Frame", EnvGrabber["13"]);
+EnvGrabber["15"]["BorderSizePixel"] = 0;
+EnvGrabber["15"]["BackgroundColor3"] = Color3.fromRGB(0, 255, 0);
+EnvGrabber["15"]["Size"] = UDim2.new(0.14133, 0, 1, 0);
+EnvGrabber["15"]["Position"] = UDim2.new(1.12109, 0, 0.06833, 0);
+EnvGrabber["15"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Functions.Frame.UIAspectRatioConstraint
+EnvGrabber["16"] = Instance.new("UIAspectRatioConstraint", EnvGrabber["15"]);
+
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Upvalues
+EnvGrabber["17"] = Instance.new("TextLabel", EnvGrabber["10"]);
+EnvGrabber["17"]["BorderSizePixel"] = 0;
+EnvGrabber["17"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["17"]["TextSize"] = 26;
+EnvGrabber["17"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["17"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["17"]["Size"] = UDim2.new(0.83332, 0, 0.25685, 0);
+EnvGrabber["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["17"]["Text"] = [[Upvalues]];
+EnvGrabber["17"]["Name"] = [[Upvalues]];
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Upvalues.UIPadding
+EnvGrabber["18"] = Instance.new("UIPadding", EnvGrabber["17"]);
+EnvGrabber["18"]["PaddingRight"] = UDim.new(0, 14);
+EnvGrabber["18"]["PaddingBottom"] = UDim.new(0, 2);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Upvalues.Frame
+EnvGrabber["19"] = Instance.new("Frame", EnvGrabber["17"]);
+EnvGrabber["19"]["BorderSizePixel"] = 0;
+EnvGrabber["19"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0);
+EnvGrabber["19"]["Size"] = UDim2.new(0.14133, 0, 1, 0);
+EnvGrabber["19"]["Position"] = UDim2.new(1.12109, 0, 0.06833, 0);
+EnvGrabber["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Upvalues.Frame.UIAspectRatioConstraint
+EnvGrabber["1a"] = Instance.new("UIAspectRatioConstraint", EnvGrabber["19"]);
+
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Constants
+EnvGrabber["1b"] = Instance.new("TextLabel", EnvGrabber["10"]);
+EnvGrabber["1b"]["BorderSizePixel"] = 0;
+EnvGrabber["1b"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["1b"]["TextSize"] = 26;
+EnvGrabber["1b"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["1b"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["1b"]["Size"] = UDim2.new(0.83332, 0, 0.25685, 0);
+EnvGrabber["1b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["1b"]["Text"] = [[Constants]];
+EnvGrabber["1b"]["Name"] = [[Constants]];
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Constants.UIPadding
+EnvGrabber["1c"] = Instance.new("UIPadding", EnvGrabber["1b"]);
+EnvGrabber["1c"]["PaddingRight"] = UDim.new(0, 14);
+EnvGrabber["1c"]["PaddingBottom"] = UDim.new(0, 2);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Constants.Frame
+EnvGrabber["1d"] = Instance.new("Frame", EnvGrabber["1b"]);
+EnvGrabber["1d"]["BorderSizePixel"] = 0;
+EnvGrabber["1d"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0);
+EnvGrabber["1d"]["Size"] = UDim2.new(0.14133, 0, 1, 0);
+EnvGrabber["1d"]["Position"] = UDim2.new(1.12109, 0, 0.06833, 0);
+EnvGrabber["1d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+
+
+-- StarterGui.PathToValues.Main.Dropdown.Choices.Constants.Frame.UIAspectRatioConstraint
+EnvGrabber["1e"] = Instance.new("UIAspectRatioConstraint", EnvGrabber["1d"]);
+
+
+
+-- StarterGui.PathToValues.Main.UIStroke
+EnvGrabber["1f"] = Instance.new("UIStroke", EnvGrabber["2"]);
+EnvGrabber["1f"]["Color"] = Color3.fromRGB(255, 255, 255);
+
+
+-- StarterGui.PathToValues.Main.Guide
+EnvGrabber["20"] = Instance.new("TextLabel", EnvGrabber["2"]);
+EnvGrabber["20"]["BorderSizePixel"] = 0;
+EnvGrabber["20"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["20"]["TextSize"] = 17;
+EnvGrabber["20"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["20"]["TextColor3"] = Color3.fromRGB(253, 253, 253);
+EnvGrabber["20"]["BackgroundTransparency"] = 1;
+EnvGrabber["20"]["Size"] = UDim2.new(1, 0, 0.06212, 0);
+EnvGrabber["20"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["20"]["Text"] = [[Enter LocalScript OR ModuleScript path below.]];
+EnvGrabber["20"]["Name"] = [[Guide]];
+EnvGrabber["20"]["Position"] = UDim2.new(0, 0, 0.07363, 0);
+
+
+-- StarterGui.PathToValues.Main.NameAndValue
+EnvGrabber["21"] = Instance.new("TextLabel", EnvGrabber["2"]);
+EnvGrabber["21"]["BorderSizePixel"] = 0;
+EnvGrabber["21"]["BackgroundColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["21"]["TextSize"] = 30;
+EnvGrabber["21"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+EnvGrabber["21"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["21"]["Size"] = UDim2.new(1, 0, 0.0995, 0);
+EnvGrabber["21"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["21"]["Text"] = [[Name --- Value]];
+EnvGrabber["21"]["Name"] = [[NameAndValue]];
+EnvGrabber["21"]["Position"] = UDim2.new(0, 0, 0.30702, 0);
+
+-- StarterGui.PathToValues.Frame
+EnvGrabber["23"] = Instance.new("Frame", EnvGrabber["1"]);
+EnvGrabber["23"]["Active"] = true;
+EnvGrabber["23"]["ZIndex"] = 2;
+EnvGrabber["23"]["BorderSizePixel"] = 0;
+EnvGrabber["23"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["23"]["Selectable"] = true;
+EnvGrabber["23"]["Size"] = UDim2.new(0.03827, 0, 0.063, 0);
+EnvGrabber["23"]["Position"] = UDim2.new(0.48065, 0, 0, 0);
+EnvGrabber["23"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["23"]["BackgroundTransparency"] = 1;
+EnvGrabber["23"]["Draggable"] = true;
+
+
+-- StarterGui.PathToValues.Frame.On/Off
+EnvGrabber["24"] = Instance.new("ImageLabel", EnvGrabber["23"]);
+EnvGrabber["24"]["BorderSizePixel"] = 0;
+EnvGrabber["24"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
+EnvGrabber["24"]["Image"] = [[rbxassetid://113144345409430]];
+EnvGrabber["24"]["Size"] = UDim2.new(1, 0, 1, 0);
+EnvGrabber["24"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["24"]["Name"] = [[On/Off]];
+EnvGrabber["24"]["Position"] = UDim2.new(-0.00211, 0, 0, 0);
+
+-- StarterGui.PathToValues.Frame.On/Off.UICorner
+EnvGrabber["25"] = Instance.new("UICorner", EnvGrabber["24"]);
+EnvGrabber["25"]["CornerRadius"] = UDim.new(0, 16);
+
+-- StarterGui.PathToValues.Frame.On/Off.UIAspectRatioConstraint
+EnvGrabber["26"] = Instance.new("UIAspectRatioConstraint", EnvGrabber["24"]);
+
+-- StarterGui.PathToValues.Frame.UIAspectRatioConstraint
+EnvGrabber["27"] = Instance.new("UIAspectRatioConstraint", EnvGrabber["23"]);
+
+local main = {
+    guiEnabled = true,
+    path = tostring(EnvGrabber["5"]["Text"]),
+    scriptClass = nil,
+    Func = nil,
+    dropdown = {
+        enabled = false,
+        current = "Functions",
+        colours = {
+            red = "http://www.roblox.com/asset/?id=83805422072683",
+            green = "http://www.roblox.com/asset/?id=90782335450898"
+        }
+    }
+}
+
+function findPath(PATH : string) : Instance
+    local splitPath = string.split(PATH:gsub("FindFirstChild", " "):gsub("GetService", " "):gsub("require", " "):gsub("getsenv", " "):gsub("%(", " "):gsub("%)", " "):gsub("%.", " "), " ")
+    local path = game
+    
+    for i = 1, #splitPath do
+        if main.dropdown.current == "Upvalues" or main.dropdown.current == "Constants" then
+            if i == #splitPath then
+                main.Func = splitPath[i]
+                path = path:GetFullName()
+                print("found the path: ", path)
+                main.path = path
+                break
+            end
+        end
+        path = path:FindFirstChild(splitPath[i])
+        if i == #splitPath then
+            path = path:GetFullName()
+            print("found the path: ", path)
+            main.path = path
+            main.scriptClass = path.ClassName
+        end
+    end
+    
+    return path
+end
+
+function makeThing(name : string, value : any)
+    -- StarterGui.PathToValues.Main.StuffScroll.Thing
+    local Grabbed = Instance.new("TextLabel", EnvGrabber["6"]);
+    Grabbed["TextWrapped"] = true;
+    Grabbed["BorderSizePixel"] = 0;
+    Grabbed["TextScaled"] = true;
+    Grabbed["BackgroundColor3"] = Color3.fromRGB(49, 49, 49);
+    Grabbed["TextSize"] = 14;
+    Grabbed["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+    Grabbed["TextColor3"] = Color3.fromRGB(246, 246, 246);
+    Grabbed["Size"] = UDim2.new(0, 168, 0, 36);
+    Grabbed["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+    Grabbed["Text"] = tostring(name);
+    Grabbed["Name"] = name;
+    Grabbed["Position"] = UDim2.new(0, 0, 0, 0);
+    
+    if main.scriptClass == "ModuleScript" and main.dropdown.current == "Functions" then
+        Grabbed["Text"] = "require("..main.path..")"..name;
+    elseif main.scriptClass == "LocalScript" and main.dropdown.current == "Functions" then
+        Grabbed["Text"] = "getsenv("..main.path..")"..name;
+    elseif main.scriptClass == "ModuleScript" and (main.dropdown.current == "Upvalues" or main.dropdown.current == "Constants") then
+        Grabbed["Text"] = "getsenv("..main.path..")."..main.Func..name;
+    elseif main.scriptClass == "LocalScript" and (main.dropdown.current == "Upvalues" or main.dropdown.current == "Constants") then
+        Grabbed["Text"] = "getsenv("..main.path..")."..main.Func..name;
+    end
+
+
+    -- StarterGui.PathToValues.Main.StuffScroll.Thing.Value
+    local Value = Instance.new("TextLabel", Grabbed);
+    Value["TextWrapped"] = true;
+    Value["BorderSizePixel"] = 0;
+    Value["TextScaled"] = true;
+    Value["BackgroundColor3"] = Color3.fromRGB(69, 57, 53);
+    Value["TextSize"] = 14;
+    Value["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
+    Value["TextColor3"] = Color3.fromRGB(255, 255, 255);
+    Value["Size"] = UDim2.new(0, 107, 0, 35);
+    Value["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+    Value["Text"] = tostring(value);
+    if main.dropdown.current == "Functions" then
+        Value["Text"] = "getsenv("..main.path..")."..value
+    end
+    Value["Name"] = value;
+    Value["Position"] = UDim2.new(1.03976, 0, 0.004, 0);
+    
+    
+    Value.MouseButton1Click:Connect(function()
+        setclipboard(Value["Text"])
+    end)
+end
+
+function getNewValues()
+    local path = findPath(main.path)
+    
+    for i = 1, #EnvGrabber["6"]:GetChildren() do
+        if EnvGrabber["6"][i].Name ~= "UIPadding" or EnvGrabber["6"][i].Name ~= "UIListLayout" then
+            EnvGrabber["6"][i]:Destroy()
+        end
+    end
+    
+    if main.dropdown.current == "Functions" then
+        if main.scriptClass == "ModuleScript" then
+            local required = require(path)
+            for i, v in required do
+                makeThing(i,v)
+            end
+        elseif main.scriptClass == "LocalScript" then
+            local senv = getsenv(path)
+            for i,v in senv do
+                makeThing(i,v)
+            end
+        end
+    elseif main.dropdown.current == "Upvalues" then
+        if main.scriptClass == "ModuleScript" then
+            local required = require(path)
+            for i, v in getupvalues(required[main.Func]) do
+                makeThing(i,v)
+            end
+        elseif main.scriptClass == "LocalScript" then
+            local senv = getsenv(path)
+            for i,v in getupvalues(senv[main.Func]) do
+                makeThing(i,v)
+            end
+        end
+    elseif main.dropdown.current == "Constants" then
+        if main.scriptClass == "ModuleScript" then
+            local required = require(path)
+            for i,v in getconstants(required[main.Func]) do
+                makeThing(i,v)
+            end
+        elseif main.scriptClass == "LocalScript" then
+            local senv = getsenv(path)
+            for i,v in getconstants(senv[main.Func]) do
+                makeThing(i,v)
+            end
+        end
+    end
+    
+    local main = {}
+end
+
+
+-- Events assignment like mouse click and stuff.
+do
+    EnvGrabber["5"]:GetPropertyChangedSignal("Text"):Connect(function(oldText, newText)
+        main.path = newText
+        task.wait()
+        getNewValues()
+    end)
+    
+    EnvGrabber["24"].MouseButton1Click:Connect(function()
+        main.guiEnabled = not main.guiEnabled
+        EnvGrabber["2"]["Active"] = main.guiEnabled
+    end)
+
+    EnvGrabber["e"].MouseButton1Click:Connect(function()
+        main.dropdown.enabled = not main.dropdown.enabled
+        
+        if main.dropdown.enabled then
+            EnvGrabber["e"]["Image"] = main.dropdown.colours.green
+            EnvGrabber["10"]["Size"] = UDim2.new(0.993, 0, 3.239, 0)
+        else
+            EnvGrabber["e"]["Image"] = main.dropdown.colours.red
+            EnvGrabber["10"]["Size"] = UDim2.new(0.993, 0, 0.001, 0)
+        end
+    end)
+
+    EnvGrabber["15"].MouseButton1Click:Connect(function()
+        if main.dropdown.current ~= "Functions" then
+            EnvGrabber["15"]["BackgroundColor3"] = Color3.fromRGB(0, 255, 0)
+            EnvGrabber["19"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0)
+            EnvGrabber["1d"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0)
+            main.dropdown.current = "Functions"
+            EnvGrabber["c"]["Text"] = [[Currently viewing: Functions]]
+        end
+    end)
+    EnvGrabber["19"].MouseButton1Click:Connect(function()
+        if main.dropdown.current ~= "Upvalues" then
+            EnvGrabber["15"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0)
+            EnvGrabber["19"]["BackgroundColor3"] = Color3.fromRGB(0, 255, 0)
+            EnvGrabber["1d"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0)
+            main.dropdown.current = "Upvalues"
+            EnvGrabber["c"]["Text"] = [[Currently viewing: Upvalues]]
+        end
+    end)
+    EnvGrabber["1d"].MouseButton1Click:Connect(function()
+        if main.dropdown.current ~= "Constants" then
+            EnvGrabber["15"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0)
+            EnvGrabber["19"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0)
+            EnvGrabber["1d"]["BackgroundColor3"] = Color3.fromRGB(0, 255, 0)
+            main.dropdown.current = "Constants"
+            EnvGrabber["c"]["Text"] = [[Currently viewing: Constants]]
+        end
+    end)
+end
+
+return EnvGrabber["1"], require;
