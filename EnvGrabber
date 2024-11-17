@@ -1,3 +1,13 @@
+--[=[
+ d888b  db    db d888888b      .d888b.      db      db    db  .d8b.  
+88' Y8b 88    88   `88'        VP  `8D      88      88    88 d8' `8b 
+88      88    88    88            odD'      88      88    88 88ooo88 
+88  ooo 88    88    88          .88'        88      88    88 88~~~88 
+88. ~8~ 88b  d88   .88.        j88.         88booo. 88b  d88 88   88    @uniquadev
+ Y888P  ~Y8888P' Y888888P      888888D      Y88888P ~Y8888P' YP   YP  CONVERTER 
+]=]
+
+-- Instances: 40 | Scripts: 0 | Modules: 0 | Tags: 0
 local EnvGrabber = {};
 
 -- StarterGui.PathToValues
@@ -314,7 +324,7 @@ EnvGrabber["23"]["Draggable"] = true;
 
 
 -- StarterGui.PathToValues.Frame.On/Off
-EnvGrabber["24"] = Instance.new("ImageLabel", EnvGrabber["23"]);
+EnvGrabber["24"] = Instance.new("ImageButton", EnvGrabber["23"]);
 EnvGrabber["24"]["BorderSizePixel"] = 0;
 EnvGrabber["24"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
 EnvGrabber["24"]["Image"] = [[rbxassetid://113144345409430]];
@@ -376,7 +386,7 @@ end
 
 function makeThing(name : string, value : any)
     -- StarterGui.PathToValues.Main.StuffScroll.Thing
-    local Grabbed = Instance.new("TextLabel", EnvGrabber["6"]);
+    local Grabbed = Instance.new("TextButton", EnvGrabber["6"]);
     Grabbed["TextWrapped"] = true;
     Grabbed["BorderSizePixel"] = 0;
     Grabbed["TextScaled"] = true;
@@ -402,7 +412,7 @@ function makeThing(name : string, value : any)
 
 
     -- StarterGui.PathToValues.Main.StuffScroll.Thing.Value
-    local Value = Instance.new("TextLabel", Grabbed);
+    local Value = Instance.new("TextButton", Grabbed);
     Value["TextWrapped"] = true;
     Value["BorderSizePixel"] = 0;
     Value["TextScaled"] = true;
