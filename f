@@ -8,11 +8,13 @@ end
 
 
 for i = 1, 5 do
+    task.wait(0.4)
     HumanoidRootPart.AssemblyLinearVelocity = Vector3.new(666,666,666)
     if i == 5 then
-        task.wait(1)
+        local CF = HumanoidRootPart.CFrame
+        HumanoidRootPart.CFrame = CFrame.new(CF.X, -666, CF.Z)
         LocalPlayer.Character.Humanoid.Health = 0
-        task.wait(2)
+        task.wait(1.5)
         main()
     end
 end
