@@ -18,6 +18,8 @@ local whitelistedPlayers = {
 }
 local Busy = false
 local PendingTargets = {}
+local PlaceId, JobId = game.PlaceId, game.JobId
+
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
@@ -185,7 +187,7 @@ local function SkidFling(TargetPlayer)
         workspace.FallenPartsDestroyHeight = 0/0
         
         local BV = Instance.new("BodyVelocity")
-        BV.Name = "EpixVel"
+        BV.Name = "Tariq's Vel"
         BV.Parent = RootPart
         BV.Velocity = Vector3.new(9e8, 9e8, 9e8)
         BV.MaxForce = Vector3.new(1/0, 1/0, 1/0)
@@ -250,6 +252,7 @@ local function SkidFling(TargetPlayer)
 end
 
 local Event = { Chatted = {} }
+
 function Event:AddToChatted(name)
     local player = Players[name]
     if not Event.Chatted[name] then
@@ -293,6 +296,10 @@ Players[owner].Chatted:Connect(function(message)
             Event:AddToChatted(player.Name)
         end
     elseif msg[1] == prefix.."unwhitelist" or msg[1] == prefix.."unws" then
+        if msg[2]:lower() == "all" then
+            whitelistedPlayers = {}
+            return
+        end
         local player = GetPlayer(msg[2])
         local foundPlayer = table.find(whitelistedPlayers, player.Name)
         if foundPlayer then
@@ -326,6 +333,6 @@ game.Players.PlayerAdded:Connect(function(player)
 end)
 
 for _, plr in whitelistedPlayers do
-    plr = GetPlayer(plr)
-    Event:AddToChatted(plr.Name)
+    local friend = GetPlayer(plr)
+    Event:AddToChatted(friend.Name)
 end
