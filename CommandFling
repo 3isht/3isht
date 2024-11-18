@@ -4,7 +4,6 @@ COMMANDS:
     /unwhitelist {name} | /unws {name}: Unwhitelists the person if they exist in the table.
     /fling {name}: Flings the target.
     /clearpending | /cpend: Clears the pending targets table.
-    /come: Brings the alt account to the caller.
 ]]
 
 local prefix = "/"
@@ -297,7 +296,7 @@ Players[owner].Chatted:Connect(function(message)
             table.remove(whitelistedPlayers, foundPlayer)
             Event:RemoveFromChatted(player.Name)
         end
-    elseif msg[1] == prefix.."clearpending" or msg[1] == prefix.."cpending" then
+    elseif msg[1] == prefix.."clearpending" or msg[1] == prefix.."cpend" then
         PendingTargets = {}
     elseif msg[1] == prefix.."come" then
         Player.Character.HumanoidRootPart.CFrame = Players[owner].Character.Head.CFrame
