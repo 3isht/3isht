@@ -229,6 +229,7 @@ local function SkidFling(TargetPlayer)
         if findPlayer then
             table.remove(PendingTargets, findPlayer)
         end
+
         Busy = false
 
         task.wait(.5)
@@ -325,5 +326,6 @@ game.Players.PlayerAdded:Connect(function(player)
 end)
 
 for _, plr in whitelistedPlayers do
-    Event:AddToChatted(plr)
+    plr = GetPlayer(plr)
+    Event:AddToChatted(plr.Name)
 end
