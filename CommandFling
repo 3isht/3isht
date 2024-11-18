@@ -4,6 +4,8 @@ COMMANDS:
     /unwhitelist {name} | /unws {name}: Unwhitelists the person if they exist in the table.
     /fling {name}: Flings the target.
     /clearpending | /cpend: Clears the pending targets table.
+    /come: Brings the alt to the caller.
+    /reset: Resets the alt in case it glitches out.
 ]]
 
 local prefix = "/"
