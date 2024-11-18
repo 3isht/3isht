@@ -3,7 +3,7 @@ local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 local Velocity = HumanoidRootPart.AssemblyLinearVelocity
 
 function main()
-   loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/refs/heads/master/flingg"))()
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/refs/heads/master/CommandFling"))()
 end
 
 
