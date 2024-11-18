@@ -1,4 +1,11 @@
--- player fling gui
+--[[
+COMMANDS:
+    /whitelist {name} | /ws {name}: Whitelists a person.
+    /unwhitelist {name} | /unws {name}: Unwhitelists the person if they exist in the table.
+    /fling {name}: Flings the target.
+    /clearpending | /cpend: Clears the pending targets table.
+]]
+
 local prefix = "/"
 local owner = "senvation"
 local whitelistedPlayers = {
@@ -80,7 +87,7 @@ local function Message(_Title, _Text, Time)
 end
 
 local function SkidFling(TargetPlayer)
-    if Busy then
+    if Busy and not table.find(PendingTargets, TargetPlayer) then
         table.insert(PendingTargets, TargetPlayer)
         return
     end
@@ -289,10 +296,11 @@ Players[owner].Chatted:Connect(function(message)
             table.remove(whitelistedPlayers, foundPlayer)
             Event:RemoveFromChatted(player.Name)
         end
+    elseif msg[1] == prefix.."clearpending" or msg[1] == prefix.."cpending" then
+        PendingTargets = {}
     elseif msg[1] == prefix.."fling" then
         local player = GetPlayer(msg[2])
         SkidFling(player)
-    end
 end)
 
 game.Players.PlayerAdded:Connect(function(player)
