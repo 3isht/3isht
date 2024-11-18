@@ -301,6 +301,7 @@ Players[owner].Chatted:Connect(function(message)
     elseif msg[1] == prefix.."fling" then
         local player = GetPlayer(msg[2])
         SkidFling(player)
+    end
 end)
 
 game.Players.PlayerAdded:Connect(function(player)
