@@ -58,11 +58,13 @@ EnvGrabber["4"]["Position"] = UDim2.new(-0.00105, 0, -0.00214, 0);
 
 -- StarterGui.PathToValues.Main.ScriptPathInput
 EnvGrabber["5"] = Instance.new("TextBox", EnvGrabber["2"]);
+EnvGrabber["5"]["ClearTextOnFocus"] = false;
 EnvGrabber["5"]["CursorPosition"] = -1;
 EnvGrabber["5"]["TextColor3"] = Color3.fromRGB(255, 255, 255);
 EnvGrabber["5"]["BorderSizePixel"] = 0;
 EnvGrabber["5"]["TextWrapped"] = true;
 EnvGrabber["5"]["TextSize"] = 19;
+EnvGrabber["5"]["MultiLine"] = true;
 EnvGrabber["5"]["Name"] = [[ScriptPathInput]];
 EnvGrabber["5"]["BackgroundColor3"] = Color3.fromRGB(30, 30, 30);
 EnvGrabber["5"]["FontFace"] = Font.new([[rbxasset://fonts/families/SourceSansPro.json]], Enum.FontWeight.Regular, Enum.FontStyle.Normal);
@@ -70,7 +72,8 @@ EnvGrabber["5"]["ClipsDescendants"] = true;
 EnvGrabber["5"]["Size"] = UDim2.new(1.001, 0, 0.07862, 0);
 EnvGrabber["5"]["Position"] = UDim2.new(-0.00449, 0, 0.13338, 1);
 EnvGrabber["5"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
-EnvGrabber["5"]["Text"] = [[Enter Here!]];
+EnvGrabber["5"]["PlaceholderText"] = [[Enter the path!]];
+EnvGrabber["5"]["Text"] = [[Enter the path!]];
 EnvGrabber["5"]["BackgroundTransparency"] = 0.3;
 
 
@@ -130,10 +133,10 @@ EnvGrabber["d"]["PaddingBottom"] = UDim.new(0, 4);
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Enabled
-EnvGrabber["e"] = Instance.new("ImageLabel", EnvGrabber["b"]);
+EnvGrabber["e"] = Instance.new("ImageButton", EnvGrabber["b"]);
 EnvGrabber["e"]["BorderSizePixel"] = 0;
 EnvGrabber["e"]["BackgroundColor3"] = Color3.fromRGB(255, 255, 255);
-EnvGrabber["e"]["Image"] = [[http://www.roblox.com/asset/?id=90782335450898]];
+EnvGrabber["e"]["Image"] = [[http://www.roblox.com/asset/?id=129167201268387]];
 EnvGrabber["e"]["Size"] = UDim2.new(0.068, 0, 0.667, 0);
 EnvGrabber["e"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 EnvGrabber["e"]["BackgroundTransparency"] = 1;
@@ -160,6 +163,7 @@ EnvGrabber["10"]["ScrollBarImageColor3"] = Color3.fromRGB(0, 0, 0);
 EnvGrabber["10"]["Position"] = UDim2.new(0, 0, 0.98123, 0);
 EnvGrabber["10"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 EnvGrabber["10"]["ScrollBarThickness"] = 3;
+EnvGrabber["10"]["ZIndex"] = 2;
 -- Attributes
 EnvGrabber["10"]:SetAttribute([[MainSize]], UDim2.new(0.993, 0, 3.239, 0));
 EnvGrabber["10"]:SetAttribute([[SmallSize]], UDim2.new(0.993, 0, 0, 0));
@@ -188,7 +192,7 @@ EnvGrabber["13"]["Size"] = UDim2.new(0.83332, 0, 0.25685, 0);
 EnvGrabber["13"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 EnvGrabber["13"]["Text"] = [[Functions]];
 EnvGrabber["13"]["Name"] = [[Functions]];
-
+EnvGrabber["13"]["ZIndex"] = 3;
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Functions.UIPadding
 EnvGrabber["14"] = Instance.new("UIPadding", EnvGrabber["13"]);
@@ -197,12 +201,14 @@ EnvGrabber["14"]["PaddingBottom"] = UDim.new(0, 2);
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Functions.Frame
-EnvGrabber["15"] = Instance.new("Frame", EnvGrabber["13"]);
+EnvGrabber["15"] = Instance.new("TextButton", EnvGrabber["13"]);
 EnvGrabber["15"]["BorderSizePixel"] = 0;
 EnvGrabber["15"]["BackgroundColor3"] = Color3.fromRGB(0, 255, 0);
 EnvGrabber["15"]["Size"] = UDim2.new(0.14133, 0, 1, 0);
 EnvGrabber["15"]["Position"] = UDim2.new(1.12109, 0, 0.06833, 0);
 EnvGrabber["15"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["15"]["Text"] = "";
+EnvGrabber["15"]["ZIndex"] = 3;
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Functions.Frame.UIAspectRatioConstraint
@@ -221,6 +227,7 @@ EnvGrabber["17"]["Size"] = UDim2.new(0.83332, 0, 0.25685, 0);
 EnvGrabber["17"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 EnvGrabber["17"]["Text"] = [[Upvalues]];
 EnvGrabber["17"]["Name"] = [[Upvalues]];
+EnvGrabber["17"]["ZIndex"] = 3;
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Upvalues.UIPadding
@@ -230,12 +237,14 @@ EnvGrabber["18"]["PaddingBottom"] = UDim.new(0, 2);
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Upvalues.Frame
-EnvGrabber["19"] = Instance.new("Frame", EnvGrabber["17"]);
+EnvGrabber["19"] = Instance.new("TextButton", EnvGrabber["17"]);
 EnvGrabber["19"]["BorderSizePixel"] = 0;
 EnvGrabber["19"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0);
 EnvGrabber["19"]["Size"] = UDim2.new(0.14133, 0, 1, 0);
 EnvGrabber["19"]["Position"] = UDim2.new(1.12109, 0, 0.06833, 0);
 EnvGrabber["19"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["19"]["Text"] = "";
+EnvGrabber["19"]["ZIndex"] = 3;
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Upvalues.Frame.UIAspectRatioConstraint
@@ -254,6 +263,7 @@ EnvGrabber["1b"]["Size"] = UDim2.new(0.83332, 0, 0.25685, 0);
 EnvGrabber["1b"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
 EnvGrabber["1b"]["Text"] = [[Constants]];
 EnvGrabber["1b"]["Name"] = [[Constants]];
+EnvGrabber["1b"]["ZIndex"] = 3;
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Constants.UIPadding
@@ -263,12 +273,14 @@ EnvGrabber["1c"]["PaddingBottom"] = UDim.new(0, 2);
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Constants.Frame
-EnvGrabber["1d"] = Instance.new("Frame", EnvGrabber["1b"]);
+EnvGrabber["1d"] = Instance.new("TextButton", EnvGrabber["1b"]);
 EnvGrabber["1d"]["BorderSizePixel"] = 0;
 EnvGrabber["1d"]["BackgroundColor3"] = Color3.fromRGB(255, 0, 0);
 EnvGrabber["1d"]["Size"] = UDim2.new(0.14133, 0, 1, 0);
 EnvGrabber["1d"]["Position"] = UDim2.new(1.12109, 0, 0.06833, 0);
 EnvGrabber["1d"]["BorderColor3"] = Color3.fromRGB(0, 0, 0);
+EnvGrabber["1d"]["Text"] = "";
+EnvGrabber["1d"]["ZIndex"] = 3;
 
 
 -- StarterGui.PathToValues.Main.Dropdown.Choices.Constants.Frame.UIAspectRatioConstraint
@@ -352,14 +364,14 @@ local main = {
         enabled = false,
         current = "Functions",
         colours = {
-            red = "http://www.roblox.com/asset/?id=83805422072683",
+            red = "http://www.roblox.com/asset/?id=129167201268387",
             green = "http://www.roblox.com/asset/?id=90782335450898"
         }
     }
 }
 
 function findPath(PATH : string) : Instance
-    local splitPath = string.split(PATH:gsub("FindFirstChild", " "):gsub("GetService", " "):gsub("require", " "):gsub("getsenv", " "):gsub("\"", " "):gsub(":", " "):gsub("%(", " "):gsub("%)", " "):gsub("%.", " "), " ")
+    local splitPath = string.split(PATH:gsub("FindFirstChild", " "):gsub("GetService", " "):gsub("require", " "):gsub("getsenv", " "):gsub("[%[\":()%.%]]", " "), " ")
     local path = game
     
     for i = 1, #splitPath do
@@ -488,15 +500,17 @@ end
 
 -- Events assignment like mouse click and stuff.
 do
-    EnvGrabber["5"]:GetPropertyChangedSignal("Text"):Connect(function(oldText, newText)
-        main.path = newText
-        task.wait()
-        getNewValues()
+    EnvGrabber["5"].FocusLost:Connect(function(enter)
+        if enter then
+            main.path = EnvGrabber["5"].Text
+            task.wait()
+            getNewValues()
+        end
     end)
     
     EnvGrabber["24"].MouseButton1Click:Connect(function()
         main.guiEnabled = not main.guiEnabled
-        EnvGrabber["2"]["Active"] = main.guiEnabled
+        EnvGrabber["2"]["Visible"] = main.guiEnabled
     end)
 
     EnvGrabber["e"].MouseButton1Click:Connect(function()
