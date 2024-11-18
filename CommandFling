@@ -25,22 +25,6 @@ local Frame = Instance.new("Frame")
 local TextBox = Instance.new("TextBox")
 local TextButton = Instance.new("TextButton")
 
-local Event = { Chatted = {} }
-function Event:AddToChatted(name)
-    local player = Players[name]
-    if not Event.Chatted[name] then
-        Event.Chatted[name] = player.Chatted:Connect(onChatted)
-    end
-end
-
-function Event:RemoveFromChatted(name)
-    local player = Players[name]
-    if Event.Chatted[name] then
-        Event.Chatted[name]:Disconnect()
-        Event.Chatted[name] = nil
-    end
-end
-
 ScreenGui.Parent = Player:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
@@ -267,6 +251,22 @@ local function onChatted(Message)
     if msg[1] == prefix.."fling" then
         local target = GetPlayer(msg[2])
         SkidFling(target)
+    end
+end
+
+local Event = { Chatted = {} }
+function Event:AddToChatted(name)
+    local player = Players[name]
+    if not Event.Chatted[name] then
+        Event.Chatted[name] = player.Chatted:Connect(onChatted)
+    end
+end
+
+function Event:RemoveFromChatted(name)
+    local player = Players[name]
+    if Event.Chatted[name] then
+        Event.Chatted[name]:Disconnect()
+        Event.Chatted[name] = nil
     end
 end
 
