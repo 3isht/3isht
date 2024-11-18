@@ -300,6 +300,8 @@ Players[owner].Chatted:Connect(function(message)
         PendingTargets = {}
     elseif msg[1] == prefix.."come" then
         Player.Character.HumanoidRootPart.CFrame = Players[owner].Character.Head.CFrame
+    elseif msg[1] == prefix.."reset" then
+        Player.Character.Humanoid.Health = 0
     elseif msg[1] == prefix.."fling" then
         local player = GetPlayer(msg[2])
         SkidFling(player)
