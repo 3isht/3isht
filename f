@@ -1,5 +1,5 @@
 local LocalPlayer = game.Players.LocalPlayer
-local HumanoidRootPart = LocalPlayer.Character
+local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 local Velocity = HumanoidRootPart.AssemblyLinearVelocity
 
 function main()
