@@ -308,7 +308,7 @@ end)
 
 game.Players.PlayerAdded:Connect(function(player)
     if table.find(whitelistedPlayers, player.Name) then
-        player.Chatted:Connect(ofunction(message)
+        player.Chatted:Connect(function(message)
             local msg = string.split(Message, " ")
             if msg[1] == prefix.."fling" then
                 local target = GetPlayer(msg[2])
