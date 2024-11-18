@@ -16,6 +16,15 @@ local whitelistedPlayers = {
 }
 local Busy = false
 local PendingTargets = {}
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local TextButton = Instance.new("TextButton")
+
 local Event = { Chatted = {} }
 function Event:AddToChatted(name)
     local player = Players[name]
@@ -31,15 +40,6 @@ function Event:RemoveFromChatted(name)
         Event.Chatted[name] = nil
     end
 end
-
-
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
-
-local ScreenGui = Instance.new("ScreenGui")
-local Frame = Instance.new("Frame")
-local TextBox = Instance.new("TextBox")
-local TextButton = Instance.new("TextButton")
 
 ScreenGui.Parent = Player:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
