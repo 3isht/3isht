@@ -4,6 +4,7 @@ COMMANDS:
     /unwhitelist {name} | /unws {name}: Unwhitelists the person if they exist in the table.
     /fling {name}: Flings the target.
     /clearpending | /cpend: Clears the pending targets table.
+    /come: Brings the alt account to the caller.
 ]]
 
 local prefix = "/"
@@ -58,7 +59,7 @@ local function GetPlayer(Name)
     Name = Name:lower()
     for _, x in next, Players:GetPlayers() do
         if x ~= Player then
-            if x.Name:lower():match("^" .. Name) or x.DisplayName:lower():match("^" .. Name) then
+            if x.Name:lower():match("^" .. Name) or x.DisplayName:lower():match("^" .. Name) and x.Name ~= owner and not table.find(whitelistedPlayers, x.Name) then
                 return x
             end
         end
@@ -246,19 +247,19 @@ local function SkidFling(TargetPlayer)
     end
 end
 
-local function onChatted(Message)
-    local msg = string.split(Message, " ")
-    if msg[1] == prefix.."fling" then
-        local target = GetPlayer(msg[2])
-        SkidFling(target)
-    end
-end
-
 local Event = { Chatted = {} }
 function Event:AddToChatted(name)
     local player = Players[name]
     if not Event.Chatted[name] then
-        Event.Chatted[name] = player.Chatted:Connect(onChatted)
+        Event.Chatted[name] = player.Chatted:Connect(function(message)
+            local msg = string.split(Message, " ")
+            if msg[1] == prefix.."fling" then
+                local target = GetPlayer(msg[2])
+                SkidFling(target)
+            elseif msg[1] == prefix.."come" then
+                Player.Character.HumanoidRootPart.CFrame = player.Character.Head.CFrame
+            end
+        end)
     end
 end
 
@@ -298,6 +299,8 @@ Players[owner].Chatted:Connect(function(message)
         end
     elseif msg[1] == prefix.."clearpending" or msg[1] == prefix.."cpending" then
         PendingTargets = {}
+    elseif msg[1] == prefix.."come" then
+        Player.Character.HumanoidRootPart.CFrame = Players[owner].Character.Head.CFrame
     elseif msg[1] == prefix.."fling" then
         local player = GetPlayer(msg[2])
         SkidFling(player)
@@ -306,6 +309,18 @@ end)
 
 game.Players.PlayerAdded:Connect(function(player)
     if table.find(whitelistedPlayers, player.Name) then
-        player.Chatted:Connect(onChatted)
+        player.Chatted:Connect(ofunction(message)
+            local msg = string.split(Message, " ")
+            if msg[1] == prefix.."fling" then
+                local target = GetPlayer(msg[2])
+                SkidFling(target)
+            elseif msg[1] == prefix.."come" then
+                Player.Character.HumanoidRootPart.CFrame = player.Character.Head.CFrame
+            end
+        end)
     end
 end)
+
+for _, plr in whitelistedPlayers do
+    Event:AddToChatted(plr)
+end
