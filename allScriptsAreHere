@@ -4,3 +4,6 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/TestLock"))()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/DaUphill"))()
+
+-- Dex
+loadstring(game:HttpGet("https://raw.githubusercontent.com/3isht/3isht/master/dex"))()
