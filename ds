@@ -941,7 +941,7 @@ Setting.newInput("Auto Stomp Delay", "Adjusts the auto stomp delay.", function(i
     settings["AutoStompDelay"] = tonumber(inp)
 end)
 
-
+--[[
 local mt = getrawmetatable(game)
 local old = mt.__namecall
 local AntiCheatNamecall
@@ -977,3 +977,4 @@ AntiCheatNamecall = hookmetamethod(game, "__namecall", newcclosure(function(Self
     
     return AntiCheatNamecall(Self, ...)
 end))
+]]
