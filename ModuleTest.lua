@@ -17,6 +17,8 @@ function module.lockButton(name)
     corner.Parent = btn
     corner.CornerRadius = UDim.new(0,10)
     corner.Name = "CORNER"
+
+    return btn
 end
 
 function module.silentButton(name)
@@ -40,6 +42,7 @@ function module.silentButton(name)
     corner.Name = "CORNER"
         
     local lockbtn = game.CoreGui.ButtonHandler:FindFirstChild("LButton")
+    return silentBtn
 end
 
 function module.armourButton(name)
@@ -59,6 +62,7 @@ function module.armourButton(name)
     corner.Parent = armBtn
     corner.CornerRadius = UDim.new(0,10)
     corner.Name = "CORNER"
+    return armBtn
 end
 
 return module
